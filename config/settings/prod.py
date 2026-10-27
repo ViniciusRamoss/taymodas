@@ -1,6 +1,7 @@
 """Settings de produção.
 
-Exige `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, `DATABASE_URL` e `CLOUDINARY_URL`.
+Exige `DJANGO_SECRET_KEY`, `DATABASE_URL`, `CLOUDINARY_URL` e um host (`DJANGO_ALLOWED_HOSTS`
+ou `RENDER_EXTERNAL_HOSTNAME`, que o Render define sozinho).
 """
 
 from django.core.exceptions import ImproperlyConfigured
@@ -18,7 +19,21 @@ def require_env(name: str) -> str:
 
 
 DEBUG = False
-ALLOWED_HOSTS = require_env("DJANGO_ALLOWED_HOSTS").split(",")
+# O Render injeta o próprio host (ex.: taymodas.onrender.com); domínios extras vão em
+# DJANGO_ALLOWED_HOSTS. Sem nenhum dos dois, o app não sobe.
+ALLOWED_HOSTS = [
+    host
+    for host in [
+        *env.list("DJANGO_ALLOWED_HOSTS", default=[]),
+        env.str("RENDER_EXTERNAL_HOSTNAME", default=""),
+    ]
+    if host
+]
+if not ALLOWED_HOSTS:
+    raise ImproperlyConfigured(
+        "A variável de ambiente DJANGO_ALLOWED_HOSTS é obrigatória em produção "
+        "(ou RENDER_EXTERNAL_HOSTNAME, definida pelo Render)."
+    )
 
 # Disco do servidor gratuito é efêmero: banco e fotos precisam ficar fora dele.
 # Falha na inicialização se faltarem, em vez de cair no SQLite / `media/` local.

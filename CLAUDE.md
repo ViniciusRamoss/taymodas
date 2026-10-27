@@ -42,7 +42,9 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
 - `assets/css/source.css`: fonte do Tailwind v4 (tokens em `@theme`). Fica fora de
   `static/` de propósito (W001 do django-tailwind-cli / manifest storage).
 - `static/js/htmx.min.js`: HTMX 2.0.4 vendorizado. `static/css/tailwind.css` é gerado.
-- `docs/`: `plan.md` (plano e decisões), `deploy.md` (Etapa 8).
+- `docs/`: `plan.md` (plano e decisões), `deploy.md` (passo a passo de produção).
+- `render.yaml` + `bin/build.sh` / `bin/start.sh`: deploy no Render (Blueprint). Admin criado
+  por `manage.py ensure_admin` a partir de `DJANGO_ADMIN_USERNAME/PASSWORD/EMAIL`.
 
 ## Convenções
 

@@ -61,7 +61,7 @@ ProductVariant product, size, color, stock             único por (product, size
 | Categorias         | Model no admin + seed via data migration      | Aguardando lista      |
 | Esgotado           | Exibir com selo "Esgotado"                    | Padrão recomendado    |
 | Baixa de estoque   | Manual no admin                               | Padrão recomendado    |
-| Hospedagem         | Render free + Neon free + Cloudinary free     | Padrão recomendado    |
+| Hospedagem         | Render free + Neon free + Cloudinary free     | Preparado (Etapa 8)   |
 | Domínio            | Subdomínio grátis do Render                   | Padrão recomendado    |
 | Entrega            | Página "Entrega" + rodapé, texto editável     | Aguardando textos     |
 
@@ -72,7 +72,11 @@ ProductVariant product, size, color, stock             único por (product, size
 - Render Postgres free: expira 30 dias após a criação (14 dias de carência) e 1 GB. Por isso
   usamos o Neon.
 - PythonAnywhere free: internet de saída só por allowlist (descartado).
-- A verificar na Etapa 8: cotas do Neon e do Cloudinary, shell/one-off jobs no Render free.
+- Neon free: 0,5 GB e 100 CU-hora/mês por projeto, suspende após 5 min parado.
+- Cloudinary free: 25 créditos/mês (1 GB armazenado, 1 GB de banda ou 1.000 transformações
+  = 1 crédito cada).
+- Render free sem shell nem pre-deploy: migrations e criação do admin rodam no start
+  (`bin/start.sh`).
 
 ## Evolução
 

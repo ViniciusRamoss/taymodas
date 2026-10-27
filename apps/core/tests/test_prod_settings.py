@@ -13,6 +13,7 @@ REQUIRED = {
 
 
 def load_prod_settings(monkeypatch: pytest.MonkeyPatch, **overrides: str) -> object:
+    monkeypatch.delenv("RENDER_EXTERNAL_HOSTNAME", raising=False)
     for name, value in {**REQUIRED, **overrides}.items():
         monkeypatch.setenv(name, value)
     sys.modules.pop("config.settings.prod", None)
@@ -39,3 +40,11 @@ def test_prod_refuses_to_start_with_empty_required_variable(
 ) -> None:
     with pytest.raises(ImproperlyConfigured, match=name):
         load_prod_settings(monkeypatch, **{name: ""})
+
+
+def test_prod_accepts_render_hostname(monkeypatch: pytest.MonkeyPatch) -> None:
+    prod = load_prod_settings(
+        monkeypatch, DJANGO_ALLOWED_HOSTS="", RENDER_EXTERNAL_HOSTNAME="taymodas.onrender.com"
+    )
+
+    assert prod.ALLOWED_HOSTS == ["taymodas.onrender.com"]  # type: ignore[attr-defined]

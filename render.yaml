@@ -1,0 +1,33 @@
+# Blueprint do Render: New > Blueprint > escolha este repositório.
+# Variáveis com `sync: false` são pedidas no painel na primeira vez (segredos ficam fora do git).
+# Passo a passo completo em docs/deploy.md.
+services:
+  - type: web
+    name: taymodas
+    runtime: python
+    plan: free
+    # Virgínia: a região do Render mais próxima do Brasil. Crie o banco do Neon em
+    # AWS us-east-1 (N. Virginia) para cada consulta não cruzar o continente.
+    region: virginia
+    branch: main
+    autoDeploy: true
+    buildCommand: bash bin/build.sh
+    startCommand: bash bin/start.sh
+    healthCheckPath: /health/
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.prod
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: CLOUDINARY_URL
+        sync: false
+      - key: DJANGO_ADMIN_URL
+        sync: false
+      - key: DJANGO_ADMIN_USERNAME
+        sync: false
+      - key: DJANGO_ADMIN_PASSWORD
+        sync: false
+      - key: DJANGO_ADMIN_EMAIL
+        sync: false
