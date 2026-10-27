@@ -1,7 +1,9 @@
 from typing import Any
+from urllib.parse import urlencode
 
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.utils.cache import patch_vary_headers
 from django.views.generic import DetailView, ListView
 
@@ -55,11 +57,12 @@ class ProductListView(ListView[Product]):
         context["categories"] = selectors.categories_with_products()
         context["current_category"] = self.category
         context["filters"] = self.filters
-        context["page_title"] = (
-            f"{self.category.name} — Tay Modas"
-            if self.category is not None
-            else "Tay Modas — moda feminina em Serrana-SP"
-        )
+        if self.category is not None:
+            context["meta_title"] = f"{self.category.name} — Tay Modas"
+            # Filtros e página não entram no canônico: são variações da mesma lista.
+            context["canonical_url"] = self.request.build_absolute_uri(
+                f"{reverse('catalog:product_list')}?{urlencode({'categoria': self.category.slug})}"
+            )
         context["show_hero"] = (
             self.category is None
             and not self.filters.is_active
@@ -112,7 +115,13 @@ class ProductDetailView(DetailView[Product]):
                 self.request.build_absolute_uri(product.get_absolute_url()),
             )
         wants_order = self.request.GET.get("pedir") == "1"
-        context["detail"] = ProductDetail.from_product(product)
+        detail = ProductDetail.from_product(product)
+        context["detail"] = detail
+        context["meta_title"] = f"{detail.name} — Tay Modas"
+        context["meta_description"] = detail.description
+        context["og_type"] = "product"
+        if detail.images:
+            context["meta_image"] = self.request.build_absolute_uri(detail.images[0].share_url)
         context["selection"] = selection
         context["order_url"] = order_url
         context["wants_order"] = wants_order

@@ -109,6 +109,20 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
   fora dela o título da lista vira `<h1>`.
 - Comentário multilinha em template Django é `{% comment %}`; `{# #}` só vale numa linha.
 
+## Acabamento (Etapa 7)
+
+- Metadados no `base.html` vêm do contexto: `meta_title`, `meta_description` (cortada em 160),
+  `meta_image`, `og_type`, `canonical_url` (padrão do context processor `core.seo`, sem
+  querystring). Lista com categoria: canônico `/?categoria=<slug>`. Produto: `og:type=product`,
+  foto de capa em 1200px como `og:image` e `product:price:*` no bloco `extra_meta`.
+- Não usar `{% block title %}`/`description`: defina as variáveis na view.
+- `404.html` usa o layout; `500.html` é autossuficiente (sem request, banco nem `base.html`).
+- `/robots.txt` (bloqueia URLs com filtro/página; não cita o admin) e `/sitemap.xml`
+  (`apps/catalog/sitemaps.py`: início, categorias com produto, produtos visíveis).
+- Favicon provisório em `static/img/favicon.svg` (trocar pelo logo).
+- Card usa `heading` (h2/h3) conforme o título da lista, para a ordem de títulos não pular nível.
+  Verificado com axe-core (wcag2a/aa + best-practice) em lista, filtro, produto e 404.
+
 ## Decisões
 
 - `django_stubs_ext.monkeypatch()` em `base.py` permite `admin.ModelAdmin[Model]` em runtime.
@@ -136,9 +150,10 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
   provisório, pessoal do dono do projeto; trocar no admin antes do deploy)
 - Lista final de categorias e tamanhos
 - Confirmação: esgotado exibido vs. escondido
+- Arquivo do logo (favicon, dourado exato e imagem padrão de compartilhamento da home)
 - Textos de entrega (cidades do mototáxi, envio nacional, prazos, retirada)
 
 ## Etapas
 
 0. Plano ✅ · 1. Scaffold ✅ · 2. Models ✅ · 3. Admin PT-BR ✅ · 4. Layout + listagem ✅ ·
-5. Detalhe + WhatsApp ✅ · 6. Filtros HTMX ✅ · 7. Acabamento · 8. Deploy · 9. Portfólio
+5. Detalhe + WhatsApp ✅ · 6. Filtros HTMX ✅ · 7. Acabamento ✅ · 8. Deploy · 9. Portfólio

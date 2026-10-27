@@ -1,0 +1,29 @@
+{% load static %}<!doctype html>
+{% comment %}
+  Renderizada sem contexto de request e sem banco (o erro pode ser o próprio banco): nada de
+  context processors, `store` ou base.html. Estilos inline para não depender do CSS gerado.
+{% endcomment %}
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Erro no site — Tay Modas</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+  <style>
+    body { margin: 0; font-family: "Jost", "Futura", system-ui, sans-serif; color: #2b2b2b; background: #fff; }
+    header { background: #000; color: #c8a24a; padding: 1rem; text-align: center; font: 600 1.5rem/1 Georgia, serif; letter-spacing: .06em; }
+    main { max-width: 36rem; padding: 4rem 1rem; margin: 0 auto; line-height: 1.6; }
+    h1 { font: 400 2rem/1.2 Georgia, serif; margin: 0; }
+    a { display: inline-block; margin-top: 1.5rem; background: #000; color: #fff; padding: .75rem 1.25rem; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header>TAY <i>modas</i></header>
+  <main>
+    <h1>O site teve um problema</h1>
+    <p>Já estamos vendo o que aconteceu. Tente de novo em alguns minutos.</p>
+    <a href="/">Voltar ao catálogo</a>
+  </main>
+</body>
+</html>

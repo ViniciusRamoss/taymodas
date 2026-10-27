@@ -29,6 +29,7 @@ DJANGO_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sitemaps",
 ]
 THIRD_PARTY_APPS = [
     "django_tailwind_cli",
@@ -64,6 +65,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "apps.core.context_processors.store",
+                "apps.core.context_processors.seo",
             ],
         },
     },

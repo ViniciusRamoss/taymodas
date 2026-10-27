@@ -19,6 +19,8 @@ from .models import Category, Color, Product, ProductImage, ProductVariant, Size
 NEW_PRODUCT_DAYS = 7
 CARD_IMAGE_WIDTHS = (400, 800)
 DETAIL_IMAGE_WIDTHS = (600, 1200)
+# Prévia em WhatsApp/Instagram/Facebook: 1200px de largura é o recomendado pelo Open Graph.
+SHARE_IMAGE_WIDTH = 1200
 
 
 def _srcset(image: ProductImage, widths: tuple[int, ...]) -> str:
@@ -36,12 +38,14 @@ class GalleryImage:
     url: str
     srcset: str
     alt: str
+    share_url: str
 
 
 @dataclass(frozen=True)
 class ProductDetail:
     name: str
     price: str
+    price_amount: str
     description: str
     category_name: str
     category_slug: str
@@ -55,12 +59,14 @@ class ProductDetail:
                 url=image_url(image.image, width=DETAIL_IMAGE_WIDTHS[0]),
                 srcset=_srcset(image, DETAIL_IMAGE_WIDTHS),
                 alt=image.alt_text or product.name,
+                share_url=image_url(image.image, width=SHARE_IMAGE_WIDTH),
             )
             for image in product.images.all()
         )
         return cls(
             name=product.name,
             price=format_brl(product.price),
+            price_amount=f"{product.price:.2f}",
             description=product.description,
             category_name=product.category.name,
             category_slug=product.category.slug,

@@ -3,9 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Tay Modas — moda feminina em Serrana-SP{% endblock %}</title>
-  <meta name="description" content="{% block description %}Moda feminina com novidades toda semana. Entrega em Ribeirão Preto e região e envio para todo o Brasil.{% endblock %}">
+  {% comment %}
+    Título, descrição, canônico e prévia de compartilhamento vêm do contexto: `meta_title`,
+    `meta_description`, `meta_image`, `og_type`, `canonical_url` (padrão: o context processor
+    `apps.core.context_processors.seo`). Views sobrescrevem só o que precisam.
+  {% endcomment %}
+  {% with title=meta_title|default:"Tay Modas — moda feminina em Serrana-SP" description=meta_description|default:"Moda feminina com novidades toda semana. Entrega em Ribeirão Preto e região e envio para todo o Brasil."|truncatechars:160 %}
+  <title>{{ title }}</title>
+  <meta name="description" content="{{ description }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <meta property="og:site_name" content="Tay Modas">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:type" content="{{ og_type|default:"website" }}">
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ description }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  {% if meta_image %}
+    <meta property="og:image" content="{{ meta_image }}">
+    <meta name="twitter:card" content="summary_large_image">
+  {% endif %}
+  {% endwith %}
+  {% block extra_meta %}{% endblock %}
   <meta name="theme-color" content="#000000">
+  <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Jost:wght@400;500&display=swap">

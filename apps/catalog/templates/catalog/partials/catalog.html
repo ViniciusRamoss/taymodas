@@ -64,7 +64,8 @@
     {% if cards %}
       <ul class="mt-5 grid grid-cols-2 gap-x-3 gap-y-9 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-4">
         {% for card in cards %}
-          <li>{% include "catalog/partials/product_card.html" %}</li>
+          {# Abaixo do título da lista: h2 com hero (h1) ou h1 sem ele; o card fica um nível abaixo. #}
+          <li>{% if show_hero %}{% include "catalog/partials/product_card.html" with heading="h3" %}{% else %}{% include "catalog/partials/product_card.html" with heading="h2" %}{% endif %}</li>
         {% endfor %}
       </ul>
 

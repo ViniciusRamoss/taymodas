@@ -1,5 +1,5 @@
 {% comment %} Resposta do HTMX para a listagem: o catálogo, o topo (hero ou cabeçalho, fora de banda) e o
    título da aba, que o HTMX aplica sozinho. {% endcomment %}
-<title>{{ page_title }}</title>
+<title>{{ meta_title|default:"Tay Modas — moda feminina em Serrana-SP" }}</title>
 {% include "catalog/partials/catalog.html" %}
 <div id="topo" hx-swap-oob="true">{% include "catalog/partials/list_header.html" %}</div>

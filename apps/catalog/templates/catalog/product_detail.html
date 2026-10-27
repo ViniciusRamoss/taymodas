@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}{{ detail.name }} — Tay Modas{% endblock %}
-{% block description %}{% if detail.description %}{{ detail.description|truncatechars:155 }}{% else %}{{ block.super }}{% endif %}{% endblock %}
+{% block extra_meta %}
+  <meta property="product:price:amount" content="{{ detail.price_amount }}">
+  <meta property="product:price:currency" content="BRL">
+{% endblock %}
 
 {% block content %}
   <nav aria-label="Você está em" class="mx-auto max-w-6xl px-4 pt-4 text-sm text-cinza md:pt-6">
