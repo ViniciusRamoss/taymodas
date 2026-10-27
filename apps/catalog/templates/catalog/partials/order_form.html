@@ -1,17 +1,18 @@
-{# Formulário GET: funciona sem JS (botão no <noscript>); com HTMX troca só este bloco. #}
+{# Formulário GET: funciona sem JS; com HTMX troca só este bloco (ao mudar a escolha ou pedir). #}
 <form id="pedido" method="get" action="{{ request.path }}"
-      hx-get="{{ request.path }}" hx-trigger="change" hx-target="this" hx-swap="outerHTML"
+      hx-get="{{ request.path }}" hx-trigger="change, submit" hx-target="this" hx-swap="outerHTML"
       hx-replace-url="true"
       class="mt-6 space-y-6">
   {% if selection.colors %}
     <fieldset>
-      <legend class="text-sm">Cor{% if selection.color %}: <span class="font-medium">{{ selection.color.name }}</span>{% endif %}</legend>
+      <legend class="text-sm">Cor{% if selection.color %}: <span class="font-medium">{{ selection.color.name }}</span>{% elif wants_order %}: <span class="font-medium text-ouro-escuro">escolha uma</span>{% endif %}</legend>
       <div class="mt-2 flex flex-wrap gap-2">
         {% for choice in selection.colors %}
           <label class="cursor-pointer has-disabled:cursor-not-allowed">
             <input type="radio" name="cor" value="{{ choice.id }}" id="cor-{{ choice.id }}" class="peer sr-only"
                    {% if choice.is_selected %}checked{% endif %}
-                   {% if not choice.is_available and not choice.is_selected %}disabled{% endif %}>
+                   {% if not choice.is_available and not choice.is_selected %}disabled{% endif %}
+                   {% if focus_group == "cor" and focus_choice == choice.id %}autofocus{% endif %}>
             <span class="choice inline-flex items-center gap-2 rounded-full px-3.5 {% if not choice.is_available %}choice-out{% endif %}">
               {% if choice.hex_code %}<span class="swatch" style="background-color: {{ choice.hex_code }}" aria-hidden="true"></span>{% endif %}
               {{ choice.name }}{% if not choice.is_available %}<span class="sr-only"> (esgotado)</span>{% endif %}
@@ -24,13 +25,14 @@
 
   {% if selection.sizes %}
     <fieldset>
-      <legend class="text-sm">Tamanho{% if selection.size %}: <span class="font-medium">{{ selection.size.name }}</span>{% endif %}</legend>
+      <legend class="text-sm">Tamanho{% if selection.size %}: <span class="font-medium">{{ selection.size.name }}</span>{% elif wants_order %}: <span class="font-medium text-ouro-escuro">escolha um</span>{% endif %}</legend>
       <div class="mt-2 flex flex-wrap gap-2">
         {% for choice in selection.sizes %}
           <label class="cursor-pointer has-disabled:cursor-not-allowed">
             <input type="radio" name="tamanho" value="{{ choice.id }}" id="tamanho-{{ choice.id }}" class="peer sr-only"
                    {% if choice.is_selected %}checked{% endif %}
-                   {% if not choice.is_available and not choice.is_selected %}disabled{% endif %}>
+                   {% if not choice.is_available and not choice.is_selected %}disabled{% endif %}
+                   {% if focus_group == "tamanho" and focus_choice == choice.id %}autofocus{% endif %}>
             <span class="choice min-w-11 justify-center px-2 {% if not choice.is_available %}choice-out{% endif %}">
               {{ choice.name }}{% if not choice.is_available %}<span class="sr-only"> (esgotado)</span>{% endif %}
             </span>
@@ -40,24 +42,26 @@
     </fieldset>
   {% endif %}
 
-  <div>
-    {% if order_url %}
-      <a href="{{ order_url }}" target="_blank" rel="noopener"
-         class="flex w-full items-center justify-center bg-preto px-5 py-4 font-medium text-white hover:bg-tinta">Pedir pelo WhatsApp</a>
-      <p class="mt-2 text-sm text-cinza">Abre o WhatsApp com o pedido já escrito.</p>
-    {% elif selection.variant %}
-      {# Loja sem número cadastrado: sem botão, conforme a ajuda do admin. #}
-    {% elif selection.is_sold_out_combination %}
-      <p role="status" class="text-sm">{{ selection.size.name }} na cor {{ selection.color.name }} esgotou. Escolha outro tamanho ou cor.</p>
-    {% elif not selection.size and not selection.color %}
-      <p role="status" class="text-sm text-cinza">Escolha a cor e o tamanho para fazer o pedido.</p>
-    {% elif not selection.size %}
-      <p role="status" class="text-sm text-cinza">Escolha o tamanho para fazer o pedido.</p>
-    {% else %}
-      <p role="status" class="text-sm text-cinza">Escolha a cor para fazer o pedido.</p>
-    {% endif %}
-    <noscript>
-      <button type="submit" class="mt-3 border border-preto px-5 py-3 font-medium">Atualizar escolha</button>
-    </noscript>
-  </div>
+  {# Sem número cadastrado na loja não há botão, conforme a ajuda do admin. #}
+  {% if store.whatsapp_number %}
+    <div>
+      {% if order_url %}
+        <a href="{{ order_url }}" target="_blank" rel="noopener" class="order-button">Pedir pelo WhatsApp</a>
+        <p class="mt-2 text-sm text-cinza">Abre o WhatsApp com o pedido já escrito.</p>
+      {% else %}
+        <button type="submit" name="pedir" value="1" class="order-button">Pedir pelo WhatsApp</button>
+        <p role="status" class="mt-2 text-sm {% if wants_order %}font-medium text-tinta{% else %}text-cinza{% endif %}">
+          {% if selection.is_sold_out_combination %}
+            {{ selection.size.name }} na cor {{ selection.color.name }} esgotou. Escolha outro tamanho ou cor.
+          {% elif not selection.size and not selection.color %}
+            Escolha a cor e o tamanho para fazer o pedido.
+          {% elif not selection.size %}
+            Escolha o tamanho para fazer o pedido.
+          {% else %}
+            Escolha a cor para fazer o pedido.
+          {% endif %}
+        </p>
+      {% endif %}
+    </div>
+  {% endif %}
 </form>

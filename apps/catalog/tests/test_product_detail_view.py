@@ -1,3 +1,4 @@
+import re
 from urllib.parse import unquote
 
 import pytest
@@ -118,11 +119,46 @@ class TestProductDetailView:
 
         assert "<html" in response.content.decode()
 
-    def test_invalid_params_are_ignored(self, client: Client, product: Product) -> None:
+    def test_invalid_params_are_ignored(
+        self, client: Client, product: Product, store: StoreSettings
+    ) -> None:
         response = client.get(product.get_absolute_url(), {"tamanho": "abc", "cor": "-1"})
 
         assert response.status_code == 200
         assert "Escolha a cor e o tamanho" in response.content.decode()
+
+    def test_order_button_is_visible_before_choice(
+        self, client: Client, product: Product, store: StoreSettings
+    ) -> None:
+        content = client.get(product.get_absolute_url()).content.decode()
+
+        assert 'name="pedir" value="1"' in content
+        assert "autofocus" not in content
+
+    def test_order_without_full_choice_points_to_missing_group(
+        self, client: Client, product: Product, store: StoreSettings
+    ) -> None:
+        black = variant(product, "P", "Preto").color
+        params: dict[str, int | str] = {"cor": black.pk, "pedir": "1"}
+
+        response = client.get(product.get_absolute_url(), params, headers=HTMX)
+
+        content = response.content.decode()
+        small = variant(product, "P", "Preto").size
+        assert "escolha um" in content
+        assert re.search(f'id="tamanho-{small.pk}"[^>]*autofocus', content)
+        assert content.count("autofocus") == 1
+        assert "font-medium text-tinta" in content
+
+    def test_order_with_full_choice_without_js_redirects_to_whatsapp(
+        self, client: Client, product: Product, store: StoreSettings
+    ) -> None:
+        params: dict[str, int | str] = {**choose(product, "M", "Preto"), "pedir": "1"}
+
+        response = client.get(product.get_absolute_url(), params)
+
+        assert response.status_code == 302
+        assert response["Location"].startswith("https://wa.me/5511900000000?text=")
 
     def test_sold_out_product_shows_message_instead_of_form(self, client: Client) -> None:
         sold_out = ProductFactory.create()

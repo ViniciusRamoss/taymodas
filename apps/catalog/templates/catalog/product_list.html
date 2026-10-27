@@ -9,7 +9,7 @@
         <span class="sr-only">Tay Modas</span>
         <span aria-hidden="true">{% include "partials/wordmark.html" with size="hero" %}</span>
       </h1>
-      <p class="mx-auto mt-5 max-w-[34ch] text-[0.95rem] leading-relaxed text-white/75">
+      <p class="mx-auto mt-5 max-w-[34ch] text-[1.0625rem] leading-relaxed text-white/80">
         Moda feminina em Serrana-SP. Peças novas toda semana, entrega em Ribeirão Preto e região e
         envio para todo o Brasil.
       </p>
@@ -21,17 +21,17 @@
 
 {% block content %}
   {% if categories %}
-    <nav aria-label="Categorias" class="sticky top-0 z-10 border-b border-black/10 bg-white/95 backdrop-blur">
+    <nav aria-label="Categorias" class="sticky top-0 z-10 bg-white">
       <ul class="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 py-3 [scrollbar-width:none]">
         <li class="shrink-0">
           <a href="{% url 'catalog:product_list' %}"
-             class="inline-block rounded-full border px-4 py-1.5 text-sm {% if not current_category %}border-preto bg-preto text-white{% else %}border-black/20 hover:border-preto{% endif %}"
+             class="inline-block rounded-full px-4 py-2 text-sm transition-colors {% if not current_category %}bg-preto text-white{% else %}bg-nevoa hover:bg-preto hover:text-white{% endif %}"
              {% if not current_category %}aria-current="page"{% endif %}>Todas</a>
         </li>
         {% for category in categories %}
           <li class="shrink-0">
             <a href="{% url 'catalog:product_list' %}?categoria={{ category.slug }}"
-               class="inline-block rounded-full border px-4 py-1.5 text-sm {% if category == current_category %}border-preto bg-preto text-white{% else %}border-black/20 hover:border-preto{% endif %}"
+               class="inline-block rounded-full px-4 py-2 text-sm transition-colors {% if category == current_category %}bg-preto text-white{% else %}bg-nevoa hover:bg-preto hover:text-white{% endif %}"
                {% if category == current_category %}aria-current="page"{% endif %}>{{ category.name }}</a>
           </li>
         {% endfor %}

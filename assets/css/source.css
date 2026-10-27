@@ -65,4 +65,9 @@
   .peer:not(:checked, :disabled) + .choice:hover {
     @apply border-preto;
   }
+
+  /* Ação principal da página do produto (link pronto ou botão que pede a escolha). */
+  .order-button {
+    @apply flex w-full cursor-pointer items-center justify-center bg-preto px-5 py-4 font-medium text-white transition-colors hover:bg-tinta active:translate-y-px;
+  }
 }

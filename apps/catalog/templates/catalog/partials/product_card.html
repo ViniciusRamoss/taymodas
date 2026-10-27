@@ -22,12 +22,7 @@
   <p class="mt-1 font-medium {% if card.is_sold_out %}text-cinza{% endif %}">{{ card.price }}</p>
 
   {% if card.sizes %}
-    <p class="sr-only">Tamanhos disponíveis: {{ card.sizes|join:", " }}</p>
-    <ul class="mt-2 flex flex-wrap gap-1" aria-hidden="true">
-      {% for size in card.sizes %}
-        <li class="min-w-7 border border-black/20 px-1.5 py-0.5 text-center text-xs">{{ size }}</li>
-      {% endfor %}
-    </ul>
+    <p class="mt-1.5 text-sm text-cinza"><span class="sr-only">Tamanhos disponíveis: </span>{{ card.sizes|join:", " }}</p>
   {% endif %}
 
   {% if card.colors %}

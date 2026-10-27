@@ -76,6 +76,8 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
   colunas, foto 3:4 sem raio, sem cards com sombra. Selos "Novidade"/"Esgotado" = faixa
   preta + texto dourado (`.photo-tag`), derivados de dados reais.
 - Evitar: eyebrows em caixa alta, middle dots, setas em botões, palavra única destacada.
+- Sem linhas finas, desfoque (glass) ou caixinhas com contorno de 1px; separar por espaço ou
+  tom (`nevoa`). Exceção: controles de formulário (`.choice`). Texto corrido com 16px ou mais.
 - View usa `selectors.catalog_products()` + `presenters.ProductCard` (sem lógica no
   template). Número de queries da listagem não cresce com os produtos (teste cobre).
 
@@ -88,7 +90,10 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
 - `services.select_variant()` resolve a escolha (opções esgotadas riscadas; opção única já vem
   escolhida). `services.build_whatsapp_order_url()` monta o `wa.me`; mensagem com chaves
   inválidas cai na padrão; sem número cadastrado devolve `None` e o botão some.
-- Estilos `.choice`, `.choice-out`, `.swatch` em `source.css` (layer components; utilitários no
+- Botão "Pedir pelo WhatsApp" sempre visível (se a loja tem número): com a escolha completa é
+  link `wa.me`; incompleta, é submit com `pedir=1`, que destaca o grupo pendente e dá `autofocus`
+  na 1ª opção dele. Sem JS e com a escolha completa, `pedir=1` redireciona (302) para o WhatsApp.
+- Estilos `.choice`, `.choice-out`, `.swatch`, `.order-button` em `source.css` (layer components; utilitários no
   template sobrescrevem, então cor do anel fica no CSS).
 
 ## Decisões

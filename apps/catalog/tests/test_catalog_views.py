@@ -130,7 +130,7 @@ class TestProductListView:
         assert "Peças novas toda semana" in content
         assert "Saia Midi" in content
         assert "Novidade" in content
-        assert "Tamanhos disponíveis: M" in content
+        assert "Tamanhos disponíveis: </span>M</p>" in content
 
     def test_sold_out_product_is_shown_with_badge(self, client: Client) -> None:
         ProductFactory.create(name="Blusa Esgotada")
