@@ -1,0 +1,14 @@
+{% if show_hero %}
+  <header class="on-dark bg-preto px-4 pb-9 pt-10 text-center">
+    <h1>
+      <span class="sr-only">Tay Modas</span>
+      <span aria-hidden="true">{% include "partials/wordmark.html" with size="hero" %}</span>
+    </h1>
+    <p class="mx-auto mt-5 max-w-[34ch] text-[1.0625rem] leading-relaxed text-white/80">
+      Moda feminina em Serrana-SP. Peças novas toda semana, entrega em Ribeirão Preto e região e
+      envio para todo o Brasil.
+    </p>
+  </header>
+{% else %}
+  {% include "partials/site_header.html" %}
+{% endif %}

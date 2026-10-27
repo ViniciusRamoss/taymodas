@@ -2,15 +2,18 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from urllib.parse import urlencode
 
+from django.urls import reverse
 from django.utils import timezone
 
 from apps.core.formatting import format_brl
 from apps.core.images import image_url
 
-from .models import Product, ProductImage, ProductVariant
+from .models import Category, Color, Product, ProductImage, ProductVariant, Size
 
 # Peças cadastradas nos últimos dias ganham o selo "Novidade" (lançamentos são semanais).
 NEW_PRODUCT_DAYS = 7
@@ -107,4 +110,49 @@ class ProductCard:
             colors=tuple(ColorSwatch(color.name, color.hex_code) for color in colors),
             is_sold_out=is_sold_out,
             is_new=not is_sold_out and now - product.created_at <= timedelta(NEW_PRODUCT_DAYS),
+        )
+
+
+@dataclass(frozen=True)
+class CatalogFilters:
+    """Filtros da listagem: opções com estoque, o que está escolhido e as URLs derivadas."""
+
+    sizes: tuple[Size, ...]
+    colors: tuple[Color, ...]
+    size: Size | None
+    color: Color | None
+    clear_url: str
+    query_prefix: str
+
+    @property
+    def is_active(self) -> bool:
+        return self.size is not None or self.color is not None
+
+    @classmethod
+    def build(
+        cls,
+        *,
+        category: Category | None,
+        sizes: Sequence[Size],
+        colors: Sequence[Color],
+        size_id: int | None,
+        color_id: int | None,
+    ) -> CatalogFilters:
+        size = next((s for s in sizes if s.pk == size_id), None)
+        color = next((c for c in colors if c.pk == color_id), None)
+        base = {"categoria": category.slug} if category is not None else {}
+        params = {
+            **base,
+            **({"tamanho": str(size.pk)} if size is not None else {}),
+            **({"cor": str(color.pk)} if color is not None else {}),
+        }
+        list_url = reverse("catalog:product_list")
+        return cls(
+            sizes=tuple(sizes),
+            colors=tuple(colors),
+            size=size,
+            color=color,
+            clear_url=f"{list_url}?{urlencode(base)}" if base else list_url,
+            # Prefixo da querystring da paginação: "categoria=x&tamanho=1&" ou "".
+            query_prefix=f"{urlencode(params)}&" if params else "",
         )

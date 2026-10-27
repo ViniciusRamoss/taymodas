@@ -1,0 +1,101 @@
+{% comment %} Bloco trocado pelo HTMX: categorias, filtros e resultados. Links e o form usam a mesma URL
+   da página inteira, então tudo funciona sem JS e o endereço é compartilhável. {% endcomment %}
+<div id="catalogo" hx-target="#catalogo" hx-swap="outerHTML show:window:top">
+  {% if categories %}
+    <nav aria-label="Categorias" class="sticky top-0 z-10 bg-white" hx-boost="true">
+      <ul class="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 py-3 [scrollbar-width:none]">
+        <li class="shrink-0">
+          <a href="{% url 'catalog:product_list' %}"
+             class="inline-block rounded-full px-4 py-2 text-sm transition-colors {% if not current_category %}bg-preto text-white{% else %}bg-nevoa hover:bg-preto hover:text-white{% endif %}"
+             {% if not current_category %}aria-current="page"{% endif %}>Todas</a>
+        </li>
+        {% for category in categories %}
+          <li class="shrink-0">
+            <a href="{% url 'catalog:product_list' %}?categoria={{ category.slug }}"
+               class="inline-block rounded-full px-4 py-2 text-sm transition-colors {% if category == current_category %}bg-preto text-white{% else %}bg-nevoa hover:bg-preto hover:text-white{% endif %}"
+               {% if category == current_category %}aria-current="page"{% endif %}>{{ category.name }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  {% endif %}
+
+  <section class="mx-auto max-w-6xl px-4 pt-6" aria-labelledby="titulo-lista">
+    {% if show_hero %}
+      <h2 id="titulo-lista" class="font-display text-2xl">Todas as peças</h2>
+    {% else %}
+      <h1 id="titulo-lista" class="font-display text-2xl">{% if current_category %}{{ current_category.name }}{% else %}Todas as peças{% endif %}</h1>
+    {% endif %}
+
+    {% if filters.sizes or filters.colors %}
+      <form method="get" action="{% url 'catalog:product_list' %}" aria-label="Filtrar peças"
+            hx-get="{% url 'catalog:product_list' %}" hx-trigger="change" hx-push-url="true"
+            hx-on:htmx:config-request="const p = event.detail.parameters; for (const k of [...p.keys()]) if (!p.get(k)) p.delete(k)"
+            hx-swap="outerHTML"
+            class="mt-4 flex flex-wrap items-end gap-3">
+        {% if current_category %}<input type="hidden" name="categoria" value="{{ current_category.slug }}">{% endif %}
+        {% if filters.sizes %}
+          <label class="text-sm">Tamanho
+            <select name="tamanho" id="filtro-tamanho" class="filter-select">
+              <option value="">Todos</option>
+              {% for size in filters.sizes %}
+                <option value="{{ size.pk }}" {% if size == filters.size %}selected{% endif %}>{{ size.name }}</option>
+              {% endfor %}
+            </select>
+          </label>
+        {% endif %}
+        {% if filters.colors %}
+          <label class="text-sm">Cor
+            <select name="cor" id="filtro-cor" class="filter-select">
+              <option value="">Todas</option>
+              {% for color in filters.colors %}
+                <option value="{{ color.pk }}" {% if color == filters.color %}selected{% endif %}>{{ color.name }}</option>
+              {% endfor %}
+            </select>
+          </label>
+        {% endif %}
+        <noscript><button type="submit" class="h-11 bg-preto px-5 text-sm font-medium text-white">Filtrar</button></noscript>
+        {% if filters.is_active %}
+          <a href="{{ filters.clear_url }}" hx-boost="true" class="py-3 text-sm underline underline-offset-4">Limpar filtros</a>
+        {% endif %}
+      </form>
+    {% endif %}
+
+    {% if cards %}
+      <ul class="mt-5 grid grid-cols-2 gap-x-3 gap-y-9 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-4">
+        {% for card in cards %}
+          <li>{% include "catalog/partials/product_card.html" %}</li>
+        {% endfor %}
+      </ul>
+
+      {% if is_paginated %}
+        <nav aria-label="Páginas" class="mt-12 flex items-center justify-between gap-4 text-sm" hx-boost="true">
+          {% if page_obj.has_previous %}
+            <a class="px-1 py-3 underline-offset-4 hover:underline"
+               href="?{{ filters.query_prefix }}page={{ page_obj.previous_page_number }}">Peças anteriores</a>
+          {% else %}<span></span>{% endif %}
+          <span class="text-cinza">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+          {% if page_obj.has_next %}
+            <a class="bg-preto px-5 py-3 font-medium text-white"
+               href="?{{ filters.query_prefix }}page={{ page_obj.next_page_number }}">Ver mais peças</a>
+          {% else %}<span></span>{% endif %}
+        </nav>
+      {% endif %}
+    {% else %}
+      <div class="mt-8 max-w-prose text-cinza" role="status">
+        {% if filters.is_active %}
+          <p>Nenhuma peça disponível com esse filtro{% if current_category %} em {{ current_category.name }}{% endif %}.</p>
+          <a class="mt-3 inline-block font-medium text-tinta underline underline-offset-4" href="{{ filters.clear_url }}" hx-boost="true">Limpar filtros</a>
+        {% elif current_category %}
+          <p>Ainda não há peças em {{ current_category.name }}.</p>
+          <a class="mt-3 inline-block font-medium text-tinta underline underline-offset-4" href="{% url 'catalog:product_list' %}" hx-boost="true">Ver todas as peças</a>
+        {% else %}
+          <p>As peças desta semana estão chegando.</p>
+          {% if store.instagram_handle %}
+            <a class="mt-3 inline-block font-medium text-tinta underline underline-offset-4" href="https://instagram.com/{{ store.instagram_handle }}" rel="noopener">Acompanhe as novidades no Instagram</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    {% endif %}
+  </section>
+</div>

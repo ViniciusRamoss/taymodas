@@ -96,6 +96,19 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
 - Estilos `.choice`, `.choice-out`, `.swatch`, `.order-button` em `source.css` (layer components; utilitários no
   template sobrescrevem, então cor do anel fica no CSS).
 
+## Filtros da listagem (Etapa 6)
+
+- Querystring `?categoria=<slug>&tamanho=<pk>&cor=<pk>`; a mesma URL serve a página inteira e
+  o HTMX, então funciona sem JS e é compartilhável. Ids fora das opções são ignorados.
+- Tamanho + cor precisam bater na **mesma variante com estoque**; com filtro ativo, esgotados
+  somem (`selectors.catalog_products`). Opções vêm de `selectors.filter_options(category)`.
+- `presenters.CatalogFilters` guarda opções, escolha, `clear_url` e `query_prefix` (paginação).
+- HTMX: `#catalogo` é trocado inteiro (categorias com `hx-boost`, form com `hx-trigger="change"`
+  e `hx-push-url`). A resposta (`partials/catalog_htmx.html`) traz `<title>` e o `#topo`
+  (hero ou cabeçalho) via `hx-swap-oob`. Hero só na lista sem categoria, sem filtro, página 1;
+  fora dela o título da lista vira `<h1>`.
+- Comentário multilinha em template Django é `{% comment %}`; `{# #}` só vale numa linha.
+
 ## Decisões
 
 - `django_stubs_ext.monkeypatch()` em `base.py` permite `admin.ModelAdmin[Model]` em runtime.
@@ -128,4 +141,4 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
 ## Etapas
 
 0. Plano ✅ · 1. Scaffold ✅ · 2. Models ✅ · 3. Admin PT-BR ✅ · 4. Layout + listagem ✅ ·
-5. Detalhe + WhatsApp ✅ · 6. Filtros HTMX · 7. Acabamento · 8. Deploy · 9. Portfólio
+5. Detalhe + WhatsApp ✅ · 6. Filtros HTMX ✅ · 7. Acabamento · 8. Deploy · 9. Portfólio

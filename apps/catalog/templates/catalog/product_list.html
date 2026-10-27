@@ -1,81 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}{% if current_category %}{{ current_category.name }} — Tay Modas{% else %}{{ block.super }}{% endif %}{% endblock %}
+{% block title %}{{ page_title }}{% endblock %}
 
 {% block header %}
-  {% if not current_category and not page_obj.has_previous %}
-    <header class="on-dark bg-preto px-4 pb-9 pt-10 text-center">
-      <h1>
-        <span class="sr-only">Tay Modas</span>
-        <span aria-hidden="true">{% include "partials/wordmark.html" with size="hero" %}</span>
-      </h1>
-      <p class="mx-auto mt-5 max-w-[34ch] text-[1.0625rem] leading-relaxed text-white/80">
-        Moda feminina em Serrana-SP. Peças novas toda semana, entrega em Ribeirão Preto e região e
-        envio para todo o Brasil.
-      </p>
-    </header>
-  {% else %}
-    {{ block.super }}
-  {% endif %}
+  <div id="topo">{% include "catalog/partials/list_header.html" %}</div>
 {% endblock %}
 
 {% block content %}
-  {% if categories %}
-    <nav aria-label="Categorias" class="sticky top-0 z-10 bg-white">
-      <ul class="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 py-3 [scrollbar-width:none]">
-        <li class="shrink-0">
-          <a href="{% url 'catalog:product_list' %}"
-             class="inline-block rounded-full px-4 py-2 text-sm transition-colors {% if not current_category %}bg-preto text-white{% else %}bg-nevoa hover:bg-preto hover:text-white{% endif %}"
-             {% if not current_category %}aria-current="page"{% endif %}>Todas</a>
-        </li>
-        {% for category in categories %}
-          <li class="shrink-0">
-            <a href="{% url 'catalog:product_list' %}?categoria={{ category.slug }}"
-               class="inline-block rounded-full px-4 py-2 text-sm transition-colors {% if category == current_category %}bg-preto text-white{% else %}bg-nevoa hover:bg-preto hover:text-white{% endif %}"
-               {% if category == current_category %}aria-current="page"{% endif %}>{{ category.name }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-    </nav>
-  {% endif %}
-
-  <section class="mx-auto max-w-6xl px-4 pt-6" aria-labelledby="titulo-lista">
-    <h2 id="titulo-lista" class="font-display text-2xl">
-      {% if current_category %}{{ current_category.name }}{% else %}Todas as peças{% endif %}
-    </h2>
-
-    {% if cards %}
-      <ul class="mt-5 grid grid-cols-2 gap-x-3 gap-y-9 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-4">
-        {% for card in cards %}
-          <li>{% include "catalog/partials/product_card.html" %}</li>
-        {% endfor %}
-      </ul>
-
-      {% if is_paginated %}
-        <nav aria-label="Páginas" class="mt-12 flex items-center justify-between gap-4 text-sm">
-          {% if page_obj.has_previous %}
-            <a class="px-1 py-3 underline-offset-4 hover:underline"
-               href="?{% if current_category %}categoria={{ current_category.slug }}&amp;{% endif %}page={{ page_obj.previous_page_number }}">Peças anteriores</a>
-          {% else %}<span></span>{% endif %}
-          <span class="text-cinza">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
-          {% if page_obj.has_next %}
-            <a class="bg-preto px-5 py-3 font-medium text-white"
-               href="?{% if current_category %}categoria={{ current_category.slug }}&amp;{% endif %}page={{ page_obj.next_page_number }}">Ver mais peças</a>
-          {% else %}<span></span>{% endif %}
-        </nav>
-      {% endif %}
-    {% else %}
-      <div class="mt-8 max-w-prose text-cinza">
-        {% if current_category %}
-          <p>Ainda não há peças em {{ current_category.name }}.</p>
-          <a class="mt-3 inline-block font-medium text-tinta underline underline-offset-4" href="{% url 'catalog:product_list' %}">Ver todas as peças</a>
-        {% else %}
-          <p>As peças desta semana estão chegando.</p>
-          {% if store.instagram_handle %}
-            <a class="mt-3 inline-block font-medium text-tinta underline underline-offset-4" href="https://instagram.com/{{ store.instagram_handle }}" rel="noopener">Acompanhe as novidades no Instagram</a>
-          {% endif %}
-        {% endif %}
-      </div>
-    {% endif %}
-  </section>
+  {% include "catalog/partials/catalog.html" %}
 {% endblock %}
