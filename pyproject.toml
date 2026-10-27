@@ -1,0 +1,87 @@
+[project]
+name = "taymodas"
+version = "0.1.0"
+description = "Catálogo online da Tay Modas com pedidos via WhatsApp."
+authors = [
+    { name = "Vinicius Silva Ramos", email = "vinicius_silva.ramos@hotmail.com" }
+]
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "cloudinary>=1.46.3",
+    "django>=5.2,<5.3",
+    "django-environ>=0.14.0",
+    "django-stubs-ext>=6.1.2",
+    "django-tailwind-cli>=4.8.1",
+    "gunicorn>=26.2.0",
+    "pillow>=13.0.0",
+    "psycopg[binary]>=3.3.6",
+    "whitenoise>=6.12.0",
+]
+
+[dependency-groups]
+dev = [
+    "django-stubs>=6.1.2",
+    "factory-boy>=3.3.3",
+    "mypy>=2.4.0",
+    "pre-commit>=4.7.0",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "pytest-django>=4.14.0",
+    "ruff>=0.17.3",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["**/migrations/*.py"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "DJ",  # flake8-django
+    "S",   # flake8-bandit
+    "SIM", # flake8-simplify
+    "RUF", # ruff-specific
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Django usa listas como atributos de classe (Meta.ordering, ModelAdmin.list_display).
+"apps/**/*.py" = ["RUF012"]
+"**/tests/**" = ["S101", "S106"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["mypy_django_plugin.main"]
+exclude = ["migrations/"]
+
+[[tool.mypy.overrides]]
+module = ["environ.*", "cloudinary.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# factory-boy expõe `create()`/`build()` sem anotação de tipos.
+module = ["apps.*.tests.*"]
+disallow_untyped_calls = false
+
+[tool.django-stubs]
+django_settings_module = "config.settings.test"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+python_files = ["test_*.py"]
+addopts = "--strict-markers --cov=apps --cov=config --cov-report=term-missing"
+filterwarnings = ["error"]
+
+[tool.coverage.run]
+omit = ["*/migrations/*", "config/wsgi.py", "config/asgi.py", "manage.py"]

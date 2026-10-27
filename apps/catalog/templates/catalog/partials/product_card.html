@@ -1,0 +1,42 @@
+<article class="group">
+  <div class="relative aspect-[3/4] overflow-hidden bg-nevoa">
+    {% if card.image_url %}
+      <img src="{{ card.image_url }}"
+           srcset="{{ card.image_srcset }}"
+           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+           alt="{{ card.image_alt }}"
+           loading="lazy" decoding="async"
+           class="h-full w-full object-cover {% if card.is_sold_out %}opacity-55 grayscale{% endif %}">
+    {% endif %}
+    {% if card.is_sold_out %}
+      <span class="photo-tag">Esgotado</span>
+    {% elif card.is_new %}
+      <span class="photo-tag">Novidade</span>
+    {% endif %}
+  </div>
+
+  <h3 class="mt-3 line-clamp-2 font-display text-[1.05rem] leading-snug">{{ card.name }}</h3>
+  <p class="mt-1 font-medium {% if card.is_sold_out %}text-cinza{% endif %}">{{ card.price }}</p>
+
+  {% if card.sizes %}
+    <p class="sr-only">Tamanhos disponíveis: {{ card.sizes|join:", " }}</p>
+    <ul class="mt-2 flex flex-wrap gap-1" aria-hidden="true">
+      {% for size in card.sizes %}
+        <li class="min-w-7 border border-black/20 px-1.5 py-0.5 text-center text-xs">{{ size }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if card.colors %}
+    <p class="sr-only">Cores disponíveis: {% for color in card.colors %}{{ color.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+    <ul class="mt-2 flex flex-wrap items-center gap-1.5" aria-hidden="true">
+      {% for color in card.colors %}
+        {% if color.hex_code %}
+          <li class="size-3.5 rounded-full ring-1 ring-black/20" style="background-color: {{ color.hex_code }}" title="{{ color.name }}"></li>
+        {% else %}
+          <li class="text-xs text-cinza">{{ color.name }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+</article>

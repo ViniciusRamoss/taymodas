@@ -1,0 +1,34 @@
+{% load static tailwind_cli %}<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Tay Modas — moda feminina em Serrana-SP{% endblock %}</title>
+  <meta name="description" content="{% block description %}Moda feminina com novidades toda semana. Entrega em Ribeirão Preto e região e envio para todo o Brasil.{% endblock %}">
+  <meta name="theme-color" content="#000000">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Jost:wght@400;500&display=swap">
+  {% tailwind_css %}
+  <script src="{% static 'js/htmx.min.js' %}" defer></script>
+</head>
+<body class="flex min-h-dvh flex-col">
+  <a href="#conteudo" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2">Pular para o conteúdo</a>
+
+  {% block header %}
+    <header class="on-dark bg-preto">
+      <div class="mx-auto flex h-14 max-w-6xl items-center justify-center px-4">
+        <a href="{% url 'catalog:product_list' %}" aria-label="Tay Modas — página inicial">
+          {% include "partials/wordmark.html" with size="small" %}
+        </a>
+      </div>
+    </header>
+  {% endblock %}
+
+  <main id="conteudo" class="flex-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include "partials/footer.html" %}
+</body>
+</html>

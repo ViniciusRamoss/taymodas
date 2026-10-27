@@ -1,0 +1,8 @@
+{% comment %}
+  Logotipo em texto, provisório até termos o arquivo do logo.
+  Uso: {% include "partials/wordmark.html" with size="small" %} (ou size="hero").
+{% endcomment %}
+<span class="inline-flex items-baseline font-display leading-none text-ouro {% if size == 'hero' %}gap-[0.18em] text-[clamp(3.25rem,17vw,9rem)]{% else %}gap-1.5 text-2xl{% endif %}">
+  <span class="font-semibold tracking-[0.06em]">TAY</span>
+  <span class="italic">modas</span>
+</span>

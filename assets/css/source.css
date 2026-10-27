@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@source "../../templates";
+@source "../../apps";
+
+/*
+ * Paleta baseada no logo (fundo preto, "TAY modas" em dourado).
+ * O dourado exato é provisório até recebermos o arquivo do logo.
+ */
+@theme {
+  --color-preto: #000000;
+  --color-ouro: #c8a24a; /* só sobre preto: contraste 8.8:1 */
+  --color-ouro-escuro: #7a5b12; /* texto dourado sobre branco: 6.1:1 */
+  --color-tinta: #2b2b2b;
+  --color-cinza: #6b6b6b;
+  --color-nevoa: #f2f2f0;
+
+  --font-display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --font-sans: "Jost", "Futura", system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-white font-sans text-tinta antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ouro-escuro;
+  }
+
+  .on-dark :focus-visible {
+    @apply outline-ouro;
+  }
+}
+
+@layer components {
+  /* Selo sobre a foto: faixa preta com texto dourado, ecoando o logo. */
+  .photo-tag {
+    @apply absolute bottom-0 left-0 bg-preto px-2.5 py-1 text-xs font-medium tracking-wide text-ouro;
+  }
+}
