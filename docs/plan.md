@@ -57,7 +57,7 @@ ProductVariant product, size, color, stock             único por (product, size
 
 | Tema               | Decisão                                       | Status                |
 |--------------------|-----------------------------------------------|-----------------------|
-| WhatsApp           | Número e mensagem em `StoreSettings`          | Aguardando número     |
+| WhatsApp           | Número e mensagem em `StoreSettings`          | Número provisório     |
 | Categorias         | Model no admin + seed via data migration      | Aguardando lista      |
 | Esgotado           | Exibir com selo "Esgotado"                    | Padrão recomendado    |
 | Baixa de estoque   | Manual no admin                               | Padrão recomendado    |
@@ -76,7 +76,7 @@ ProductVariant product, size, color, stock             único por (product, size
 
 ## Evolução
 
-1. Hoje: `build_whatsapp_order_url(variant)`.
+1. Hoje: `build_whatsapp_order_url(variant, store, product_url)`.
 2. `cart`: carrinho em sessão, itens apontando para `ProductVariant`.
 3. `orders`: `Order`/`OrderItem` com preço congelado; baixa de estoque com `select_for_update`.
 4. `payments`: interface `PaymentGateway` (Pix/Mercado Pago ou similar).

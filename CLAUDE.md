@@ -79,6 +79,18 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
 - View usa `selectors.catalog_products()` + `presenters.ProductCard` (sem lógica no
   template). Número de queries da listagem não cresce com os produtos (teste cobre).
 
+## Página do produto (Etapa 5)
+
+- URL `/p/<slug>/` (`catalog:product_detail`). Escolha na querystring `?cor=<pk>&tamanho=<pk>`:
+  form GET que funciona sem JS; com HTMX (`hx-trigger="change"`) a view devolve só
+  `partials/order_form.html` e a URL é atualizada (`hx-replace-url`). Restore de histórico do
+  HTMX recebe a página inteira. Resposta tem `Vary: HX-Request`.
+- `services.select_variant()` resolve a escolha (opções esgotadas riscadas; opção única já vem
+  escolhida). `services.build_whatsapp_order_url()` monta o `wa.me`; mensagem com chaves
+  inválidas cai na padrão; sem número cadastrado devolve `None` e o botão some.
+- Estilos `.choice`, `.choice-out`, `.swatch` em `source.css` (layer components; utilitários no
+  template sobrescrevem, então cor do anel fica no CSS).
+
 ## Decisões
 
 - `django_stubs_ext.monkeypatch()` em `base.py` permite `admin.ModelAdmin[Model]` em runtime.
@@ -102,7 +114,8 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
 
 ## Pendências com o dono do projeto
 
-- Número do WhatsApp e texto da mensagem padrão
+- Número do WhatsApp da loja e texto da mensagem padrão (no banco de dev há um número
+  provisório, pessoal do dono do projeto; trocar no admin antes do deploy)
 - Lista final de categorias e tamanhos
 - Confirmação: esgotado exibido vs. escondido
 - Textos de entrega (cidades do mototáxi, envio nacional, prazos, retirada)
@@ -110,4 +123,4 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
 ## Etapas
 
 0. Plano ✅ · 1. Scaffold ✅ · 2. Models ✅ · 3. Admin PT-BR ✅ · 4. Layout + listagem ✅ ·
-5. Detalhe + WhatsApp · 6. Filtros HTMX · 7. Acabamento · 8. Deploy · 9. Portfólio
+5. Detalhe + WhatsApp ✅ · 6. Filtros HTMX · 7. Acabamento · 8. Deploy · 9. Portfólio

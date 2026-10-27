@@ -6,6 +6,7 @@ from typing import Any
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from django.db.models.functions import Coalesce
+from django.urls import reverse
 
 from apps.core.models import TimeStampedModel
 from apps.core.text import unique_slugify
@@ -179,6 +180,9 @@ class Product(TimeStampedModel):
         if not self.slug:
             self.slug = unique_slugify(self, self.name)
         super().save(*args, **kwargs)
+
+    def get_absolute_url(self) -> str:
+        return reverse("catalog:product_detail", kwargs={"slug": self.slug})
 
 
 class ProductImage(models.Model):

@@ -31,6 +31,19 @@ def catalog_products(category: Category | None = None) -> QuerySet[Product]:
     )
 
 
+def product_details() -> QuerySet[Product]:
+    """Produtos visíveis com o que a página do produto usa: fotos e todas as variantes
+    (inclusive as esgotadas, que aparecem riscadas), com tamanho e cor."""
+    return (
+        Product.objects.active()
+        .select_related("category")
+        .prefetch_related(
+            "images",
+            Prefetch("variants", queryset=ProductVariant.objects.select_related("size", "color")),
+        )
+    )
+
+
 def categories_with_products() -> QuerySet[Category]:
     """Categorias ativas que têm pelo menos um produto visível."""
     visible = Product.objects.active().filter(category=OuterRef("pk"))

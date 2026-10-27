@@ -10,11 +10,16 @@ from django.utils import timezone
 from apps.core.formatting import format_brl
 from apps.core.images import image_url
 
-from .models import Product, ProductVariant
+from .models import Product, ProductImage, ProductVariant
 
 # Peças cadastradas nos últimos dias ganham o selo "Novidade" (lançamentos são semanais).
 NEW_PRODUCT_DAYS = 7
 CARD_IMAGE_WIDTHS = (400, 800)
+DETAIL_IMAGE_WIDTHS = (600, 1200)
+
+
+def _srcset(image: ProductImage, widths: tuple[int, ...]) -> str:
+    return ", ".join(f"{image_url(image.image, width=width)} {width}w" for width in widths)
 
 
 @dataclass(frozen=True)
@@ -24,8 +29,46 @@ class ColorSwatch:
 
 
 @dataclass(frozen=True)
+class GalleryImage:
+    url: str
+    srcset: str
+    alt: str
+
+
+@dataclass(frozen=True)
+class ProductDetail:
+    name: str
+    price: str
+    description: str
+    category_name: str
+    category_slug: str
+    images: tuple[GalleryImage, ...]
+
+    @classmethod
+    def from_product(cls, product: Product) -> ProductDetail:
+        """Monta a página a partir de um produto vindo de `selectors.product_details`."""
+        images = tuple(
+            GalleryImage(
+                url=image_url(image.image, width=DETAIL_IMAGE_WIDTHS[0]),
+                srcset=_srcset(image, DETAIL_IMAGE_WIDTHS),
+                alt=image.alt_text or product.name,
+            )
+            for image in product.images.all()
+        )
+        return cls(
+            name=product.name,
+            price=format_brl(product.price),
+            description=product.description,
+            category_name=product.category.name,
+            category_slug=product.category.slug,
+            images=images,
+        )
+
+
+@dataclass(frozen=True)
 class ProductCard:
     name: str
+    url: str
     price: str
     image_url: str
     image_srcset: str
@@ -46,9 +89,7 @@ class ProductCard:
         url, srcset, alt = "", "", product.name
         if cover is not None:
             url = image_url(cover.image, width=CARD_IMAGE_WIDTHS[0])
-            srcset = ", ".join(
-                f"{image_url(cover.image, width=width)} {width}w" for width in CARD_IMAGE_WIDTHS
-            )
+            srcset = _srcset(cover, CARD_IMAGE_WIDTHS)
             alt = cover.alt_text or product.name
 
         sizes = sorted({v.size for v in variants}, key=lambda size: (size.position, size.name))
@@ -57,6 +98,7 @@ class ProductCard:
 
         return cls(
             name=product.name,
+            url=product.get_absolute_url(),
             price=format_brl(product.price),
             image_url=url,
             image_srcset=srcset,

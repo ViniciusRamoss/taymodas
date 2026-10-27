@@ -42,4 +42,27 @@
   .photo-tag {
     @apply absolute bottom-0 left-0 bg-preto px-2.5 py-1 text-xs font-medium tracking-wide text-ouro;
   }
+
+  /* Opção de tamanho/cor: o <input> (peer, sr-only) vem logo antes deste <span>. */
+  .choice {
+    @apply inline-flex h-11 items-center border border-black/20 text-sm;
+  }
+  .peer:checked + .choice {
+    @apply border-preto bg-preto text-white;
+  }
+  .swatch {
+    @apply size-4 rounded-full ring-1 ring-black/20;
+  }
+  .peer:checked + .choice .swatch {
+    @apply ring-white/70;
+  }
+  .peer:focus-visible + .choice {
+    @apply outline-2 outline-offset-2 outline-ouro-escuro;
+  }
+  .choice-out {
+    @apply border-dashed text-cinza line-through;
+  }
+  .peer:not(:checked, :disabled) + .choice:hover {
+    @apply border-preto;
+  }
 }

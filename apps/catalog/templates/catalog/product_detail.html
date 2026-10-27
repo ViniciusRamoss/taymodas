@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}{{ detail.name }} — Tay Modas{% endblock %}
+{% block description %}{% if detail.description %}{{ detail.description|truncatechars:155 }}{% else %}{{ block.super }}{% endif %}{% endblock %}
+
+{% block content %}
+  <nav aria-label="Você está em" class="mx-auto max-w-6xl px-4 pt-4 text-sm text-cinza md:pt-6">
+    <ol class="flex flex-wrap gap-x-2">
+      <li><a class="underline-offset-4 hover:underline" href="{% url 'catalog:product_list' %}">Início</a></li>
+      <li aria-hidden="true">/</li>
+      <li><a class="underline-offset-4 hover:underline" href="{% url 'catalog:product_list' %}?categoria={{ detail.category_slug }}">{{ detail.category_name }}</a></li>
+    </ol>
+  </nav>
+
+  <div class="mx-auto mt-4 max-w-6xl md:grid md:grid-cols-12 md:gap-10 md:px-4">
+    <div class="md:col-span-7">
+      {% if detail.images %}
+        {# Mobile: carrossel com scroll-snap (a próxima foto aparece na borda). Desktop: grade. #}
+        <ul aria-label="Fotos de {{ detail.name }}"
+            class="flex snap-x snap-mandatory scroll-px-4 gap-2 overflow-x-auto px-4 [scrollbar-width:none] md:grid md:grid-cols-2 md:gap-3 md:overflow-visible md:px-0">
+          {% for image in detail.images %}
+            <li class="shrink-0 snap-start {% if detail.images|length == 1 %}w-full md:col-span-2{% else %}w-[88%] md:w-auto{% endif %}">
+              <img src="{{ image.url }}"
+                   srcset="{{ image.srcset }}"
+                   sizes="(min-width: 768px) 30vw, 88vw"
+                   alt="{{ image.alt }}"
+                   decoding="async"
+                   {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
+                   class="aspect-[3/4] w-full bg-nevoa object-cover {% if is_sold_out %}opacity-55 grayscale{% endif %}">
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="mx-4 aspect-[3/4] bg-nevoa md:mx-0"></div>
+      {% endif %}
+    </div>
+
+    <div class="px-4 pb-12 pt-6 md:col-span-5 md:px-0 md:pt-0">
+      <div class="md:sticky md:top-8">
+        <h1 class="font-display text-[1.9rem] leading-tight md:text-[2.25rem]">{{ detail.name }}</h1>
+        <p class="mt-2 text-lg font-medium {% if is_sold_out %}text-cinza{% endif %}">{{ detail.price }}</p>
+
+        {% if is_sold_out %}
+          <div class="mt-6">
+            <p class="font-medium">Esta peça esgotou.</p>
+            <a class="mt-2 inline-block underline underline-offset-4" href="{% url 'catalog:product_list' %}?categoria={{ detail.category_slug }}">Ver outras peças de {{ detail.category_name }}</a>
+          </div>
+        {% else %}
+          {% include "catalog/partials/order_form.html" %}
+        {% endif %}
+
+        {% if detail.description %}
+          <div class="mt-10 max-w-prose space-y-3 leading-relaxed">{{ detail.description|linebreaks }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -22,3 +22,6 @@ staticfiles/
 Thumbs.db
 static/css/tailwind.css
 .django_tailwind_cli/
+
+# Inspeções de design (taste-skill)
+.taste-skill/

@@ -1,4 +1,4 @@
-<article class="group">
+<article class="relative">
   <div class="relative aspect-[3/4] overflow-hidden bg-nevoa">
     {% if card.image_url %}
       <img src="{{ card.image_url }}"
@@ -15,7 +15,10 @@
     {% endif %}
   </div>
 
-  <h3 class="mt-3 line-clamp-2 font-display text-[1.05rem] leading-snug">{{ card.name }}</h3>
+  {# O link cobre o card inteiro (foto incluída) via ::after. #}
+  <h3 class="mt-3 line-clamp-2 font-display text-[1.05rem] leading-snug">
+    <a href="{{ card.url }}" class="after:absolute after:inset-0 hover:underline hover:underline-offset-4">{{ card.name }}</a>
+  </h3>
   <p class="mt-1 font-medium {% if card.is_sold_out %}text-cinza{% endif %}">{{ card.price }}</p>
 
   {% if card.sizes %}
