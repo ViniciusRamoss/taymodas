@@ -12,7 +12,7 @@ admin.site.unregister(Group)
 @admin.register(StoreSettings)
 class StoreSettingsAdmin(admin.ModelAdmin[StoreSettings]):
     fieldsets = [
-        ("Contato", {"fields": ["whatsapp_number", "instagram_handle"]}),
+        ("Contato", {"fields": ["whatsapp_number", "instagram_handle", "store_address"]}),
         (
             "Pedido pelo WhatsApp",
             {
@@ -21,7 +21,8 @@ class StoreSettingsAdmin(admin.ModelAdmin[StoreSettings]):
                 "em “Pedir no WhatsApp”.",
             },
         ),
-        ("Entrega", {"fields": ["delivery_info"]}),
+        ("Entrega", {"fields": ["mototaxi_cities", "delivery_info"]}),
+        ("Sobre", {"fields": ["about_text"]}),
     ]
 
     def has_add_permission(self, request: HttpRequest) -> bool:

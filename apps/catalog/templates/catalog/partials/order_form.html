@@ -5,7 +5,7 @@
       class="mt-6 space-y-6">
   {% if selection.colors %}
     <fieldset>
-      <legend class="text-sm">Cor{% if selection.color %}: <span class="font-medium">{{ selection.color.name }}</span>{% elif wants_order %}: <span class="font-medium text-ouro-escuro">escolha uma</span>{% endif %}</legend>
+      <legend class="text-[0.95rem]">Cor{% if selection.color %}: <span class="font-medium">{{ selection.color.name }}</span>{% elif wants_order %}: <span class="font-medium text-rosa">escolha uma</span>{% endif %}</legend>
       <div class="mt-2 flex flex-wrap gap-2">
         {% for choice in selection.colors %}
           <label class="cursor-pointer has-disabled:cursor-not-allowed">
@@ -25,7 +25,7 @@
 
   {% if selection.sizes %}
     <fieldset>
-      <legend class="text-sm">Tamanho{% if selection.size %}: <span class="font-medium">{{ selection.size.name }}</span>{% elif wants_order %}: <span class="font-medium text-ouro-escuro">escolha um</span>{% endif %}</legend>
+      <legend class="text-[0.95rem]">Tamanho{% if selection.size %}: <span class="font-medium">{{ selection.size.name }}</span>{% elif wants_order %}: <span class="font-medium text-rosa">escolha um</span>{% endif %}</legend>
       <div class="mt-2 flex flex-wrap gap-2">
         {% for choice in selection.sizes %}
           <label class="cursor-pointer has-disabled:cursor-not-allowed">
@@ -46,11 +46,11 @@
   {% if store.whatsapp_number %}
     <div>
       {% if order_url %}
-        <a href="{{ order_url }}" target="_blank" rel="noopener" class="order-button">Pedir pelo WhatsApp</a>
-        <p class="mt-2 text-sm text-cinza">Abre o WhatsApp com o pedido já escrito.</p>
+        <a href="{{ order_url }}" target="_blank" rel="noopener" class="order-button">{% include "partials/icon.html" with name="chat" %}Pedir pelo WhatsApp</a>
+        <p class="mt-2 text-sm text-malva">Abre o WhatsApp com o pedido já escrito.</p>
       {% else %}
-        <button type="submit" name="pedir" value="1" class="order-button">Pedir pelo WhatsApp</button>
-        <p role="status" class="mt-2 text-sm {% if wants_order %}font-medium text-tinta{% else %}text-cinza{% endif %}">
+        <button type="submit" name="pedir" value="1" class="order-button">{% include "partials/icon.html" with name="chat" %}Pedir pelo WhatsApp</button>
+        <p role="status" class="mt-2 text-sm {% if wants_order %}font-medium text-tinta{% else %}text-malva{% endif %}">
           {% if selection.is_sold_out_combination %}
             {{ selection.size.name }} na cor {{ selection.color.name }} esgotou. Escolha outro tamanho ou cor.
           {% elif not selection.size and not selection.color %}

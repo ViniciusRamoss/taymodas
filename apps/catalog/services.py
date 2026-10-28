@@ -4,14 +4,11 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from dataclasses import dataclass
-from urllib.parse import quote
 
 from apps.core.formatting import format_brl
 from apps.core.models import DEFAULT_ORDER_MESSAGE, StoreSettings
 
 from .models import Color, ProductVariant, Size
-
-WHATSAPP_URL = "https://wa.me/{number}?text={text}"
 
 
 @dataclass(frozen=True)
@@ -96,8 +93,6 @@ def build_whatsapp_order_url(
 
     Devolve `None` enquanto a loja não cadastrou o número (o botão não aparece).
     """
-    if not store.whatsapp_number:
-        return None
     fields = {
         "produto": variant.product.name,
         "tamanho": variant.size.name,
@@ -111,4 +106,4 @@ def build_whatsapp_order_url(
         # Mensagem salva com chaves inválidas (ex.: "{" solto): usa a padrão para não
         # deixar a cliente sem botão de pedido.
         text = DEFAULT_ORDER_MESSAGE.format_map(fields)
-    return WHATSAPP_URL.format(number=store.whatsapp_number, text=quote(text))
+    return store.whatsapp_url(text)

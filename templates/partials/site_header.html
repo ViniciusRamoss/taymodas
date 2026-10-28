@@ -1,7 +1,21 @@
-<header class="on-dark bg-preto">
-  <div class="mx-auto flex h-14 max-w-6xl items-center justify-center px-4">
-    <a href="{% url 'catalog:product_list' %}" aria-label="Tay Modas — página inicial">
+{% comment %} Cabeçalho de todas as páginas. `nav_current` vem da view (catalogo/entregas/como-comprar). {% endcomment %}
+<header class="bg-creme">
+  {% if store.instagram_handle %}
+    <p class="bg-petala-forte px-4 py-2 text-center text-[0.85rem] text-rosa-escuro">
+      Novidades toda semana no
+      <a class="font-medium underline underline-offset-2" href="https://instagram.com/{{ store.instagram_handle }}" rel="noopener">@{{ store.instagram_handle }}</a>
+    </p>
+  {% endif %}
+  <div class="mx-auto flex max-w-6xl flex-col items-center gap-1 px-4 pt-3 sm:h-28 sm:flex-row sm:justify-between sm:pt-0">
+    <a href="{% url 'catalog:product_list' %}" aria-label="Tay Modas, página inicial" class="inline-flex">
       {% include "partials/wordmark.html" with size="small" %}
     </a>
+    <nav aria-label="Principal">
+      <ul class="flex gap-6 sm:gap-8">
+        <li><a class="nav-link" href="{% url 'catalog:product_list' %}" {% if nav_current == "catalogo" %}aria-current="page"{% endif %}>Peças</a></li>
+        <li><a class="nav-link" href="{% url 'core:delivery' %}" {% if nav_current == "entregas" %}aria-current="page"{% endif %}>Entregas</a></li>
+        <li><a class="nav-link" href="{% url 'core:how_to_buy' %}" {% if nav_current == "como-comprar" %}aria-current="page"{% endif %}>Como comprar</a></li>
+      </ul>
+    </nav>
   </div>
 </header>

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="mx-auto max-w-6xl px-4">
+    <section aria-labelledby="titulo-comprar" class="pb-10 pt-8 sm:pt-12">
+      <h1 id="titulo-comprar" class="rise max-w-[16ch] font-display text-[clamp(2.4rem,8vw,4.2rem)] leading-[1.04] tracking-[-0.02em]">Do site para o seu WhatsApp</h1>
+      <p class="rise-late mt-5 max-w-[52ch] text-[1.05rem] leading-relaxed text-tinta/80">
+        Sem cadastro e sem carrinho. Você escolhe aqui, a gente atende você pessoalmente na conversa.
+      </p>
+      <a class="button mt-7" href="{% url 'catalog:product_list' %}">Ver as peças</a>
+    </section>
+
+    {% comment %} Os passos são uma sequência real; por isso a numeração, numa coluna só. {% endcomment %}
+    <ol class="rounded-3xl bg-petala px-6 py-2 sm:px-10">
+        <li class="grid grid-cols-[3rem_1fr] gap-x-4 py-6 sm:grid-cols-[5rem_1fr] sm:py-8">
+          <span class="font-display text-[2.75rem] leading-none text-rosa sm:text-[3.5rem]" aria-hidden="true">1</span>
+          <div>
+            <h2 class="font-display text-[1.6rem] leading-tight">Escolha a peça</h2>
+            <p class="mt-2 max-w-[56ch] leading-relaxed text-tinta/80">Veja por categoria ou filtre pelo seu tamanho e pela cor que você quer.</p>
+            <a class="mt-2 inline-flex min-h-11 items-center text-rosa-escuro underline underline-offset-4" href="{% url 'catalog:product_list' %}">Ver as peças</a>
+          </div>
+        </li>
+        <li class="grid grid-cols-[3rem_1fr] gap-x-4 py-6 sm:grid-cols-[5rem_1fr] sm:py-8 border-t border-petala-forte">
+          <span class="font-display text-[2.75rem] leading-none text-rosa sm:text-[3.5rem]" aria-hidden="true">2</span>
+          <div>
+            <h2 class="font-display text-[1.6rem] leading-tight">Escolha tamanho e cor</h2>
+            <p class="mt-2 max-w-[56ch] leading-relaxed text-tinta/80">Na página da peça, as combinações sem estoque aparecem riscadas. O que está disponível, está na loja.</p>
+          </div>
+        </li>
+        <li class="grid grid-cols-[3rem_1fr] gap-x-4 py-6 sm:grid-cols-[5rem_1fr] sm:py-8 border-t border-petala-forte">
+          <span class="font-display text-[2.75rem] leading-none text-rosa sm:text-[3.5rem]" aria-hidden="true">3</span>
+          <div>
+            <h2 class="font-display text-[1.6rem] leading-tight">Toque em Pedir pelo WhatsApp</h2>
+            <p class="mt-2 max-w-[56ch] leading-relaxed text-tinta/80">A mensagem já vai escrita, com a peça, o tamanho, a cor, o preço e o link. É só enviar.</p>
+          </div>
+        </li>
+        <li class="grid grid-cols-[3rem_1fr] gap-x-4 py-6 sm:grid-cols-[5rem_1fr] sm:py-8 border-t border-petala-forte">
+          <span class="font-display text-[2.75rem] leading-none text-rosa sm:text-[3.5rem]" aria-hidden="true">4</span>
+          <div>
+            <h2 class="font-display text-[1.6rem] leading-tight">Combine pagamento e entrega</h2>
+            <p class="mt-2 max-w-[56ch] leading-relaxed text-tinta/80">A gente confirma o pedido e combina com você a forma de pagamento e a entrega.</p>
+            <a class="mt-2 inline-flex min-h-11 items-center text-rosa-escuro underline underline-offset-4" href="{% url 'core:delivery' %}">Ver formas de entrega</a>
+          </div>
+        </li>
+    </ol>
+
+    {% if store.about_text %}
+      <section aria-labelledby="titulo-sobre" class="mt-14 grid gap-6 md:grid-cols-[1fr_1.6fr] md:gap-10">
+        <h2 id="titulo-sobre" class="font-display text-[2rem] leading-tight">Sobre a Tay Modas</h2>
+        <div class="max-w-prose space-y-4 text-[1.05rem] leading-relaxed">{{ store.about_text|linebreaks }}</div>
+      </section>
+    {% endif %}
+
+    {% if whatsapp_url %}
+      <section aria-labelledby="titulo-duvida" class="on-dark mt-14 grid gap-8 rounded-3xl bg-ameixa px-6 py-9 text-white sm:px-10 md:grid-cols-[1.4fr_1fr] md:items-center">
+        <div>
+          <h2 id="titulo-duvida" class="font-display text-[clamp(1.9rem,5vw,2.6rem)] leading-tight">Ficou com alguma dúvida?</h2>
+          <p class="mt-4 max-w-[52ch] leading-relaxed text-white/80">Pergunte sobre medidas, tecido ou como fica no corpo. A resposta vem de quem conhece cada peça.</p>
+        </div>
+        <a class="button button--light w-full md:justify-self-end md:w-auto" href="{{ whatsapp_url }}" target="_blank" rel="noopener">
+          {% include "partials/icon.html" with name="chat" %}Conversar no WhatsApp
+        </a>
+      </section>
+    {% endif %}
+  </div>
+{% endblock %}

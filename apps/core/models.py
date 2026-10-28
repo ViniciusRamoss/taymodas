@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from string import Formatter
 from typing import Any
+from urllib.parse import quote
 
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
@@ -29,6 +30,15 @@ DEFAULT_ORDER_MESSAGE = (
     "Preço: {preco}\n"
     "{link}"
 )
+
+DEFAULT_MOTOTAXI_CITIES = "\n".join(
+    ["Ribeirão Preto", "Serrana", "Serra Azul", "Cravinhos", "Cajuru", "Jardinópolis"]
+)
+
+# Embed público do Google Maps pela busca do endereço: não exige chave nem conta no Google Cloud.
+MAP_EMBED_URL = "https://maps.google.com/maps?q={query}&output=embed"
+MAP_LINK_URL = "https://www.google.com/maps/search/?api=1&query={query}"
+WHATSAPP_URL = "https://wa.me/{number}?text={text}"
 
 WHATSAPP_NUMBER_VALIDATOR = RegexValidator(
     regex=r"^55\d{10,11}$",
@@ -63,6 +73,30 @@ class StoreSettings(models.Model):
         "informações de entrega",
         blank=True,
         help_text="Cidades atendidas, envio pelos Correios, prazos, retirada na loja...",
+    )
+    store_address = models.CharField(
+        "endereço da loja",
+        max_length=200,
+        blank=True,
+        default="Rua Onofre Serafim, 148, Serrana-SP",
+        help_text=(
+            "Rua, número e cidade, como no Google Maps. Aparece no mapa da página de entregas "
+            "e no rodapé. Vazio esconde o mapa."
+        ),
+    )
+    mototaxi_cities = models.TextField(
+        "cidades com entrega por mototáxi",
+        blank=True,
+        default=DEFAULT_MOTOTAXI_CITIES,
+        help_text="Uma cidade por linha.",
+    )
+    about_text = models.TextField(
+        "sobre a loja",
+        blank=True,
+        help_text=(
+            "Sua história, em poucas linhas. Aparece na página Como comprar; vazio esconde o "
+            "trecho."
+        ),
     )
     instagram_handle = models.CharField(
         "Instagram",
@@ -101,6 +135,24 @@ class StoreSettings(models.Model):
                     )
                 }
             )
+
+    @property
+    def mototaxi_city_list(self) -> list[str]:
+        return [line.strip() for line in self.mototaxi_cities.splitlines() if line.strip()]
+
+    def whatsapp_url(self, text: str) -> str | None:
+        """Conversa com a loja com `text` já escrito; `None` enquanto não há número."""
+        if not self.whatsapp_number:
+            return None
+        return WHATSAPP_URL.format(number=self.whatsapp_number, text=quote(text))
+
+    @property
+    def map_embed_url(self) -> str:
+        return MAP_EMBED_URL.format(query=quote(self.store_address)) if self.store_address else ""
+
+    @property
+    def map_link_url(self) -> str:
+        return MAP_LINK_URL.format(query=quote(self.store_address)) if self.store_address else ""
 
     @classmethod
     def load(cls) -> StoreSettings:

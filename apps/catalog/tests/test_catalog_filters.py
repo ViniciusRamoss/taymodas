@@ -16,6 +16,8 @@ from .factories import (
     SizeFactory,
 )
 
+HERO_MARKER = 'id="titulo-inicio"'
+
 pytestmark = pytest.mark.django_db
 
 URL = reverse("catalog:product_list")
@@ -106,7 +108,7 @@ class TestListFilters:
     def test_filters_hide_hero_and_use_h1(self, client: Client, sizes: dict[str, Size]) -> None:
         html = client.get(URL, {"tamanho": sizes["P"].pk}).content.decode()
 
-        assert "Peças novas toda semana" not in html
+        assert HERO_MARKER not in html
         assert '<h1 id="titulo-lista"' in html
 
     def test_empty_result_offers_to_clear(
@@ -139,13 +141,13 @@ class TestHtmx:
         assert "<title>Vestidos — Tay Modas</title>" in html
         assert 'id="catalogo"' in html
         assert 'id="topo" hx-swap-oob="true"' in html
-        assert "Peças novas toda semana" not in html
+        assert HERO_MARKER not in html
         assert "HX-Request" in response["Vary"]
 
     def test_unfiltered_first_page_brings_hero_back(self, client: Client) -> None:
         html = client.get(URL, headers=HTMX).content.decode()
 
-        assert "Peças novas toda semana" in html
+        assert HERO_MARKER in html
 
     def test_history_restore_gets_full_page(self, client: Client) -> None:
         response = client.get(URL, headers={**HTMX, "HX-History-Restore-Request": "true"})

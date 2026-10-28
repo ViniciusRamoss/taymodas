@@ -1,14 +1,28 @@
+{% include "partials/site_header.html" %}
 {% if show_hero %}
-  <header class="on-dark bg-preto px-4 pb-9 pt-10 text-center">
-    <h1>
-      <span class="sr-only">Tay Modas</span>
-      <span aria-hidden="true">{% include "partials/wordmark.html" with size="hero" %}</span>
-    </h1>
-    <p class="mx-auto mt-5 max-w-[34ch] text-[1.0625rem] leading-relaxed text-white/80">
-      Moda feminina em Serrana-SP. Peças novas toda semana, entrega em Ribeirão Preto e região e
-      envio para todo o Brasil.
-    </p>
-  </header>
-{% else %}
-  {% include "partials/site_header.html" %}
+  <div class="px-4 pt-4 sm:pt-2">
+    <div class="mx-auto grid max-w-6xl items-center gap-8 rounded-3xl bg-petala px-6 py-9 sm:px-12 sm:py-14 lg:grid-cols-[1.3fr_1fr]">
+      <div>
+      <h1 id="titulo-inicio" class="rise font-display text-[clamp(2.4rem,9vw,4.4rem)] leading-[1.02] tracking-[-0.02em]">Peças novas<br>toda semana</h1>
+      <p class="rise-late mt-4 max-w-[44ch] text-[1.05rem] leading-relaxed text-tinta/80">
+        Moda feminina em Serrana-SP. Escolha tamanho e cor aqui e peça direto no WhatsApp, com
+        entrega por mototáxi na região e envio para todo o Brasil.
+      </p>
+      </div>
+      {% with newest=cards.0 %}
+        {% if newest.image_url %}
+          {% comment %} A peça mais nova do catálogo; só em telas largas, onde o hero tem espaço. {% endcomment %}
+          <a href="{{ newest.url }}" class="group relative hidden aspect-[4/5] max-h-[30rem] w-full justify-self-end overflow-hidden rounded-2xl lg:block">
+            <img src="{{ newest.image_url }}" srcset="{{ newest.image_srcset }}" sizes="30vw" alt="{{ newest.image_alt }}"
+                 class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]">
+            {% if newest.is_new %}<span class="photo-tag photo-tag--new">Novidade</span>{% endif %}
+            <span class="absolute inset-x-3 bottom-3 flex items-baseline justify-between gap-4 rounded-2xl bg-white/95 px-4 py-3">
+              <span class="font-display text-[1.2rem] leading-snug">{{ newest.name }}</span>
+              <span class="shrink-0 font-medium text-rosa-escuro">{{ newest.price }}</span>
+            </span>
+          </a>
+        {% endif %}
+      {% endwith %}
+    </div>
+  </div>
 {% endif %}

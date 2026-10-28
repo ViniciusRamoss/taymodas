@@ -1,0 +1,397 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-27T23:00:00-03:00",
+  "title": "Design System: Tay Modas",
+  "extensions": {
+    "colorMeta": {
+      "creme": {
+        "role": "neutral",
+        "displayName": "Creme",
+        "canonical": "#fbf7f3",
+        "oklch": "oklch(97.8% 0.007 68)",
+        "tonalRamp": [
+          "oklch(15% 0.004 68)",
+          "oklch(27% 0.006 68)",
+          "oklch(39% 0.007 68)",
+          "oklch(51% 0.007 68)",
+          "oklch(63% 0.007 68)",
+          "oklch(75% 0.006 68)",
+          "oklch(85% 0.004 68)",
+          "oklch(95% 0.002 68)"
+        ]
+      },
+      "petala": {
+        "role": "neutral",
+        "displayName": "Pétala",
+        "canonical": "#f6e8ec",
+        "oklch": "oklch(94.3% 0.016 358)",
+        "tonalRamp": [
+          "oklch(15% 0.008 358)",
+          "oklch(27% 0.013 358)",
+          "oklch(39% 0.016 358)",
+          "oklch(51% 0.016 358)",
+          "oklch(63% 0.016 358)",
+          "oklch(75% 0.014 358)",
+          "oklch(85% 0.010 358)",
+          "oklch(95% 0.005 358)"
+        ]
+      },
+      "petala-forte": {
+        "role": "neutral",
+        "displayName": "Pétala Forte",
+        "canonical": "#f0dbe2",
+        "oklch": "oklch(91.0% 0.025 355)",
+        "tonalRamp": [
+          "oklch(15% 0.013 355)",
+          "oklch(27% 0.020 355)",
+          "oklch(39% 0.025 355)",
+          "oklch(51% 0.025 355)",
+          "oklch(63% 0.025 355)",
+          "oklch(75% 0.021 355)",
+          "oklch(85% 0.015 355)",
+          "oklch(95% 0.007 355)"
+        ]
+      },
+      "linha": {
+        "role": "neutral",
+        "displayName": "Linha Rosada",
+        "canonical": "#eedfe4",
+        "oklch": "oklch(91.7% 0.018 355)",
+        "tonalRamp": [
+          "oklch(15% 0.009 355)",
+          "oklch(27% 0.014 355)",
+          "oklch(39% 0.018 355)",
+          "oklch(51% 0.018 355)",
+          "oklch(63% 0.018 355)",
+          "oklch(75% 0.015 355)",
+          "oklch(85% 0.011 355)",
+          "oklch(95% 0.005 355)"
+        ]
+      },
+      "branco": {
+        "role": "neutral",
+        "displayName": "Branco",
+        "canonical": "#ffffff",
+        "oklch": "oklch(100.0% 0.000 0)",
+        "tonalRamp": [
+          "oklch(15% 0.000 0)",
+          "oklch(27% 0.000 0)",
+          "oklch(39% 0.000 0)",
+          "oklch(51% 0.000 0)",
+          "oklch(63% 0.000 0)",
+          "oklch(75% 0.000 0)",
+          "oklch(85% 0.000 0)",
+          "oklch(95% 0.000 0)"
+        ]
+      },
+      "tinta": {
+        "role": "neutral",
+        "displayName": "Tinta Ameixada",
+        "canonical": "#2f242b",
+        "oklch": "oklch(27.6% 0.021 340)",
+        "tonalRamp": [
+          "oklch(15% 0.011 340)",
+          "oklch(27% 0.017 340)",
+          "oklch(39% 0.021 340)",
+          "oklch(51% 0.021 340)",
+          "oklch(63% 0.021 340)",
+          "oklch(75% 0.018 340)",
+          "oklch(85% 0.013 340)",
+          "oklch(95% 0.006 340)"
+        ]
+      },
+      "malva": {
+        "role": "neutral",
+        "displayName": "Malva",
+        "canonical": "#75666f",
+        "oklch": "oklch(52.7% 0.023 341)",
+        "tonalRamp": [
+          "oklch(15% 0.011 341)",
+          "oklch(27% 0.018 341)",
+          "oklch(39% 0.023 341)",
+          "oklch(51% 0.023 341)",
+          "oklch(63% 0.023 341)",
+          "oklch(75% 0.020 341)",
+          "oklch(85% 0.014 341)",
+          "oklch(95% 0.007 341)"
+        ]
+      },
+      "rosa": {
+        "role": "secondary",
+        "displayName": "Rosa Antigo",
+        "canonical": "#a34f73",
+        "oklch": "oklch(54.2% 0.118 355)",
+        "tonalRamp": [
+          "oklch(15% 0.059 355)",
+          "oklch(27% 0.094 355)",
+          "oklch(39% 0.118 355)",
+          "oklch(51% 0.118 355)",
+          "oklch(63% 0.118 355)",
+          "oklch(75% 0.100 355)",
+          "oklch(85% 0.071 355)",
+          "oklch(95% 0.035 355)"
+        ]
+      },
+      "rosa-escuro": {
+        "role": "primary",
+        "displayName": "Rosa Escuro",
+        "canonical": "#813557",
+        "oklch": "oklch(44.4% 0.112 355)",
+        "tonalRamp": [
+          "oklch(15% 0.056 355)",
+          "oklch(27% 0.090 355)",
+          "oklch(39% 0.112 355)",
+          "oklch(51% 0.112 355)",
+          "oklch(63% 0.112 355)",
+          "oklch(75% 0.095 355)",
+          "oklch(85% 0.067 355)",
+          "oklch(95% 0.034 355)"
+        ]
+      },
+      "ameixa": {
+        "role": "primary",
+        "displayName": "Ameixa",
+        "canonical": "#3b2833",
+        "oklch": "oklch(30.4% 0.034 344)",
+        "tonalRamp": [
+          "oklch(15% 0.017 344)",
+          "oklch(27% 0.027 344)",
+          "oklch(39% 0.034 344)",
+          "oklch(51% 0.034 344)",
+          "oklch(63% 0.034 344)",
+          "oklch(75% 0.029 344)",
+          "oklch(85% 0.020 344)",
+          "oklch(95% 0.010 344)"
+        ]
+      },
+      "ouro": {
+        "role": "tertiary",
+        "displayName": "Ouro do Logo",
+        "canonical": "#dab871",
+        "oklch": "oklch(79.7% 0.098 85)",
+        "tonalRamp": [
+          "oklch(15% 0.049 85)",
+          "oklch(27% 0.078 85)",
+          "oklch(39% 0.098 85)",
+          "oklch(51% 0.098 85)",
+          "oklch(63% 0.098 85)",
+          "oklch(75% 0.083 85)",
+          "oklch(85% 0.059 85)",
+          "oklch(95% 0.029 85)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Título de abertura de cada página, com entrada rise."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Títulos de seção, h1 da listagem filtrada e nome da peça (2rem a 2.6rem); nas faixas ameixa sobe para clamp(1.9rem, 5vw, 2.6rem)."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Títulos de painel e de passo (1.5rem a 1.85rem na prática)."
+      },
+      "card-title": {
+        "displayName": "Card Title",
+        "purpose": "Nome da peça no card, até duas linhas."
+      },
+      "body-lead": {
+        "displayName": "Body Lead",
+        "purpose": "Parágrafo de abertura sob o display, tinta a 80%."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texto corrido, até 56ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Menu, pílulas, legendas e linhas de detalhe."
+      },
+      "tag": {
+        "displayName": "Tag",
+        "purpose": "Selos sobre a foto."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "rise",
+        "value": "rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; from opacity 0, translateY(14px)",
+        "purpose": "Entrada única: título de abertura de cada página, só com prefers-reduced-motion: no-preference."
+      },
+      {
+        "name": "rise-late",
+        "value": "rise 0.7s 0.12s cubic-bezier(0.16, 1, 0.3, 1) both",
+        "purpose": "Parágrafo de abertura, logo depois do título."
+      },
+      {
+        "name": "button-state",
+        "value": "background-color, transform 200ms; active translateY(1px)",
+        "purpose": "Troca de ameixa para rosa-escuro no hover dos botões."
+      },
+      {
+        "name": "photo-zoom",
+        "value": "transform 500ms ease-out; hover scale(1.03)",
+        "purpose": "Aproximação da foto no hover do card de peça e do hero."
+      },
+      {
+        "name": "color-transition",
+        "value": "color, border-color 150ms",
+        "purpose": "Hover de menu, pílulas, opções e cartão de entrega."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ],
+    "focus": {
+      "default": "outline 2px solid rosa, offset 2px",
+      "onDark": "outline 2px solid ouro, offset 2px (dentro de .on-dark)"
+    },
+    "openDependencies": [
+      "Logo em alta resolução ou vetor: static/img/logo.png foi recortado de media/Logo.jpeg (500x500); pedir o original à dona."
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão principal",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação principal em pílula ameixa; leva ao WhatsApp ou ao catálogo.",
+      "html": "<a class=\"ds-button\" href=\"#\"><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4.5 19.5 6 15.6A7.5 7.5 0 1 1 9 18.6z\"/><path d=\"M9 11.5h.01M12 11.5h.01M15 11.5h.01\" stroke-width=\"2\"/></svg>Consultar entrega no WhatsApp</a>",
+      "css": ".ds-button { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: 10px; border-radius: 9999px; background: var(--color-ameixa, #3b2833); color: #fff; padding: 0 24px; font-family: \"Jost\", \"Futura\", system-ui, sans-serif; font-weight: 500; text-decoration: none; cursor: pointer; transition: background-color 200ms, transform 200ms; } .ds-button:hover { background: var(--color-rosa-escuro, #813557); } .ds-button:active { transform: translateY(1px); } .ds-button:focus-visible { outline: 2px solid var(--color-rosa, #a34f73); outline-offset: 2px; }"
+    },
+    {
+      "name": "Botão claro",
+      "kind": "button",
+      "refersTo": "button-light",
+      "description": "Botão branco usado só dentro das faixas ameixa; foco em dourado.",
+      "html": "<div class=\"ds-on-dark\"><a class=\"ds-button-light\" href=\"#\"><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4.5 19.5 6 15.6A7.5 7.5 0 1 1 9 18.6z\"/><path d=\"M9 11.5h.01M12 11.5h.01M15 11.5h.01\" stroke-width=\"2\"/></svg>Conversar no WhatsApp</a></div>",
+      "css": ".ds-on-dark { background: var(--color-ameixa, #3b2833); padding: 24px; border-radius: 24px; } .ds-button-light { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: 10px; border-radius: 9999px; background: #fff; color: var(--color-ameixa, #3b2833); padding: 0 24px; font-family: \"Jost\", \"Futura\", system-ui, sans-serif; font-weight: 500; text-decoration: none; transition: background-color 200ms, transform 200ms; } .ds-button-light:hover { background: var(--color-petala, #f6e8ec); } .ds-button-light:active { transform: translateY(1px); } .ds-button-light:focus-visible { outline: 2px solid var(--color-ouro, #dab871); outline-offset: 2px; }"
+    },
+    {
+      "name": "Botão de pedido",
+      "kind": "button",
+      "refersTo": "order-button",
+      "description": "Ação final da página da peça: largura total, 56px, abre o WhatsApp com o pedido escrito.",
+      "html": "<div style=\"max-width:360px\"><a class=\"ds-order-button\" href=\"#\"><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4.5 19.5 6 15.6A7.5 7.5 0 1 1 9 18.6z\"/><path d=\"M9 11.5h.01M12 11.5h.01M15 11.5h.01\" stroke-width=\"2\"/></svg>Pedir pelo WhatsApp</a><p class=\"ds-hint\">Abre o WhatsApp com o pedido já escrito.</p></div>",
+      "css": ".ds-order-button { display: flex; width: 100%; min-height: 56px; align-items: center; justify-content: center; gap: 10px; border-radius: 9999px; background: var(--color-ameixa, #3b2833); color: #fff; padding: 0 24px; font-family: \"Jost\", \"Futura\", system-ui, sans-serif; font-size: 1.05rem; font-weight: 500; text-decoration: none; transition: background-color 200ms, transform 200ms; } .ds-order-button:hover { background: var(--color-rosa-escuro, #813557); } .ds-order-button:active { transform: translateY(1px); } .ds-order-button:focus-visible { outline: 2px solid var(--color-rosa, #a34f73); outline-offset: 2px; } .ds-hint { margin-top: 8px; font-family: \"Jost\", \"Futura\", system-ui, sans-serif; font-size: 0.875rem; color: var(--color-malva, #75666f); }"
+    },
+    {
+      "name": "Pílulas de categoria",
+      "kind": "chip",
+      "refersTo": "pill",
+      "description": "Navegação por categoria e lista de cidades; a atual fica ameixa.",
+      "html": "<ul class=\"ds-pills\"><li><a class=\"ds-pill\" aria-current=\"page\" href=\"#\">Todas</a></li><li><a class=\"ds-pill\" href=\"#\">Vestidos</a></li><li><a class=\"ds-pill\" href=\"#\">Blusas</a></li></ul>",
+      "css": ".ds-pills { display: flex; gap: 8px; list-style: none; margin: 0; padding: 0; } .ds-pill { display: inline-flex; min-height: 44px; align-items: center; border-radius: 9999px; background: #fff; padding: 0 16px; font-family: \"Jost\", \"Futura\", system-ui, sans-serif; font-size: 0.95rem; color: var(--color-tinta, #2f242b); border: 1px solid var(--color-linha, #eedfe4); text-decoration: none; transition: border-color 150ms, background-color 150ms; } a.ds-pill:hover { border-color: var(--color-rosa, #a34f73); } .ds-pill[aria-current=\"page\"] { background: var(--color-ameixa, #3b2833); color: #fff; border-color: var(--color-ameixa, #3b2833); } .ds-pill:focus-visible { outline: 2px solid var(--color-rosa, #a34f73); outline-offset: 2px; }"
+    },
+    {
+      "name": "Opções de tamanho e cor",
+      "kind": "chip",
+      "refersTo": "choice",
+      "description": "Rádios escondidos com pílula visível; marcada em ameixa, esgotada riscada em malva.",
+      "html": "<fieldset class=\"ds-fieldset\"><legend>Tamanho: <b>M</b></legend><label><input class=\"ds-peer\" type=\"radio\" name=\"t\"><span class=\"ds-choice\">P</span></label><label><input class=\"ds-peer\" type=\"radio\" name=\"t\" checked><span class=\"ds-choice\">M</span></label><label><input class=\"ds-peer\" type=\"radio\" name=\"t\" disabled><span class=\"ds-choice ds-choice-out\">G</span></label><label><input class=\"ds-peer\" type=\"radio\" name=\"c\"><span class=\"ds-choice ds-choice-color\"><span class=\"ds-swatch\" style=\"background:#000\"></span>Preto</span></label></fieldset>",
+      "css": ".ds-fieldset { border: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; font-family: \"Jost\", \"Futura\", system-ui, sans-serif; } .ds-fieldset legend { font-size: 0.95rem; margin-bottom: 8px; } .ds-fieldset b { font-weight: 500; } .ds-peer { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); } .ds-choice { display: inline-flex; height: 44px; min-width: 44px; justify-content: center; align-items: center; gap: 8px; padding: 0 8px; border-radius: 9999px; border: 1px solid var(--color-linha, #eedfe4); background: #fff; font-size: 0.875rem; cursor: pointer; transition: border-color 150ms, background-color 150ms; } .ds-choice-color { padding: 0 14px; } .ds-peer:checked + .ds-choice { border-color: var(--color-ameixa, #3b2833); background: var(--color-ameixa, #3b2833); color: #fff; } .ds-peer:not(:checked, :disabled) + .ds-choice:hover { border-color: var(--color-rosa, #a34f73); } .ds-peer:focus-visible + .ds-choice { outline: 2px solid var(--color-rosa, #a34f73); outline-offset: 2px; } .ds-choice-out { background: transparent; color: var(--color-malva, #75666f); text-decoration: line-through; cursor: not-allowed; } .ds-swatch { width: 16px; height: 16px; border-radius: 9999px; box-shadow: 0 0 0 1px rgba(0,0,0,0.2); } .ds-peer:checked + .ds-choice .ds-swatch { box-shadow: 0 0 0 1px rgba(255,255,255,0.7); }"
+    },
+    {
+      "name": "Select de filtro",
+      "kind": "input",
+      "refersTo": "filter-select",
+      "description": "Filtro de tamanho e cor da listagem, em pílula branca.",
+      "html": "<label class=\"ds-label\">Tamanho<select class=\"ds-filter-select\"><option>Todos</option><option>P</option><option>M</option></select></label>",
+      "css": ".ds-label { font-family: \"Jost\", \"Futura\", system-ui, sans-serif; font-size: 0.875rem; color: var(--color-tinta, #2f242b); } .ds-filter-select { margin-top: 4px; display: block; height: 44px; min-width: 128px; border-radius: 9999px; background: #fff; padding: 0 16px; font-family: \"Jost\", \"Futura\", system-ui, sans-serif; font-size: 1rem; color: var(--color-tinta, #2f242b); border: 1px solid var(--color-linha, #eedfe4); } .ds-filter-select:focus-visible { outline: 2px solid var(--color-rosa, #a34f73); outline-offset: 2px; }"
+    },
+    {
+      "name": "Menu principal",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Três links em malva; o atual em tinta com sublinhado rosa de 2px.",
+      "html": "<nav><ul class=\"ds-nav\"><li><a class=\"ds-nav-link\" aria-current=\"page\" href=\"#\">Peças</a></li><li><a class=\"ds-nav-link\" href=\"#\">Entregas</a></li><li><a class=\"ds-nav-link\" href=\"#\">Como comprar</a></li></ul></nav>",
+      "css": ".ds-nav { display: flex; gap: 32px; list-style: none; margin: 0; padding: 0; } .ds-nav-link { display: inline-flex; height: 44px; align-items: center; font-family: \"Jost\", \"Futura\", system-ui, sans-serif; font-size: 0.95rem; color: var(--color-malva, #75666f); text-decoration: none; text-underline-offset: 0.6em; transition: color 150ms; } .ds-nav-link:hover { color: var(--color-tinta, #2f242b); } .ds-nav-link[aria-current=\"page\"] { color: var(--color-tinta, #2f242b); text-decoration: underline; text-decoration-color: var(--color-rosa, #a34f73); text-decoration-thickness: 2px; } .ds-nav-link:focus-visible { outline: 2px solid var(--color-rosa, #a34f73); outline-offset: 2px; }"
+    },
+    {
+      "name": "Card de peça",
+      "kind": "card",
+      "refersTo": "product-photo",
+      "description": "Foto 3:4 sobre pétala com selo, nome em Bodoni, preço, tamanhos e amostras; sem caixa.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-photo\"><span class=\"ds-tag ds-tag-new\">Novidade</span></div><h3 class=\"ds-card-title\"><a href=\"#\">Vestido midi floral</a></h3><p class=\"ds-price\">R$ 140,00</p><p class=\"ds-sizes\">P, M, G</p><ul class=\"ds-dots\"><li style=\"background:#000\"></li><li style=\"background:#e8e0d4\"></li></ul></article>",
+      "css": ".ds-card { position: relative; width: 220px; font-family: \"Jost\", \"Futura\", system-ui, sans-serif; color: var(--color-tinta, #2f242b); } .ds-photo { position: relative; aspect-ratio: 3/4; border-radius: 16px; overflow: hidden; background: var(--color-petala, #f6e8ec); } .ds-tag { position: absolute; left: 10px; top: 10px; border-radius: 9999px; background: var(--color-ameixa, #3b2833); color: #fff; padding: 4px 12px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.025em; } .ds-tag-new { background: #fff; color: var(--color-rosa-escuro, #813557); } .ds-card-title { margin: 12px 0 0; font-family: \"Bodoni Moda\", \"Didot\", \"Bodoni 72\", Georgia, serif; font-weight: 400; font-size: 1.05rem; line-height: 1.375; } .ds-card-title a { color: inherit; text-decoration: none; } .ds-card-title a::after { content: \"\"; position: absolute; inset: 0; border-radius: 16px; } .ds-card-title a:hover { text-decoration: underline; text-decoration-color: var(--color-rosa, #a34f73); text-underline-offset: 4px; } .ds-card-title a:focus-visible { outline: 2px solid var(--color-rosa, #a34f73); outline-offset: 2px; } .ds-price { margin: 4px 0 0; font-weight: 500; } .ds-sizes { margin: 6px 0 0; font-size: 0.875rem; color: var(--color-malva, #75666f); } .ds-dots { display: flex; gap: 6px; list-style: none; padding: 0; margin: 8px 0 0; } .ds-dots li { width: 14px; height: 14px; border-radius: 9999px; box-shadow: 0 0 0 1px rgba(0,0,0,0.2); }"
+    },
+    {
+      "name": "Painel de entrega",
+      "kind": "card",
+      "refersTo": "panel-petala",
+      "description": "Painel arredondado (24px) em pétala ou branco, ícone rosa de traço 1.5, título em Bodoni e linha de detalhe no pé.",
+      "html": "<article class=\"ds-panel ds-panel-petala\"><span class=\"ds-icon\"><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"5\" cy=\"17\" r=\"2.75\"/><circle cx=\"19\" cy=\"17\" r=\"2.75\"/><path d=\"M7.75 17h6.5l2-4.5H9.5L7 15M16.25 12.5 15 7.5h-2.5M15 7.5h2.5M5 12.5h4.5\"/></svg></span><h2 class=\"ds-panel-title\">Mototáxi em Ribeirão Preto e região</h2><p class=\"ds-panel-text\">Está pertinho? Receba suas peças por mototáxi.</p><ul class=\"ds-cities\"><li>Serrana</li><li>Cravinhos</li></ul><p class=\"ds-panel-foot\"><b>Valor e prazo:</b> combinados no WhatsApp.</p></article>",
+      "css": ".ds-panel { max-width: 420px; border-radius: 24px; background: #fff; padding: 32px; font-family: \"Jost\", \"Futura\", system-ui, sans-serif; color: var(--color-tinta, #2f242b); } .ds-panel-petala { background: var(--color-petala, #f6e8ec); } .ds-icon { color: var(--color-rosa, #a34f73); display: block; } .ds-panel-title { margin: 24px 0 0; font-family: \"Bodoni Moda\", \"Didot\", \"Bodoni 72\", Georgia, serif; font-weight: 400; font-size: 1.85rem; line-height: 1.25; } .ds-panel-text { margin: 12px 0 0; line-height: 1.625; color: rgba(47,36,43,0.8); } .ds-cities { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 16px 0 24px; } .ds-cities li { display: inline-flex; min-height: 44px; align-items: center; border-radius: 9999px; background: #fff; border: 1px solid var(--color-linha, #eedfe4); padding: 0 16px; font-size: 0.95rem; } .ds-panel-foot { margin: 0; border-top: 1px solid var(--color-petala-forte, #f0dbe2); padding-top: 20px; font-size: 0.95rem; } .ds-panel-foot b { font-weight: 500; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "A Boutique de Bairro",
+    "overview": "O site é uma loja pequena de moda feminina que atende pessoalmente, pelo WhatsApp. O mundo visual vem do template da dona: fundo creme quente, campos pétala, títulos em serifa de alto contraste e painéis bem arredondados. A cor que age é a ameixa, quase preta e levemente rosada. Ela marca a ação, o item escolhido e as faixas escuras que fecham as páginas. O rosa é acento: traço no menu, ícones, números de passo, preço. O dourado só aparece no logo e, como texto, apenas sobre ameixa.\n\nA densidade é baixa e o celular vem primeiro. A página é uma coluna de largura contida (72rem). Dentro dela, blocos tonais arredondados se empilham: pétala, branco e ameixa sobre o creme. Não há sombras; a profundidade vem da troca de tom. As peças são as protagonistas: a foto em 3:4 com cantos de 16px é o maior elemento de cada card, e a interface em volta é texto pequeno e calmo.\n\nO movimento é quase nenhum: o título de cada página sobe ao carregar, os botões mudam de cor e as fotos aproximam levemente no hover. Com movimento reduzido, nada se anima.",
+    "keyCharacteristics": [
+      "Fundo creme, campos pétala e painéis brancos; ameixa para ação e fechamento.",
+      "Bodoni Moda nos títulos, Jost no texto; peso 400 na serifa, 500 só para ênfase em Jost.",
+      "Três raios: 16px (fotos), 24px (painéis e faixas), pílula (botões, filtros, opções, selos).",
+      "Plano: nenhuma sombra; profundidade por camadas tonais.",
+      "Ícones SVG de traço 1.5 em `currentColor`, quase sempre em rosa.",
+      "Alvos de toque de 44px no mínimo; o botão de pedido tem 56px."
+    ],
+    "rules": [
+      {
+        "name": "The Gold-on-Plum Rule",
+        "body": "O dourado vira texto só sobre ameixa. Sobre creme, pétala ou branco, ele aparece apenas no logo.",
+        "section": "colors"
+      },
+      {
+        "name": "The Plum Acts Rule",
+        "body": "Ameixa marca o que age ou o que foi escolhido: botão, pílula atual, opção marcada, faixa de fechamento. Rosa nunca preenche um botão.",
+        "section": "colors"
+      },
+      {
+        "name": "The Serif Speaks, Sans Serves Rule",
+        "body": "Todo título e o nome de cada peça vão em Bodoni Moda; preço, botões, menu e formulários vão em Jost.",
+        "section": "typography"
+      },
+      {
+        "name": "The Regular Bodoni Rule",
+        "body": "A Bodoni fica em peso 400. Ênfase vem do tamanho, nunca do negrito.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tonal Layer Rule",
+        "body": "Para separar um bloco, troque o tom do fundo (creme, pétala, branco, ameixa) ou use uma borda `linha` de 1px. A superfície fica plana em repouso; o template tinha uma sombra quase invisível nos cards (alfa 0.045) que o site não adotou.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do terminar cada página com uma ação que leva ao WhatsApp, num botão ameixa em pílula.",
+      "Do usar Bodoni Moda em peso 400 para títulos e nomes de peça, e Jost para todo o resto.",
+      "Do separar blocos por troca de tom (creme, pétala, branco, ameixa) e raio de 24px.",
+      "Do manter fotos em 3:4 com raio de 16px e fundo pétala enquanto carregam.",
+      "Do garantir 44px de alvo de toque em links, pílulas, opções e selects.",
+      "Do usar ícones do conjunto `partials/icon.html` (traço 1.5) e acrescentar novos no mesmo traço.",
+      "Do limitar a animação de entrada ao título e ao parágrafo de abertura (`rise`, `rise-late`), sempre dentro de `prefers-reduced-motion: no-preference`."
+    ],
+    "donts": [
+      "Don't usar o dourado como texto ou detalhe sobre fundo claro; ele só aparece como texto sobre ameixa.",
+      "Don't preencher botões de rosa; a ação é ameixa e o hover é rosa-escuro.",
+      "Don't usar sombras duras, deslocadas ou escuras; a separação é tonal.",
+      "Don't pôr sobretítulos em caixa alta acima dos títulos nem usar símbolos de texto ou emoji como ícone.",
+      "Don't usar fotos de banco ou inventadas como se fossem da loja."
+    ]
+  }
+}

@@ -21,6 +21,8 @@ from .factories import (
     SizeFactory,
 )
 
+HERO_MARKER = 'id="titulo-inicio"'
+
 pytestmark = pytest.mark.django_db
 
 URL = reverse("catalog:product_list")
@@ -127,7 +129,7 @@ class TestProductListView:
 
         content = response.content.decode()
         assert response.status_code == 200
-        assert "Peças novas toda semana" in content
+        assert HERO_MARKER in content
         assert "Saia Midi" in content
         assert "Novidade" in content
         assert "Tamanhos disponíveis: </span>M</p>" in content
@@ -150,7 +152,7 @@ class TestProductListView:
         content = response.content.decode()
         assert "Vestido Longo" in content
         assert "Calça Reta" not in content
-        assert "Peças novas toda semana" not in content
+        assert HERO_MARKER not in content
         assert 'aria-current="page">Vestidos' in content
 
     @pytest.mark.parametrize("slug", ["nao-existe", "oculta"])
@@ -176,14 +178,8 @@ class TestProductListView:
         assert "As peças desta semana estão chegando." in content
         assert "instagram.com/taymodas23" in content
 
-    def test_footer_shows_delivery_info_when_set(self, client: Client) -> None:
-        from apps.core.models import StoreSettings
-
-        settings = StoreSettings.load()
-        settings.delivery_info = "[PLACEHOLDER] texto de entrega"
-        settings.save()
-
-        assert "[PLACEHOLDER] texto de entrega" in client.get(URL).content.decode()
+    def test_footer_links_delivery_page(self, client: Client) -> None:
+        assert f'href="{reverse("core:delivery")}"' in client.get(URL).content.decode()
 
     def test_query_count_does_not_grow_with_products(self, client: Client) -> None:
         from django.db import connection

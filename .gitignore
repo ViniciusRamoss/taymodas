@@ -26,3 +26,5 @@ static/css/tailwind.css
 # Inspeções de design (taste-skill)
 .taste-skill/
 .playwright-cli/
+.impeccable/review/
+.impeccable/build/

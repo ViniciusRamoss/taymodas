@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-  <nav aria-label="Você está em" class="mx-auto max-w-6xl px-4 pt-4 text-sm text-cinza md:pt-6">
+  <nav aria-label="Você está em" class="mx-auto max-w-6xl px-4 pt-4 text-sm text-malva md:pt-6">
     <ol class="flex flex-wrap gap-x-2">
       <li><a class="underline-offset-4 hover:underline" href="{% url 'catalog:product_list' %}">Início</a></li>
       <li aria-hidden="true">/</li>
@@ -28,28 +28,33 @@
                    alt="{{ image.alt }}"
                    decoding="async"
                    {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
-                   class="aspect-[3/4] w-full bg-nevoa object-cover {% if is_sold_out %}opacity-55 grayscale{% endif %}">
+                   class="aspect-[3/4] w-full rounded-2xl bg-petala object-cover {% if is_sold_out %}opacity-55 grayscale{% endif %}">
             </li>
           {% endfor %}
         </ul>
       {% else %}
-        <div class="mx-4 aspect-[3/4] bg-nevoa md:mx-0"></div>
+        <div class="mx-4 aspect-[3/4] rounded-2xl bg-petala md:mx-0"></div>
       {% endif %}
     </div>
 
     <div class="px-4 pb-12 pt-6 md:col-span-5 md:px-0 md:pt-0">
       <div class="md:sticky md:top-8">
-        <h1 class="font-display text-[1.9rem] leading-tight md:text-[2.25rem]">{{ detail.name }}</h1>
-        <p class="mt-2 text-lg font-medium {% if is_sold_out %}text-cinza{% endif %}">{{ detail.price }}</p>
+        <h1 class="font-display text-[2rem] leading-[1.1] tracking-[-0.01em] md:text-[2.6rem]">{{ detail.name }}</h1>
+        <p class="mt-3 text-xl font-medium {% if is_sold_out %}text-malva{% else %}text-rosa-escuro{% endif %}">{{ detail.price }}</p>
 
         {% if is_sold_out %}
-          <div class="mt-6">
+          <div class="mt-6 rounded-3xl bg-petala p-6">
             <p class="font-medium">Esta peça esgotou.</p>
-            <a class="mt-2 inline-block underline underline-offset-4" href="{% url 'catalog:product_list' %}?categoria={{ detail.category_slug }}">Ver outras peças de {{ detail.category_name }}</a>
+            <a class="mt-2 inline-flex min-h-11 items-center text-rosa-escuro underline underline-offset-4" href="{% url 'catalog:product_list' %}?categoria={{ detail.category_slug }}">Ver outras peças de {{ detail.category_name }}</a>
           </div>
         {% else %}
           {% include "catalog/partials/order_form.html" %}
         {% endif %}
+
+        <a href="{% url 'core:delivery' %}" class="mt-6 flex items-center gap-3 rounded-2xl bg-white p-4 text-[0.95rem] border border-linha transition-colors hover:border-rosa">
+          {% include "partials/icon.html" with name="moto" class="size-6 shrink-0 text-rosa" %}
+          <span>Mototáxi em Ribeirão Preto e região, envio para todo o Brasil. <span class="text-rosa-escuro underline underline-offset-4">Ver entregas</span></span>
+        </a>
 
         {% if detail.description %}
           <div class="mt-10 max-w-prose space-y-3 leading-relaxed">{{ detail.description|linebreaks }}</div>

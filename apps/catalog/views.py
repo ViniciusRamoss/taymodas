@@ -53,6 +53,7 @@ class ProductListView(ListView[Product]):
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
+        context["nav_current"] = "catalogo"
         context["cards"] = [ProductCard.from_product(p) for p in context["object_list"]]
         context["categories"] = selectors.categories_with_products()
         context["current_category"] = self.category
@@ -101,6 +102,7 @@ class ProductDetailView(DetailView[Product]):
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
+        context["nav_current"] = "catalogo"
         product: Product = self.object
         selection = services.select_variant(
             list(product.variants.all()),

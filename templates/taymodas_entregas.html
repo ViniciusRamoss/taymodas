@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#fbf5f1" />
+  <meta name="description" content="Entregas TayModas: enviamos para todo o Brasil e oferecemos mototáxi em Ribeirão Preto e região." />
+  <title>Entregas | TayModas</title>
+  <style>
+    :root { --ink:#2f242b; --muted:#75666f; --rose:#a34f73; --rose-dark:#813557; --soft:#fff4f6; --base:#fbf7f3; --line:#eedfe4; --white:#fff; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--base); font: 16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    a { color:inherit; }
+    .container { width:min(1120px, calc(100% - 36px)); margin:auto; }
+    .topbar { background:#f5e3e9; color:#754458; text-align:center; font-size:13px; font-weight:600; padding:9px 12px; }
+    .header { background:rgba(255,255,255,.92); border-bottom:1px solid var(--line); }
+    .header-inner { min-height:76px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .logo { font-family:Georgia,"Times New Roman",serif; font-size:32px; font-weight:700; letter-spacing:-1.6px; text-decoration:none; }
+    .logo span { color:var(--rose); }
+    .nav-link { text-decoration:none; font-size:14px; color:var(--muted); font-weight:700; }
+    .eyebrow { color:var(--rose); letter-spacing:.18em; text-transform:uppercase; font-size:12px; font-weight:800; }
+    main { padding:58px 0 78px; }
+    .hero { text-align:center; max-width:750px; margin:0 auto 38px; }
+    .hero h1 { font-family:Georgia,"Times New Roman",serif; font-size:clamp(40px, 6vw, 67px); line-height:1.07; letter-spacing:-2px; font-weight:500; margin:13px 0 17px; }
+    .hero h1 em { color:var(--rose); font-style:italic; }
+    .hero p { color:var(--muted); font-size:17px; max-width:610px; margin:auto; }
+    .cards { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .card { min-width:0; position:relative; border:1px solid var(--line); background:#fff; border-radius:24px; padding:32px; box-shadow:0 12px 36px rgba(73,35,49,.045); }
+    .card--rose { background:linear-gradient(145deg,#fff2f5 0%,#fffaf9 100%); }
+    .icon-circle { display:grid; place-items:center; width:58px; height:58px; border-radius:18px; background:#f9e3eb; font-size:28px; margin-bottom:25px; }
+    .tag { color:var(--rose-dark); background:#f8e7ec; display:inline-block; font-weight:750; border-radius:99px; padding:5px 12px; font-size:12px; letter-spacing:.025em; }
+    .card h2 { font-family:Georgia,"Times New Roman",serif; font-size:31px; line-height:1.2; letter-spacing:-.8px; font-weight:500; margin:15px 0 10px; }
+    .card p { color:var(--muted); margin:0 0 15px; }
+    .details { margin-top:26px; padding-top:19px; border-top:1px solid var(--line); color:#65515e; font-size:14px; }
+    .details strong { color:var(--ink); }
+    .cities-label { font-weight:800; font-size:13px; margin:18px 0 11px; }
+    .cities { display:flex; flex-wrap:wrap; gap:9px; }
+    .city { background:white; border:1px solid #edd7df; border-radius:999px; color:#734357; font-size:13px; font-weight:650; padding:8px 12px; white-space:nowrap; }
+    .notice { display:flex; align-items:flex-start; gap:20px; margin-top:22px; padding:25px 28px; background:#f3e8e9; border:1px solid #ecd7dd; border-radius:20px; }
+    .notice-icon { font-size:24px; line-height:1.3; }
+    .notice h3 { margin:0 0 5px; font-size:19px; }
+    .notice p { margin:0; color:#6d5b64; }
+    .cta { margin-top:28px; background:#3b2833; border-radius:24px; padding:34px 36px; display:flex; align-items:center; justify-content:space-between; gap:26px; color:white; }
+    .cta h2 { font-family:Georgia,"Times New Roman",serif; font-weight:500; line-height:1.13; font-size:30px; margin:4px 0 9px; }
+    .cta p { margin:0; color:#e5d5df; max-width:540px; }
+    .cta-button { flex-shrink:0; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:9px; border-radius:100px; padding:15px 23px; font-size:14px; font-weight:800; background:#fff; color:#3b2833; transition:transform .2s, background .2s; }
+    .cta-button:hover { transform:translateY(-2px); background:#ffe5ef; }
+    .footer { border-top:1px solid var(--line); text-align:center; color:#87747d; padding:25px 0 35px; font-size:13px; }
+    @media(max-width:760px) {
+      main { padding:42px 0 60px; } .hero { margin-bottom:29px; } .hero h1 { letter-spacing:-1.4px; } .hero p {font-size:15px;}
+      .cards { grid-template-columns:1fr; } .card { padding:26px 23px; border-radius:20px; } .card h2 {font-size:28px;}
+      .cta { flex-direction:column; align-items:stretch; padding:27px 23px; } .cta h2 { font-size:27px; } .cta-button { width:100%; }
+      .notice { padding:22px; gap:13px; } .header-inner { min-height:66px; } .logo {font-size:28px;}
+    }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after {scroll-behavior:auto !important;transition:none !important;} }
+  </style>
+</head>
+<body>
+  <div class="topbar">✦ Moda que combina com você, entregue onde estiver ✦</div>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="logo" href="#inicio" aria-label="TayModas, início">Tay<span>Modas</span></a>
+      <a class="nav-link" href="#entregas">Informações de entrega</a>
+    </div>
+  </header>
+
+  <!-- Pode copiar somente a seção abaixo e os estilos CSS para o seu site atual. -->
+  <main id="inicio">
+    <section class="container" id="entregas" aria-labelledby="titulo-entregas">
+      <div class="hero">
+        <div class="eyebrow">✦ TayModas • Entregas</div>
+        <h1>Seu look favorito,<br><em>até você.</em></h1>
+        <p>Escolheu, amou, pediu! Veja como receber suas peças da TayModas com praticidade, em qualquer lugar do Brasil.</p>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <div class="icon-circle" aria-hidden="true">📦</div>
+          <span class="tag">Para todo o país</span>
+          <h2>Entregamos para<br>todo o Brasil 🇧🇷</h2>
+          <p>Não importa onde você mora: enviamos nossos produtos para todo o território nacional.</p>
+          <div class="details"><strong>Frete e prazo:</strong> informados de acordo com o CEP de destino.</div>
+        </article>
+
+        <article class="card card--rose">
+          <div class="icon-circle" aria-hidden="true">🏍️</div>
+          <span class="tag">Entrega na região</span>
+          <h2>Mototáxi em Ribeirão<br>Preto e região</h2>
+          <p>Está pertinho? Você também pode receber suas peças por mototáxi, de forma prática e ágil.</p>
+          <div class="cities-label">📍 Cidades atendidas</div>
+          <div class="cities" aria-label="Cidades com entrega por mototáxi">
+            <span class="city">Ribeirão Preto</span>
+            <span class="city">Serrana</span>
+            <span class="city">Serra Azul</span>
+            <span class="city">Cravinhos</span>
+            <span class="city">Cajuru</span>
+            <span class="city">Jardinópolis</span>
+          </div>
+          <div class="details"><strong>Valor e prazo:</strong> consulte nossa equipe pelo WhatsApp.</div>
+        </article>
+      </div>
+
+      <div class="notice">
+        <div class="notice-icon" aria-hidden="true">💌</div>
+        <div>
+          <h3>Como combinar sua entrega?</h3>
+          <p>Escolha suas peças no catálogo e finalize o pedido pelo WhatsApp. Informe seu CEP ou cidade e bairro para receber os detalhes da entrega.</p>
+        </div>
+      </div>
+
+      <div class="cta">
+        <div>
+          <div class="eyebrow" style="color:#ffc0d8">Vamos combinar?</div>
+          <h2>Seu próximo look está te esperando.</h2>
+          <p>Chame a TayModas no WhatsApp para consultar o frete e finalizar seu pedido.</p>
+        </div>
+        <!-- Substitua SEU_NUMERO_AQUI pelo WhatsApp da loja, no formato 55 + DDD + número (somente dígitos). -->
+        <a class="cta-button" href="https://wa.me/SEU_NUMERO_AQUI?text=Ol%C3%A1%21%20Gostaria%20de%20consultar%20a%20entrega%20do%20meu%20pedido." target="_blank" rel="noopener noreferrer" aria-label="Consultar entrega no WhatsApp">💬 Consultar entrega ↗</a>
+      </div>
+    </section>
+  </main>
+  <footer class="footer"><div class="container">TayModas ♡ Moda que chega até você</div></footer>
+</body>
+</html>

@@ -4,16 +4,20 @@
 @source "../../apps";
 
 /*
- * Paleta baseada no logo (fundo preto, "TAY modas" em dourado).
- * O dourado exato é provisório até recebermos o arquivo do logo.
+ * Base: template da página de entregas (rosa e creme) + logo dourado (static/img/logo.png).
+ * O dourado do logo só vira texto sobre `ameixa`; sobre fundo claro aparece só no logo.
  */
 @theme {
-  --color-preto: #000000;
-  --color-ouro: #c8a24a; /* só sobre preto: contraste 8.8:1 */
-  --color-ouro-escuro: #7a5b12; /* texto dourado sobre branco: 6.1:1 */
-  --color-tinta: #2b2b2b;
-  --color-cinza: #6b6b6b;
-  --color-nevoa: #f2f2f0;
+  --color-creme: #fbf7f3;
+  --color-petala: #f6e8ec; /* campos rosados e fundo de foto */
+  --color-petala-forte: #f0dbe2;
+  --color-linha: #eedfe4;
+  --color-tinta: #2f242b;
+  --color-malva: #75666f;
+  --color-rosa: #a34f73;
+  --color-rosa-escuro: #813557;
+  --color-ameixa: #3b2833;
+  --color-ouro: #dab871;
 
   --font-display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
   --font-sans: "Jost", "Futura", system-ui, sans-serif;
@@ -22,33 +26,87 @@
 @layer base {
   html {
     -webkit-tap-highlight-color: transparent;
+    scrollbar-color: var(--color-petala-forte) var(--color-creme);
   }
 
   body {
-    @apply bg-white font-sans text-tinta antialiased;
+    @apply bg-creme font-sans text-tinta antialiased;
+  }
+
+  ::selection {
+    @apply bg-rosa text-white;
   }
 
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-ouro-escuro;
+    @apply outline-2 outline-offset-2 outline-rosa;
   }
 
   .on-dark :focus-visible {
     @apply outline-ouro;
   }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* Única entrada animada: o título de cada página sobe ao carregar. */
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .rise-late {
+    animation: rise 0.7s 0.12s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
 }
 
 @layer components {
-  /* Selo sobre a foto: faixa preta com texto dourado, ecoando o logo. */
+  /* Link do menu principal; a página atual ganha o traço rosa. */
+  .nav-link {
+    @apply inline-flex h-11 items-center text-[0.95rem] text-malva underline-offset-[0.6em] transition-colors hover:text-tinta;
+  }
+  .nav-link[aria-current="page"] {
+    @apply text-tinta underline decoration-rosa decoration-2;
+  }
+
+  /* Pílula de categoria (navegação) e de cidade (lista). */
+  .pill {
+    @apply inline-flex min-h-11 items-center rounded-full bg-white px-4 text-[0.95rem] text-tinta border border-linha transition-colors;
+  }
+  a.pill:hover {
+    @apply border-rosa;
+  }
+  .pill[aria-current="page"] {
+    @apply bg-ameixa text-white border-ameixa;
+  }
+
+  /* Selo sobre a foto, no canto, em pílula. */
   .photo-tag {
-    @apply absolute bottom-0 left-0 bg-preto px-2.5 py-1 text-xs font-medium tracking-wide text-ouro;
+    @apply absolute left-2.5 top-2.5 rounded-full bg-ameixa px-3 py-1 text-xs font-medium tracking-wide text-white;
+  }
+  .photo-tag--new {
+    @apply bg-white text-rosa-escuro;
   }
 
   /* Opção de tamanho/cor: o <input> (peer, sr-only) vem logo antes deste <span>. */
   .choice {
-    @apply inline-flex h-11 items-center border border-black/20 text-sm;
+    @apply inline-flex h-11 items-center rounded-full border border-linha bg-white text-sm transition-colors;
   }
   .peer:checked + .choice {
-    @apply border-preto bg-preto text-white;
+    @apply border-ameixa bg-ameixa text-white;
   }
   .swatch {
     @apply size-4 rounded-full ring-1 ring-black/20;
@@ -57,22 +115,33 @@
     @apply ring-white/70;
   }
   .peer:focus-visible + .choice {
-    @apply outline-2 outline-offset-2 outline-ouro-escuro;
+    @apply outline-2 outline-offset-2 outline-rosa;
   }
   .choice-out {
-    @apply border-dashed text-cinza line-through;
+    @apply bg-transparent text-malva line-through;
   }
   .peer:not(:checked, :disabled) + .choice:hover {
-    @apply border-preto;
+    @apply border-rosa;
   }
 
-  /* Ação principal da página do produto (link pronto ou botão que pede a escolha). */
+  /* Ação principal: sempre leva ao WhatsApp. */
+  .button {
+    @apply inline-flex min-h-12 cursor-pointer items-center justify-center gap-2.5 rounded-full bg-ameixa px-6 font-medium text-white transition-[background-color,transform] duration-200 hover:bg-rosa-escuro active:translate-y-px;
+  }
+  .button--light {
+    @apply bg-white text-ameixa hover:bg-petala;
+  }
   .order-button {
-    @apply flex w-full cursor-pointer items-center justify-center bg-preto px-5 py-4 font-medium text-white transition-colors hover:bg-tinta active:translate-y-px;
+    @apply flex w-full min-h-14 cursor-pointer items-center justify-center gap-2.5 rounded-full bg-ameixa px-6 text-[1.05rem] font-medium text-white transition-[background-color,transform] duration-200 hover:bg-rosa-escuro active:translate-y-px;
   }
 
-  /* Filtros da listagem (campo de formulário: contorno é permitido). */
+  /* Filtros da listagem. */
   .filter-select {
-    @apply mt-1 block h-11 min-w-32 border border-black/20 bg-white px-3 text-base;
+    @apply mt-1 block h-11 min-w-32 rounded-full bg-white px-4 text-base text-tinta border border-linha;
+  }
+
+  /* Painel arredondado do template (entregas, como comprar). */
+  .panel {
+    @apply rounded-3xl bg-white p-6 sm:p-8;
   }
 }

@@ -65,23 +65,39 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
   `[PLACEHOLDER]` e pergunte.
 - Dependências sempre via `uv add` / `uv add --dev`.
 - Frontend: usar skills de design (frontend-design / impeccable) nas etapas de UI.
-  Mobile-first (~375px), paleta baseada no logo: fundo preto, "TAY modas" em dourado.
+  Mobile-first (~375px). Base visual: `templates/taymodas_entregas.html` (template da dona do
+  projeto, vinculante) + logo oficial. Contexto de produto em `PRODUCT.md`.
 
-## Design (Etapa 4)
+## Design (redesign rosa)
 
-- Tokens: `preto #000`, `ouro #c8a24a` (só sobre preto), `ouro-escuro #7a5b12` (dourado
-  sobre branco), `tinta #2b2b2b`, `cinza #6b6b6b`, `nevoa #f2f2f0` (fundo de foto).
-  O dourado é provisório até chegar o arquivo do logo.
-- Tipos: Bodoni Moda (wordmark, nomes de peça, títulos) + Jost (texto). Google Fonts.
-- Única ousadia: hero preto com wordmark "TAY *modas*" em `clamp(3.25rem,17vw,9rem)`
-  (17vw é o máximo sem scroll horizontal em 375/393px). Resto quieto: grade 2→3→4
-  colunas, foto 3:4 sem raio, sem cards com sombra. Selos "Novidade"/"Esgotado" = faixa
-  preta + texto dourado (`.photo-tag`), derivados de dados reais.
-- Evitar: eyebrows em caixa alta, middle dots, setas em botões, palavra única destacada.
-- Sem linhas finas, desfoque (glass) ou caixinhas com contorno de 1px; separar por espaço ou
-  tom (`nevoa`). Exceção: controles de formulário (`.choice`). Texto corrido com 16px ou mais.
+- Tokens (`assets/css/source.css`): `creme #fbf7f3` (fundo), `petala #f6e8ec` (campos e fundo
+  de foto), `linha #eedfe4`, `tinta #2f242b`, `malva #75666f` (secundário), `rosa #a34f73`
+  (acento), `rosa-escuro #813557`, `ameixa #3b2833` (botões, rodapé, faixas de ação),
+  `ouro #dab871` (só o logo; como texto, só sobre `ameixa`).
+- Logo: `static/img/logo.png`, recortado com fundo transparente de `media/Logo.jpeg` (500px,
+  baixa resolução; pedir o original). Partial `partials/wordmark.html` (`size="small|large"`).
+- Tipos: Bodoni Moda (títulos, nomes de peça; ecoa o "TAY" do logo) + Jost (texto).
+- Formas: painéis `rounded-3xl` (`.panel`), pílulas (`.pill`, `.choice`, `.button`), fotos
+  `rounded-2xl`. Ícones SVG próprios em `partials/icon.html` (traço 1.5), nunca emoji.
+- Movimento: só `.rise`/`.rise-late` no título de cada página e zoom leve na foto ao passar o
+  mouse; respeita `prefers-reduced-motion`.
+- Evitar: eyebrows/rótulos em caixa alta, palavra única destacada no título, emoji, setas em
+  texto, sombras. Contornos de 1px (`border-linha`) só em pílulas e controles.
+- Menu: `nav_current` no contexto (`catalogo`, `entregas`, `como-comprar`) marca a aba.
+- Hero da home (`partials/list_header.html`, id `titulo-inicio`): em `lg+` mostra a peça mais
+  nova (`cards.0`).
 - View usa `selectors.catalog_products()` + `presenters.ProductCard` (sem lógica no
   template). Número de queries da listagem não cresce com os produtos (teste cobre).
+
+## Entregas e Como comprar
+
+- `apps/core/views.py`: `DeliveryView` (`/entregas/`) e `HowToBuyView` (`/como-comprar/`),
+  templates em `apps/core/templates/core/`. Estão no sitemap.
+- Dados do admin (`StoreSettings`): `store_address` (mapa + rodapé), `mototaxi_cities` (uma
+  por linha), `delivery_info` (prazos e detalhes), `about_text` (trecho "Sobre", some se vazio).
+- Mapa: iframe do Google Maps sem chave (`map_embed_url`, `loading="lazy"`) + botão
+  `map_link_url` (URL oficial `maps/search/?api=1`). Sem endereço, a seção some.
+- `StoreSettings.whatsapp_url(text)` monta o `wa.me` (usado também pelo pedido da peça).
 
 ## Página do produto (Etapa 5)
 
@@ -152,7 +168,8 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
   provisório, pessoal do dono do projeto; trocar no admin antes do deploy)
 - Lista final de categorias e tamanhos
 - Confirmação: esgotado exibido vs. escondido
-- Arquivo do logo (favicon, dourado exato e imagem padrão de compartilhamento da home)
+- Logo em alta resolução ou vetor (o atual tem 500px); favicon e imagem de compartilhamento
+  da home ainda usam o provisório
 - Textos de entrega (cidades do mototáxi, envio nacional, prazos, retirada)
 - Screenshots do README: tirar depois do novo layout e com fotos reais de produção
   (as fotos lisas do `seed_demo` não servem para portfólio)

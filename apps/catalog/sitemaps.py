@@ -28,15 +28,15 @@ class CategorySitemap(Sitemap[Category]):
         return f"{reverse('catalog:product_list')}?categoria={item.slug}"
 
 
-class HomeSitemap(Sitemap[str]):
+class PagesSitemap(Sitemap[str]):
     changefreq = "daily"
     priority = 1.0
 
     def items(self) -> list[str]:
-        return ["catalog:product_list"]
+        return ["catalog:product_list", "core:delivery", "core:how_to_buy"]
 
     def location(self, item: str) -> str:
         return reverse(item)
 
 
-SITEMAPS = {"inicio": HomeSitemap, "categorias": CategorySitemap, "produtos": ProductSitemap}
+SITEMAPS = {"paginas": PagesSitemap, "categorias": CategorySitemap, "produtos": ProductSitemap}
