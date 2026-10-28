@@ -154,8 +154,11 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
 - Confirmação: esgotado exibido vs. escondido
 - Arquivo do logo (favicon, dourado exato e imagem padrão de compartilhamento da home)
 - Textos de entrega (cidades do mototáxi, envio nacional, prazos, retirada)
+- Screenshots do README: tirar depois do novo layout e com fotos reais de produção
+  (as fotos lisas do `seed_demo` não servem para portfólio)
 
 ## Etapas
 
 0. Plano ✅ · 1. Scaffold ✅ · 2. Models ✅ · 3. Admin PT-BR ✅ · 4. Layout + listagem ✅ ·
-5. Detalhe + WhatsApp ✅ · 6. Filtros HTMX ✅ · 7. Acabamento ✅ · 8. Deploy ✅ (taymodas.onrender.com) · 9. Portfólio
+5. Detalhe + WhatsApp ✅ · 6. Filtros HTMX ✅ · 7. Acabamento ✅ · 8. Deploy ✅ (taymodas.onrender.com) · 9. Portfólio ✅
+(README + `docs/guia-admin.md`; screenshots pendentes)

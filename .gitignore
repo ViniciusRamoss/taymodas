@@ -25,3 +25,4 @@ static/css/tailwind.css
 
 # Inspeções de design (taste-skill)
 .taste-skill/
+.playwright-cli/

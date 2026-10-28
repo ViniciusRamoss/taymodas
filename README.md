@@ -1,23 +1,42 @@
 # Tay Modas — Catálogo Online
 
-[![CI](https://github.com/OWNER/taymodas/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/taymodas/actions/workflows/ci.yml)
+[![CI](https://github.com/ViniciusRamoss/taymodas/actions/workflows/ci.yml/badge.svg)](https://github.com/ViniciusRamoss/taymodas/actions/workflows/ci.yml)
 
 Catálogo web da **Tay Modas** ([@taymodas23](https://instagram.com/taymodas23)), loja de moda
 feminina em Serrana-SP. As clientes navegam pelas peças e fazem o pedido pelo WhatsApp, com a
 mensagem já preenchida (produto, tamanho e cor). A dona da loja cadastra produtos, fotos e
 estoque por um painel administrativo em português.
 
-> 🚧 Em desenvolvimento. Veja o [plano do projeto](docs/plan.md).
+**No ar:** https://taymodas.onrender.com
 
 ## Funcionalidades
 
-- [x] Estrutura do projeto, CI e qualidade de código
-- [x] Produtos com várias fotos, categorias e variantes (tamanho + cor) com estoque
-- [x] Painel administrativo em PT-BR pensado para quem não é técnico
-- [x] Catálogo público mobile-first (listagem por categoria, paginação)
-- [ ] Filtros por tamanho e cor (HTMX)
-- [ ] Botão "Pedir no WhatsApp" com mensagem preenchida
-- [ ] Deploy gratuito (Render + Neon + Cloudinary)
+- Catálogo mobile-first com categorias, paginação e selos "Novidade" e "Esgotado".
+- Filtros por tamanho e cor com HTMX: atualizam a lista sem recarregar a página e geram URLs
+  compartilháveis. Sem JavaScript, viram um formulário comum.
+- Página da peça com galeria e escolha de tamanho e cor. Combinações sem estoque aparecem
+  riscadas, e o botão "Pedir pelo WhatsApp" abre a conversa com produto, tamanho, cor, preço e
+  link preenchidos.
+- Painel administrativo em PT-BR para quem não é técnico: fotos com prévia, estoque por
+  tamanho e cor, filtros de esgotado e atualização de estoque em lote.
+  [Guia do painel](docs/guia-admin.md).
+- Prévia com foto e preço ao compartilhar um link (Open Graph), sitemap, `robots.txt` e
+  páginas de erro próprias.
+- Hospedagem a custo zero: Render, Neon (PostgreSQL) e Cloudinary.
+
+## Decisões técnicas
+
+- **Sem SPA.** Templates Django com HTMX: cada interação também funciona como link ou
+  formulário comum, e o botão voltar do navegador restaura o estado.
+- **Camadas finas.** `selectors.py` faz as consultas, `services.py` guarda as regras de
+  negócio em funções puras (escolha de variante, montagem da mensagem do WhatsApp) e
+  `presenters.py` entrega aos templates dados prontos para exibir. As views só ligam as partes.
+- **Estoque por variante.** Tamanho e cor só contam como disponíveis juntos, na mesma
+  variante com estoque, tanto nos filtros quanto na página da peça.
+- **Fotos econômicas.** O Cloudinary reduz as fotos no upload e entrega WebP/AVIF no tamanho
+  da tela (`srcset`), para caber na cota gratuita.
+- **Qualidade.** mypy strict, ruff e testes com pytest em cada commit (pre-commit) e em cada
+  push (GitHub Actions).
 
 ## Stack
 
@@ -34,7 +53,7 @@ estoque por um painel administrativo em português.
 Pré-requisito: [uv](https://docs.astral.sh/uv/). Ele instala o Python 3.12 se for preciso.
 
 ```bash
-git clone https://github.com/OWNER/taymodas.git
+git clone https://github.com/ViniciusRamoss/taymodas.git
 cd taymodas
 uv sync
 cp .env.example .env          # edite DJANGO_SECRET_KEY
@@ -79,21 +98,26 @@ apps/core/         configurações da loja, storage Cloudinary, healthcheck
 apps/catalog/      produtos, variantes, fotos e admin
 templates/         templates globais
 static/            CSS, JS e imagens
-docs/              plano, decisões e deploy
+docs/              plano, deploy e guia do painel
+bin/               scripts de build e start do Render
+render.yaml        Blueprint do Render
 ```
 
 ## Variáveis de ambiente
 
 Veja [`.env.example`](.env.example). Em produção, as obrigatórias são `DJANGO_SECRET_KEY`,
-`DJANGO_ALLOWED_HOSTS`, `DATABASE_URL` e `CLOUDINARY_URL` (o app não sobe sem elas, porque o
-disco do servidor gratuito é apagado a cada deploy).
+`DATABASE_URL`, `CLOUDINARY_URL` e um host (`DJANGO_ALLOWED_HOSTS`, ou o
+`RENDER_EXTERNAL_HOSTNAME` que o Render define sozinho). O app não sobe sem elas, porque o
+disco do servidor gratuito é apagado a cada deploy.
 
 Em desenvolvimento, sem `CLOUDINARY_URL` as fotos ficam na pasta `media/`.
 
 ## Deploy
 
-Documentação em `docs/deploy.md` (Etapa 8).
+Push na `main` publica sozinho no Render. Passo a passo da primeira vez, limites do plano
+gratuito e problemas comuns em [`docs/deploy.md`](docs/deploy.md).
 
 ## Licença
 
-[PLACEHOLDER — definir licença]
+Código publicado como portfólio. Nome, marca e conteúdo da Tay Modas pertencem à loja e não
+podem ser reutilizados.
