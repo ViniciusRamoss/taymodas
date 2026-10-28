@@ -15,6 +15,8 @@
     {% endif %}
     {% if card.is_sold_out %}
       <span class="photo-tag">Esgotado</span>
+    {% elif card.is_on_sale %}
+      <span class="photo-tag photo-tag--sale">Promoção</span>
     {% elif card.is_new %}
       <span class="photo-tag photo-tag--new">Novidade</span>
     {% endif %}
@@ -25,7 +27,7 @@
         <{{ heading }} class="line-clamp-2 font-display text-[1.15rem] leading-snug">
           <a href="{{ card.url }}" class="after:absolute after:inset-0 group-hover:underline group-hover:decoration-rosa group-hover:underline-offset-4">{{ card.name }}</a>
         </{{ heading }}>
-        <p class="mt-0.5 font-medium {% if card.is_sold_out %}text-malva{% else %}text-rosa-escuro{% endif %}">{{ card.price }}</p>
+        <p class="mt-0.5 font-medium {% if card.is_sold_out %}text-malva{% else %}text-rosa-escuro{% endif %}">{{ card.price }}{% if card.original_price %} <s class="ml-1 text-[0.85rem] font-normal text-malva"><span class="sr-only">de </span>{{ card.original_price }}</s>{% endif %}</p>
         {% if card.sizes %}
           <p class="mt-0.5 text-[0.85rem] text-malva"><span class="sr-only">Tamanhos disponíveis: </span>{{ card.sizes|join:", " }}</p>
         {% endif %}

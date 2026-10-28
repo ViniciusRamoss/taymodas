@@ -138,6 +138,17 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
 - Estilos `.choice`, `.choice-out`, `.swatch`, `.order-button` em `source.css` (layer components; utilitários no
   template sobrescrevem, então cor do anel fica no CSS).
 
+## Promoção
+
+- `Product.sale_price` (opcional, menor que `price`; `clean` valida) e `sale_ends_at` (DateField,
+  último dia inclusive; exige `sale_price`). `is_on_sale(day)` / `current_price(day)` usam
+  `timezone.localdate()`; `Product.objects.on_sale(day)`.
+- Cards e página da peça: preço atual + original em `<s>`, selo `.photo-tag--sale` (prioridade:
+  Esgotado > Promoção > Novidade). Sacola usa `current_price()`.
+- Listagem `?promocao=1` (combina com categoria, tamanho e cor; `CatalogFilters` leva o parâmetro).
+  Pílula `.pill--sale` só aparece se `selectors.has_products_on_sale()`. Canônico `/?promocao=1`.
+- Admin: fieldset "Promoção", filtro `SaleFilter` (`?promocao=sim`), preço da lista mostra o riscado.
+
 ## Filtros da listagem (Etapa 6)
 
 - Querystring `?categoria=<slug>&tamanho=<pk>&cor=<pk>`; a mesma URL serve a página inteira e

@@ -16,6 +16,8 @@ estoque por um painel administrativo em português.
   compartilháveis. Sem JavaScript, viram um formulário comum.
 - Página da peça com galeria e escolha de tamanho e cor. Combinações sem estoque aparecem
   riscadas; a peça escolhida vai para a sacola.
+- Promoções: preço promocional por peça, com data de término opcional; selo, preço riscado e
+  atalho "Promoções" na listagem.
 - Sacola na sessão (sem login): quantidades limitadas ao estoque, total, e o botão "Enviar
   pedido pelo WhatsApp" abre a conversa com todas as peças (quantidade, cor, tamanho, valor e
   link) e o total já escritos.

@@ -115,6 +115,10 @@
   .pill[aria-current="page"] {
     @apply bg-ameixa text-white border-ameixa;
   }
+  /* Atalho "Promoções": rosa para se destacar das categorias. */
+  .pill--sale:not([aria-current="page"]) {
+    @apply border-rosa text-rosa-escuro;
+  }
 
   /* Selo sobre a foto, no canto, em pílula. */
   .photo-tag {
@@ -122,6 +126,9 @@
   }
   .photo-tag--new {
     @apply bg-white text-rosa-escuro;
+  }
+  .photo-tag--sale {
+    @apply bg-rosa text-white;
   }
 
   /* Opção de tamanho/cor: o <input> (peer, sr-only) vem logo antes deste <span>. */

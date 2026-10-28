@@ -54,6 +54,20 @@ Em **Produtos > Adicionar produto**:
 
 A peça aparece no site na hora, com o selo **Novidade** nos primeiros 7 dias.
 
+## Colocar uma peça em promoção
+
+1. Abra a peça em **Produtos**.
+2. Em **Promoção**, preencha o **preço promocional** (precisa ser menor que o preço normal).
+3. Opcional: em **promoção até**, escolha o último dia. No dia seguinte o preço normal volta
+   sozinho. Vazio, a promoção vale até você apagar o preço promocional.
+4. Salve.
+
+No site, a peça ganha o selo **Promoção** e o preço normal aparece riscado. A sacola e a
+mensagem do WhatsApp já usam o preço promocional. Enquanto houver peça em promoção, aparece o
+atalho **Promoções** junto das categorias.
+
+Para ver o que está em promoção no painel, use o filtro **promoção** na lista de produtos.
+
 ## Depois de uma venda
 
 Baixe o estoque da combinação vendida. Dois caminhos:

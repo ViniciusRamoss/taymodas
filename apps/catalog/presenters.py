@@ -45,6 +45,7 @@ class GalleryImage:
 class ProductDetail:
     name: str
     price: str
+    original_price: str
     price_amount: str
     description: str
     category_name: str
@@ -63,10 +64,12 @@ class ProductDetail:
             )
             for image in product.images.all()
         )
+        price = product.current_price()
         return cls(
             name=product.name,
-            price=format_brl(product.price),
-            price_amount=f"{product.price:.2f}",
+            price=format_brl(price),
+            original_price=format_brl(product.price) if product.is_on_sale() else "",
+            price_amount=f"{price:.2f}",
             description=product.description,
             category_name=product.category.name,
             category_slug=product.category.slug,
@@ -79,6 +82,7 @@ class ProductCard:
     name: str
     url: str
     price: str
+    original_price: str
     image_url: str
     image_srcset: str
     image_alt: str
@@ -86,6 +90,7 @@ class ProductCard:
     colors: tuple[ColorSwatch, ...]
     is_sold_out: bool
     is_new: bool
+    is_on_sale: bool
 
     @classmethod
     def from_product(cls, product: Product, *, now: datetime | None = None) -> ProductCard:
@@ -104,11 +109,14 @@ class ProductCard:
         sizes = sorted({v.size for v in variants}, key=lambda size: (size.position, size.name))
         colors = sorted({v.color for v in variants}, key=lambda color: color.name)
         is_sold_out = not variants
+        today = timezone.localdate(now)
+        is_on_sale = product.is_on_sale(today)
 
         return cls(
             name=product.name,
             url=product.get_absolute_url(),
-            price=format_brl(product.price),
+            price=format_brl(product.current_price(today)),
+            original_price=format_brl(product.price) if is_on_sale else "",
             image_url=url,
             image_srcset=srcset,
             image_alt=alt,
@@ -116,6 +124,7 @@ class ProductCard:
             colors=tuple(ColorSwatch(color.name, color.hex_code) for color in colors),
             is_sold_out=is_sold_out,
             is_new=not is_sold_out and now - product.created_at <= timedelta(NEW_PRODUCT_DAYS),
+            is_on_sale=is_on_sale,
         )
 
 
@@ -143,10 +152,14 @@ class CatalogFilters:
         colors: Sequence[Color],
         size_id: int | None,
         color_id: int | None,
+        on_sale: bool = False,
     ) -> CatalogFilters:
         size = next((s for s in sizes if s.pk == size_id), None)
         color = next((c for c in colors if c.pk == color_id), None)
-        base = {"categoria": category.slug} if category is not None else {}
+        base = {
+            **({"categoria": category.slug} if category is not None else {}),
+            **({"promocao": "1"} if on_sale else {}),
+        }
         params = {
             **base,
             **({"tamanho": str(size.pk)} if size is not None else {}),

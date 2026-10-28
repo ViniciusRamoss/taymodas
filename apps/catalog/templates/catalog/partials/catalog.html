@@ -5,15 +5,20 @@
     {% if show_hero %}
       <h2 id="titulo-lista" class="font-display text-[1.75rem] leading-tight">Todas as peças</h2>
     {% else %}
-      <h1 id="titulo-lista" class="font-display text-[2rem] leading-tight">{% if current_category %}{{ current_category.name }}{% else %}Todas as peças{% endif %}</h1>
+      <h1 id="titulo-lista" class="font-display text-[2rem] leading-tight">{{ list_title }}</h1>
     {% endif %}
 
     {% if categories %}
       <nav aria-label="Categorias" class="sticky top-0 z-10 -mx-4 mt-4 bg-creme/95" hx-boost="true">
         <ul class="flex gap-2 overflow-x-auto px-4 py-2 [scrollbar-width:none]">
           <li class="shrink-0">
-            <a href="{% url 'catalog:product_list' %}" class="pill" {% if not current_category %}aria-current="page"{% endif %}>Todas</a>
+            <a href="{% url 'catalog:product_list' %}" class="pill" {% if not current_category and not on_sale %}aria-current="page"{% endif %}>Todas</a>
           </li>
+          {% if has_sales %}
+            <li class="shrink-0">
+              <a href="{% url 'catalog:product_list' %}?promocao=1" class="pill pill--sale" {% if on_sale and not current_category %}aria-current="page"{% endif %}>Promoções</a>
+            </li>
+          {% endif %}
           {% for category in categories %}
             <li class="shrink-0">
               <a href="{% url 'catalog:product_list' %}?categoria={{ category.slug }}" class="pill"
@@ -31,6 +36,7 @@
             hx-swap="outerHTML"
             class="mt-3 flex flex-wrap items-end gap-3">
         {% if current_category %}<input type="hidden" name="categoria" value="{{ current_category.slug }}">{% endif %}
+        {% if on_sale %}<input type="hidden" name="promocao" value="1">{% endif %}
         {% if filters.sizes %}
           <label class="text-sm">Tamanho
             <select name="tamanho" id="filtro-tamanho" class="filter-select">
@@ -82,8 +88,11 @@
     {% else %}
       <div class="mt-8 max-w-prose rounded-3xl bg-white p-6 text-tinta" role="status">
         {% if filters.is_active %}
-          <p>Nenhuma peça disponível com esse filtro{% if current_category %} em {{ current_category.name }}{% endif %}.</p>
+          <p>Nenhuma peça disponível com esse filtro{% if current_category or on_sale %} em {{ list_title }}{% endif %}.</p>
           <a class="mt-3 inline-block font-medium text-rosa-escuro underline underline-offset-4" href="{{ filters.clear_url }}" hx-boost="true">Limpar filtros</a>
+        {% elif on_sale and not current_category %}
+          <p>Nenhuma peça em promoção agora. Fique de olho no Instagram.</p>
+          <a class="mt-3 inline-block font-medium text-rosa-escuro underline underline-offset-4" href="{% url 'catalog:product_list' %}" hx-boost="true">Ver todas as peças</a>
         {% elif current_category %}
           <p>Ainda não há peças em {{ current_category.name }}.</p>
           <a class="mt-3 inline-block font-medium text-rosa-escuro underline underline-offset-4" href="{% url 'catalog:product_list' %}" hx-boost="true">Ver todas as peças</a>

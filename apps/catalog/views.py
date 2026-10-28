@@ -16,7 +16,8 @@ from .presenters import CatalogFilters, ProductCard, ProductDetail
 
 
 class ProductListView(ListView[Product]):
-    """Listagem com filtros na querystring (`?categoria=<slug>&tamanho=<pk>&cor=<pk>`).
+    """Listagem com filtros na querystring (`?categoria=<slug>&tamanho=<pk>&cor=<pk>`;
+    `?promocao=1` mostra só peças em promoção).
 
     Em requests do HTMX devolve só o bloco do catálogo (+ topo fora de banda e título).
     Ids de tamanho/cor que não estão entre as opções com estoque são ignorados.
@@ -26,6 +27,7 @@ class ProductListView(ListView[Product]):
     htmx_template = "catalog/partials/catalog_htmx.html"
     paginate_by = 12
     category: Category | None = None
+    on_sale = False
     filters: CatalogFilters
 
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
@@ -40,16 +42,21 @@ class ProductListView(ListView[Product]):
         slug = self.request.GET.get("categoria")
         if slug:
             self.category = get_object_or_404(Category, slug=slug, is_active=True)
-        sizes, colors = selectors.filter_options(self.category)
+        self.on_sale = self.request.GET.get("promocao") == "1"
+        sizes, colors = selectors.filter_options(self.category, on_sale=self.on_sale)
         self.filters = CatalogFilters.build(
             category=self.category,
             sizes=sizes,
             colors=colors,
             size_id=_int_param(self.request.GET, "tamanho"),
             color_id=_int_param(self.request.GET, "cor"),
+            on_sale=self.on_sale,
         )
         return selectors.catalog_products(
-            category=self.category, size=self.filters.size, color=self.filters.color
+            category=self.category,
+            size=self.filters.size,
+            color=self.filters.color,
+            on_sale=self.on_sale,
         )
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
@@ -58,7 +65,18 @@ class ProductListView(ListView[Product]):
         context["cards"] = [ProductCard.from_product(p) for p in context["object_list"]]
         context["categories"] = selectors.categories_with_products()
         context["current_category"] = self.category
+        context["on_sale"] = self.on_sale
+        context["has_sales"] = self.on_sale or selectors.has_products_on_sale()
         context["filters"] = self.filters
+        if self.category is not None:
+            context["list_title"] = self.category.name
+        else:
+            context["list_title"] = "Promoções" if self.on_sale else "Todas as peças"
+        if self.on_sale and self.category is None:
+            context["meta_title"] = "Promoções — Tay Modas"
+            context["canonical_url"] = self.request.build_absolute_uri(
+                f"{reverse('catalog:product_list')}?promocao=1"
+            )
         if self.category is not None:
             context["meta_title"] = f"{self.category.name} — Tay Modas"
             # Filtros e página não entram no canônico: são variações da mesma lista.
@@ -67,6 +85,7 @@ class ProductListView(ListView[Product]):
             )
         context["show_hero"] = (
             self.category is None
+            and not self.on_sale
             and not self.filters.is_active
             and not context["page_obj"].has_previous()
         )

@@ -85,7 +85,7 @@ def build_lines(items: dict[int, int], variants: Iterable[ProductVariant]) -> li
                 url=product.get_absolute_url(),
                 color=variant.color.name,
                 size=variant.size.name,
-                unit_price=product.price,
+                unit_price=product.current_price(),
                 quantity=min(quantity, variant.stock),
                 stock=variant.stock,
                 image_url=image_url(cover.image, width=THUMB_WIDTH) if cover else "",

@@ -71,12 +71,34 @@ class StockStatusFilter(admin.SimpleListFilter):
         return queryset
 
 
+class SaleFilter(admin.SimpleListFilter):
+    title = "promoção"
+    parameter_name = "promocao"
+
+    def lookups(
+        self, request: HttpRequest, model_admin: admin.ModelAdmin[Product]
+    ) -> list[tuple[str, str]]:
+        return [("sim", "Em promoção hoje")]
+
+    def queryset(self, request: HttpRequest, queryset: QuerySet[Product]) -> QuerySet[Product]:
+        if self.value() == "sim":
+            return queryset.on_sale()  # type: ignore[attr-defined, no-any-return]
+        return queryset
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin[Product]):
     list_display = ["cover", "name", "category", "formatted_price", "stock", "is_active"]
     list_display_links = ["cover", "name"]
     list_editable = ["is_active"]
-    list_filter = [StockStatusFilter, "is_active", "category", "variants__size", "variants__color"]
+    list_filter = [
+        StockStatusFilter,
+        SaleFilter,
+        "is_active",
+        "category",
+        "variants__size",
+        "variants__color",
+    ]
     search_fields = ["name", "description"]
     search_help_text = "Busque pelo nome ou descrição do produto."
     list_per_page = 30
@@ -86,6 +108,16 @@ class ProductAdmin(admin.ModelAdmin[Product]):
     readonly_fields = ["slug", "created_at", "updated_at"]
     fieldsets = [
         (None, {"fields": ["name", "category", "price", "description", "is_active"]}),
+        (
+            "Promoção",
+            {
+                "fields": ["sale_price", "sale_ends_at"],
+                "description": (
+                    "Para colocar a peça em promoção, preencha o preço promocional. No site, o "
+                    "preço normal aparece riscado e a peça ganha o selo Promoção."
+                ),
+            },
+        ),
         (
             "Informações automáticas",
             {"fields": ["slug", "created_at", "updated_at"], "classes": ["collapse"]},
@@ -105,7 +137,7 @@ class ProductAdmin(admin.ModelAdmin[Product]):
     def get_fieldsets(self, request: HttpRequest, obj: Product | None = None) -> Any:
         # No cadastro novo os campos automáticos ainda estão vazios; mostrar só confunde.
         fieldsets = super().get_fieldsets(request, obj)
-        return fieldsets[:1] if obj is None else fieldsets
+        return fieldsets[:2] if obj is None else fieldsets
 
     @admin.display(description="foto")
     def cover(self, obj: Product) -> SafeString | str:
@@ -114,7 +146,13 @@ class ProductAdmin(admin.ModelAdmin[Product]):
         return thumbnail(images[0] if images else None)
 
     @admin.display(description="preço", ordering="price")
-    def formatted_price(self, obj: Product) -> str:
+    def formatted_price(self, obj: Product) -> SafeString | str:
+        if obj.is_on_sale():
+            return format_html(
+                "<strong>{}</strong> <s>{}</s>",
+                format_brl(obj.current_price()),
+                format_brl(obj.price),
+            )
         return format_brl(obj.price)
 
     @admin.display(description="estoque total", ordering="total_stock")

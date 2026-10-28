@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+from datetime import date
 from decimal import Decimal
 from typing import Any
 
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from django.db.models.functions import Coalesce
 from django.urls import reverse
+from django.utils import timezone
 
 from apps.core.models import TimeStampedModel
 from apps.core.text import unique_slugify
@@ -108,6 +111,13 @@ class ProductQuerySet(models.QuerySet["Product"]):
         """Produtos com pelo menos uma variante com estoque."""
         return self.filter(models.Exists(self._variants_in_stock()))
 
+    def on_sale(self, day: date | None = None) -> ProductQuerySet:
+        """Produtos com preço promocional valendo em `day` (padrão: hoje)."""
+        day = day or timezone.localdate()
+        return self.filter(sale_price__isnull=False).filter(
+            models.Q(sale_ends_at__isnull=True) | models.Q(sale_ends_at__gte=day)
+        )
+
     def sold_out(self) -> ProductQuerySet:
         """Produtos sem nenhuma variante com estoque (inclui os sem variantes)."""
         return self.exclude(models.Exists(self._variants_in_stock()))
@@ -154,6 +164,27 @@ class Product(TimeStampedModel):
         decimal_places=2,
         validators=[MinValueValidator(Decimal("0.01"))],
     )
+    sale_price = models.DecimalField(
+        "preço promocional (R$)",
+        max_digits=8,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(Decimal("0.01"))],
+        help_text=(
+            "Opcional. Preencha para colocar a peça em promoção: o preço normal aparece riscado. "
+            "Apague para encerrar a promoção."
+        ),
+    )
+    sale_ends_at = models.DateField(
+        "promoção até",
+        null=True,
+        blank=True,
+        help_text=(
+            "Opcional. Último dia da promoção; no dia seguinte volta o preço normal sozinho. "
+            "Vazio: vale até você apagar o preço promocional."
+        ),
+    )
     category = models.ForeignKey(
         Category,
         verbose_name="categoria",
@@ -183,6 +214,27 @@ class Product(TimeStampedModel):
 
     def get_absolute_url(self) -> str:
         return reverse("catalog:product_detail", kwargs={"slug": self.slug})
+
+    def clean(self) -> None:
+        if self.sale_price is not None and self.price is not None and self.sale_price >= self.price:
+            raise ValidationError(
+                {"sale_price": "O preço promocional precisa ser menor que o preço normal."}
+            )
+        if self.sale_ends_at is not None and self.sale_price is None:
+            raise ValidationError(
+                {"sale_ends_at": "Preencha o preço promocional ou deixe esta data vazia."}
+            )
+
+    def is_on_sale(self, day: date | None = None) -> bool:
+        if self.sale_price is None:
+            return False
+        return self.sale_ends_at is None or self.sale_ends_at >= (day or timezone.localdate())
+
+    def current_price(self, day: date | None = None) -> Decimal:
+        """Preço que a cliente paga hoje: o promocional, se a promoção está valendo."""
+        if self.is_on_sale(day) and self.sale_price is not None:
+            return self.sale_price
+        return self.price
 
 
 class ProductImage(models.Model):
