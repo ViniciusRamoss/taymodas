@@ -1,0 +1,1331 @@
+/*
+  Painel (Django Admin) com a identidade do catálogo. Ver DESIGN.md.
+  Carregado depois do CSS do admin (bloco `responsive` em templates/admin/base_site.html).
+  Plano, sem sombras: blocos separados por tom (creme, pétala, branco, ameixa).
+*/
+
+/* Tokens do site mapeados para as variáveis do admin. */
+:root,
+html[data-theme="light"],
+html[data-theme="dark"],
+html[data-theme="auto"] {
+  --creme: #fbf7f3;
+  --petala: #f6e8ec;
+  --petala-forte: #f0dbe2;
+  --linha: #eedfe4;
+  --campo: #dcc6cf;
+  --tinta: #2f242b;
+  --malva: #75666f;
+  --rosa: #a34f73;
+  --rosa-escuro: #813557;
+  --ameixa: #3b2833;
+  --ouro: #d5ba7e;
+  --erro: #a8283c;
+  --serif: "Bodoni Moda", Didot, "Bodoni 72", Georgia, serif;
+  --sans: Jost, Futura, system-ui, sans-serif;
+  --coluna: 72rem;
+  --gutter: max(16px, calc((100% - var(--coluna)) / 2));
+
+  --primary: var(--rosa);
+  --secondary: var(--ameixa);
+  --accent: var(--ouro);
+  --primary-fg: #fff;
+
+  --body-fg: var(--tinta);
+  --body-bg: var(--creme);
+  --body-quiet-color: var(--malva);
+  --body-medium-color: var(--tinta);
+  --body-loud-color: var(--tinta);
+
+  --header-color: var(--tinta);
+  --header-branding-color: var(--tinta);
+  --header-bg: var(--creme);
+  --header-link-color: var(--tinta);
+
+  --breadcrumbs-fg: var(--malva);
+  --breadcrumbs-link-fg: var(--rosa-escuro);
+  --breadcrumbs-bg: transparent;
+
+  --link-fg: var(--rosa-escuro);
+  --link-hover-color: var(--ameixa);
+  --link-selected-fg: var(--ameixa);
+
+  --hairline-color: var(--linha);
+  --border-color: var(--campo);
+
+  --error-fg: var(--erro);
+
+  --message-success-bg: #eef4ea;
+  --message-warning-bg: #fbf1dc;
+  --message-error-bg: #fbe7ea;
+
+  --darkened-bg: var(--petala);
+  --selected-bg: var(--petala-forte);
+  --selected-row: var(--petala);
+
+  --button-fg: #fff;
+  --button-bg: var(--ameixa);
+  --button-hover-bg: var(--rosa-escuro);
+  --default-button-bg: var(--ameixa);
+  --default-button-hover-bg: var(--rosa-escuro);
+  --close-button-bg: var(--malva);
+  --close-button-hover-bg: var(--tinta);
+  --delete-button-bg: var(--erro);
+  --delete-button-hover-bg: #861f30;
+
+  --object-tools-fg: #fff;
+  --object-tools-bg: var(--ameixa);
+  --object-tools-hover-bg: var(--rosa-escuro);
+
+  --font-family-primary: var(--sans);
+
+  color-scheme: light;
+  accent-color: var(--ameixa);
+  scrollbar-color: var(--petala-forte) transparent;
+}
+
+/* Base */
+
+html,
+body {
+  background: var(--creme);
+}
+
+body {
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--tinta);
+  caret-color: var(--rosa);
+}
+
+::selection {
+  background: var(--rosa);
+  color: #fff;
+}
+
+:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--rosa);
+  outline-offset: 2px;
+}
+
+a:link,
+a:visited {
+  color: var(--rosa-escuro);
+  text-underline-offset: 0.25em;
+}
+
+a:hover,
+a:focus {
+  color: var(--ameixa);
+  text-decoration: underline;
+  text-decoration-color: var(--rosa);
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 400;
+}
+
+#content h1 {
+  font-family: var(--serif);
+  font-size: clamp(1.9rem, 5vw, 2.6rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--tinta);
+  margin: 0 0 8px;
+  text-wrap: balance;
+}
+
+#content > h2 {
+  font-family: var(--sans);
+  font-size: 1.05rem;
+  color: var(--malva);
+  margin: 0 0 24px;
+}
+
+.theme-toggle {
+  display: none !important;
+}
+
+/* Coluna central: cabeçalho, migalhas, mensagens e conteúdo alinhados em 72rem. */
+
+body:not(.login):not(.popup) #header,
+body:not(.login):not(.popup) .breadcrumbs,
+body:not(.login):not(.popup) .main {
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+/* Cabeçalho */
+
+#header {
+  flex-shrink: 0;
+  min-height: 96px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background: var(--creme);
+  color: var(--tinta);
+  border-bottom: 1px solid var(--linha);
+  gap: 16px;
+}
+
+#site-name {
+  margin: 0;
+}
+
+#site-name a,
+#site-name a:link,
+#site-name a:visited {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 44px;
+  text-decoration: none;
+  color: var(--tinta);
+}
+
+#site-name img {
+  height: 64px;
+  width: auto;
+}
+
+#site-name span {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  line-height: 1.2;
+  padding-left: 16px;
+  border-left: 1px solid var(--linha);
+}
+
+#user-tools {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--malva);
+}
+
+#user-tools strong {
+  font-weight: 500;
+  color: var(--tinta);
+}
+
+#user-tools a,
+#user-tools button,
+#logout-form button {
+  color: var(--malva);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  text-transform: none;
+  border-bottom: 0;
+  text-decoration: none;
+}
+
+#user-tools a:hover,
+#user-tools a:focus,
+#user-tools button:hover,
+#user-tools button:focus {
+  color: var(--tinta);
+  text-decoration: underline;
+  text-decoration-color: var(--rosa);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.6em;
+}
+
+/* Migalhas */
+
+.breadcrumbs {
+  background: transparent;
+  color: var(--malva);
+  font-size: 0.875rem;
+  padding-top: 16px;
+  padding-bottom: 0;
+  border: 0;
+}
+
+.breadcrumbs a,
+.breadcrumbs a:link,
+.breadcrumbs a:visited {
+  color: var(--malva);
+}
+
+.breadcrumbs a:hover,
+.breadcrumbs a:focus {
+  color: var(--tinta);
+}
+
+/* Área principal */
+
+body:not(.login) .main {
+  padding-bottom: 80px;
+}
+
+#content {
+  padding: 32px 0 0;
+}
+
+#nav-sidebar + #content,
+.main > #nav-sidebar + .content {
+  padding-left: 24px;
+}
+
+#footer {
+  display: none;
+}
+
+/* Mensagens */
+
+ul.messagelist {
+  margin: 16px 0 0;
+}
+
+ul.messagelist li {
+  border-radius: 16px;
+  margin: 0 0 8px;
+  padding: 14px 20px 14px 48px;
+  background-position: 20px 16px;
+  font-size: 0.95rem;
+  color: var(--tinta);
+}
+
+.errornote {
+  border: 0;
+  border-radius: 16px;
+  background-color: var(--message-error-bg);
+  color: var(--erro);
+  padding: 14px 20px 14px 48px;
+  background-position: 20px 16px;
+  font-size: 0.95rem;
+}
+
+/* Painéis: módulos do admin viram painéis brancos de 24px, sem borda nem sombra. */
+
+.module {
+  background: #fff;
+  border: 0;
+  border-radius: 24px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.module h2,
+.module caption,
+.inline-group h2,
+fieldset .fieldset-heading,
+.module .fieldset-heading {
+  background: transparent;
+  color: var(--tinta);
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  text-align: left;
+  padding: 20px 24px 8px;
+  border: 0;
+}
+
+.module h2 a,
+.module caption a,
+.module caption a:link,
+.module caption a:visited {
+  color: var(--tinta);
+  text-decoration: none;
+}
+
+.module h2 a:hover,
+.module caption a:hover {
+  color: var(--rosa-escuro);
+  text-decoration: underline;
+  text-decoration-color: var(--rosa);
+}
+
+.module .description,
+fieldset .description,
+div.help,
+.help {
+  color: var(--malva);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.module .description {
+  padding: 0 24px 8px;
+}
+
+/* Tabelas */
+
+table {
+  border-color: var(--linha);
+  font-variant-numeric: tabular-nums;
+}
+
+td,
+th {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border-bottom-color: var(--linha);
+  padding: 12px 16px;
+  vertical-align: middle;
+}
+
+th {
+  font-weight: 500;
+}
+
+.module td:first-child,
+.module th:first-child {
+  padding-left: 24px;
+}
+
+.module td:last-child,
+.module th:last-child {
+  padding-right: 24px;
+}
+
+thead th,
+tfoot td {
+  background: var(--petala);
+  color: var(--malva);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: normal;
+  border-top: 0;
+  border-bottom: 0;
+}
+
+thead th a:link,
+thead th a:visited {
+  color: var(--malva);
+}
+
+thead th.sorted {
+  background: var(--petala-forte);
+}
+
+tr:last-child > td,
+tr:last-child > th {
+  border-bottom: 0;
+}
+
+/* Sem zebra: as linhas se separam pela borda `linha`. */
+tr,
+tr:nth-child(odd),
+tr:nth-child(even),
+.row-form-errors {
+  background: transparent;
+}
+
+/* Ícones coloridos do Django (verde, azul, vermelho) saem; fica o texto do link. */
+a.addlink,
+a.changelink,
+a.viewlink,
+a.inlinechangelink {
+  background-image: none;
+  padding-left: 0;
+}
+
+.related-widget-wrapper-link img,
+.inline-deletelink,
+.add-row a {
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+
+.related-widget-wrapper-link:hover img {
+  opacity: 1;
+}
+
+tr.selected td,
+tr.selected th {
+  background: var(--selected-row);
+}
+
+/* Painel inicial */
+
+#content-main .app-list .module table,
+.dashboard .module table {
+  width: 100%;
+}
+
+.dashboard .module table th {
+  width: auto;
+}
+
+.dashboard .module table td {
+  white-space: nowrap;
+}
+
+.dashboard #content {
+  width: auto;
+  max-width: none;
+}
+
+#content-related {
+  background: var(--petala);
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+#content-related .module {
+  background: transparent;
+  margin: 0;
+}
+
+#content-related .module h2 {
+  font-size: 1.2rem;
+  border-bottom: 1px solid var(--petala-forte);
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+#content-related p {
+  padding: 0 24px 20px;
+  color: var(--malva);
+}
+
+#recent-actions-module h3 {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--malva);
+  padding: 0 24px;
+}
+
+#recent-actions-module ul.actionlist {
+  padding: 0 24px 20px;
+  margin: 0;
+}
+
+ul.actionlist li {
+  font-size: 0.95rem;
+  padding-block: 4px;
+}
+
+ul.actionlist li .mini {
+  color: var(--malva);
+}
+
+/* Barra lateral de navegação */
+
+#nav-sidebar {
+  border-right: 0;
+  background: transparent;
+  padding-top: 32px;
+}
+
+#nav-sidebar .module {
+  margin-bottom: 12px;
+}
+
+#nav-sidebar .module caption {
+  font-size: 1.1rem;
+  padding: 16px 16px 6px 16px;
+}
+
+#nav-sidebar .module td:first-child,
+#nav-sidebar .module th:first-child {
+  padding-left: 16px;
+}
+
+#nav-sidebar .module td:last-child,
+#nav-sidebar .module th:last-child {
+  padding-right: 16px;
+}
+
+#nav-sidebar .module th,
+#nav-sidebar .module td {
+  padding-block: 10px;
+}
+
+#nav-sidebar .current-app .section:link,
+#nav-sidebar .current-app .section:visited {
+  color: var(--tinta);
+}
+
+#nav-sidebar .current-model {
+  background: var(--petala);
+}
+
+#nav-sidebar .current-model th a {
+  color: var(--ameixa);
+  font-weight: 500;
+}
+
+#nav-filter {
+  width: 100%;
+  min-height: 44px;
+  margin-bottom: 12px;
+  border-radius: 9999px;
+  background: #fff;
+}
+
+.toggle-nav-sidebar {
+  background: transparent;
+  border: 0;
+  color: var(--rosa);
+}
+
+.toggle-nav-sidebar:hover,
+.toggle-nav-sidebar:focus {
+  background: var(--petala);
+}
+
+/* Botões: pílula ameixa, hover rosa-escuro (como o site). */
+
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+a.button,
+button.button {
+  background: var(--ameixa);
+  color: #fff;
+  border: 0;
+  border-radius: 9999px;
+  min-height: 44px;
+  padding: 10px 24px;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-transform: none;
+  cursor: pointer;
+  transition: background-color 200ms ease-out;
+}
+
+.button:hover,
+.button:focus,
+input[type="submit"]:hover,
+input[type="submit"]:focus,
+input[type="button"]:hover,
+input[type="button"]:focus,
+a.button:hover {
+  background: var(--rosa-escuro);
+  color: #fff;
+  text-decoration: none;
+}
+
+.button:active,
+input[type="submit"]:active,
+input[type="button"]:active {
+  transform: translateY(1px);
+}
+
+.button.default,
+input[type="submit"].default,
+.submit-row input.default {
+  background: var(--ameixa);
+  font-weight: 500;
+  text-transform: none;
+}
+
+.button.default:hover,
+input[type="submit"].default:hover,
+.submit-row input.default:hover {
+  background: var(--rosa-escuro);
+}
+
+.button[disabled],
+input[type="submit"][disabled],
+input[type="button"][disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Botões secundários (salvar e continuar, salvar e adicionar): pílula branca com contorno. */
+
+body:not(.login) .submit-row input:not(.default),
+.submit-row a.closelink {
+  background: #fff;
+  color: var(--ameixa);
+  border: 1px solid var(--campo);
+}
+
+body:not(.login) .submit-row input:not(.default):hover,
+body:not(.login) .submit-row input:not(.default):focus,
+.submit-row a.closelink:hover {
+  background: var(--petala);
+  color: var(--ameixa);
+  border-color: var(--rosa);
+}
+
+.submit-row {
+  background: #fff;
+  border: 0;
+  border-radius: 24px;
+  padding: 16px 24px;
+  margin: 16px 0 0;
+  gap: 12px;
+  align-items: center;
+}
+
+.submit-row a.deletelink,
+.submit-row a.deletelink:link,
+.submit-row a.deletelink:visited,
+a.deletelink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--erro);
+  border: 1px solid currentColor;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.submit-row a.deletelink:hover,
+.submit-row a.deletelink:focus {
+  background: var(--erro);
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Ações no topo (Adicionar produto, Histórico...) */
+
+.object-tools {
+  margin-top: -56px;
+  font-size: 0.95rem;
+}
+
+.object-tools li {
+  height: auto;
+  margin-left: 8px;
+}
+
+.object-tools a,
+.object-tools a:link,
+.object-tools a:visited {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 9999px;
+  background: var(--ameixa);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
+  line-height: 1.2;
+}
+
+.object-tools a:hover,
+.object-tools a:focus {
+  background: var(--rosa-escuro);
+  color: #fff;
+  text-decoration: none;
+}
+
+.object-tools a.addlink {
+  background-image: none;
+  padding-left: 20px;
+}
+
+.object-tools a.addlink::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  background:
+    linear-gradient(currentColor, currentColor) center / 12px 1.5px no-repeat,
+    linear-gradient(currentColor, currentColor) center / 1.5px 12px no-repeat;
+}
+
+/* Campos */
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+input[type="number"],
+input[type="tel"],
+input[type="search"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+.vTextField,
+select,
+textarea {
+  font-family: var(--sans);
+  font-size: 1rem;
+  color: var(--tinta);
+  background-color: #fff;
+  border: 1px solid var(--campo);
+  border-radius: 12px;
+  padding: 10px 14px;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+select {
+  border-radius: 9999px;
+  padding-left: 16px;
+  padding-right: 32px;
+  height: auto;
+}
+
+select[multiple] {
+  border-radius: 16px;
+  padding: 8px;
+}
+
+textarea {
+  border-radius: 16px;
+  line-height: 1.6;
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+  border-color: var(--rosa);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--rosa);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--ameixa);
+  vertical-align: middle;
+}
+
+::placeholder {
+  color: var(--malva);
+  opacity: 1;
+}
+
+/* Formulário de edição */
+
+fieldset.module {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 0 8px;
+}
+
+.form-row label,
+.aligned label {
+  font-size: 0.95rem;
+}
+
+form .aligned div.help,
+form .aligned p.help,
+form div.help,
+.help,
+p.help {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.form-row {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--linha);
+  font-size: 0.95rem;
+}
+
+.form-row:last-child {
+  border-bottom: 0;
+}
+
+.aligned label,
+.aligned .checkbox-row label + p,
+form .aligned p.help {
+  color: var(--tinta);
+}
+
+.aligned label {
+  font-weight: 500;
+  padding-top: 10px;
+}
+
+form .aligned div.help,
+form .aligned p.help {
+  color: var(--malva);
+}
+
+.required label,
+label.required {
+  font-weight: 500;
+  color: var(--tinta);
+}
+
+.errorlist li,
+ul.errorlist li {
+  color: var(--erro);
+  font-size: 0.875rem;
+}
+
+.errors input,
+.errors select,
+.errors textarea {
+  border-color: var(--erro);
+}
+
+/* Grupos recolhíveis (details/summary do Django 5) */
+
+fieldset.collapse summary,
+.collapse summary {
+  cursor: pointer;
+}
+
+/* Inlines (fotos, tamanhos e cores) */
+
+.inline-group {
+  margin-bottom: 16px;
+}
+
+.inline-group .tabular {
+  background: #fff;
+  border-radius: 24px;
+  overflow-x: auto;
+}
+
+/* O rótulo "P / Preto" do Django fica absoluto e cobre os campos com linhas mais altas. */
+.inline-group .tabular td.original p {
+  display: none;
+}
+
+.inline-group .tabular table {
+  width: 100%;
+}
+
+.inline-group .tabular tr.add-row td,
+.inline-group div.add-row {
+  background: var(--petala);
+  border: 0;
+  padding: 12px 24px;
+}
+
+.inline-group .add-row a {
+  font-weight: 500;
+}
+
+.inline-related h3 {
+  background: var(--petala);
+  color: var(--tinta);
+  border: 0;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+}
+
+/* Lista (changelist) */
+
+#changelist,
+#changelist.module {
+  gap: 16px;
+  width: 100%;
+  background: transparent;
+  border-radius: 0;
+  overflow: visible;
+}
+
+#changelist .changelist-form-container {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+#changelist #toolbar {
+  background: transparent;
+  border: 0;
+  padding: 0 0 16px;
+  color: var(--malva);
+}
+
+#changelist #toolbar form input[type="text"],
+#changelist-search input[type="text"] {
+  border-radius: 9999px;
+  min-width: min(100%, 22rem);
+  padding-left: 18px;
+}
+
+#changelist #toolbar form input[type="submit"],
+#changelist .actions .button {
+  margin-left: 4px;
+  background: var(--ameixa);
+  color: #fff;
+  border: 0;
+  border-radius: 9999px;
+  min-height: 44px;
+  padding: 0 20px;
+  font-size: 0.95rem;
+}
+
+#changelist #toolbar form input[type="submit"]:hover,
+#changelist .actions .button:hover {
+  background: var(--rosa-escuro);
+}
+
+#changelist #toolbar form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+#changelist #toolbar .help,
+#changelist #toolbar #searchbar-help {
+  flex-basis: 100%;
+  font-size: 0.875rem;
+}
+
+#changelist #toolbar img[src*="search"] {
+  display: none;
+}
+
+#changelist .actions {
+  background: var(--petala);
+  border: 0;
+  border-radius: 9999px;
+  padding: 8px 8px 8px 20px;
+  margin-bottom: 12px;
+  color: var(--tinta);
+  font-size: 0.95rem;
+}
+
+#changelist .actions label {
+  font-size: 0.95rem;
+}
+
+#changelist .actions span.all,
+#changelist .actions span.action-counter,
+#changelist .actions span.clear,
+#changelist .actions span.question {
+  font-size: 0.875rem;
+  color: var(--malva);
+}
+
+#changelist .results {
+  background: #fff;
+  border-radius: 24px;
+  overflow-x: auto;
+}
+
+#changelist table {
+  width: 100%;
+}
+
+#changelist table thead th:first-child,
+#changelist table tbody td:first-child {
+  padding-left: 24px;
+}
+
+#changelist .field-name {
+  min-width: 10rem;
+}
+
+#changelist .field-formatted_price {
+  white-space: nowrap;
+}
+
+#changelist tbody tr:hover td,
+#changelist tbody tr:hover th {
+  background: var(--creme);
+}
+
+#changelist .paginator {
+  background: transparent;
+  border: 0;
+  color: var(--malva);
+  font-size: 0.95rem;
+  padding: 16px 4px 0;
+  line-height: 44px;
+}
+
+.paginator a:link,
+.paginator a:visited {
+  background: #fff;
+  color: var(--tinta);
+  border-radius: 9999px;
+  padding: 6px 12px;
+}
+
+.paginator a:hover,
+.paginator a:focus {
+  background: var(--petala);
+  text-decoration: none;
+}
+
+.paginator .this-page {
+  background: var(--ameixa);
+  color: #fff;
+  border-radius: 9999px;
+  padding: 6px 12px;
+}
+
+.paginator a.showall {
+  background: transparent;
+  color: var(--rosa-escuro);
+}
+
+/* Filtros da lista */
+
+#changelist-filter {
+  background: #fff;
+  border-radius: 24px;
+  border: 0;
+  padding: 8px 0 16px;
+  flex: 0 0 240px;
+  align-self: flex-start;
+}
+
+#changelist-filter h2 {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  background: transparent;
+  color: var(--tinta);
+  padding: 12px 24px 4px;
+  border: 0;
+}
+
+#changelist-filter h3,
+#changelist-filter details summary {
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--malva);
+  text-transform: none;
+  letter-spacing: normal;
+  padding: 16px 24px 4px;
+  margin: 0;
+}
+
+#changelist-filter details summary {
+  cursor: pointer;
+}
+
+#changelist-filter ul {
+  border: 0;
+  padding: 0 12px;
+  margin: 0;
+}
+
+#changelist-filter li {
+  list-style: none;
+}
+
+#changelist-filter li a,
+#changelist-filter li a:link,
+#changelist-filter li a:visited {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 9999px;
+  color: var(--tinta);
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+#changelist-filter li a:hover,
+#changelist-filter li a:focus {
+  background: var(--petala);
+  color: var(--tinta);
+}
+
+#changelist-filter li.selected a,
+#changelist-filter li.selected a:link,
+#changelist-filter li.selected a:visited {
+  background: var(--ameixa);
+  color: #fff;
+}
+
+#changelist-filter li.selected {
+  border-left: 0;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+#changelist-filter #changelist-filter-extra-actions,
+#changelist-filter-clear {
+  padding: 8px 24px 0;
+  font-size: 0.875rem;
+}
+
+#changelist-filter-clear a {
+  color: var(--rosa-escuro);
+}
+
+/* Ícones booleanos e miniaturas: só suavizar a borda das fotos. */
+
+#changelist td img[alt=""] {
+  border-radius: 10px;
+}
+
+/* Login */
+
+body.login {
+  background: var(--creme);
+}
+
+.login #container {
+  background: #fff;
+  border: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  width: min(28rem, calc(100% - 32px));
+  min-width: 0;
+  margin: clamp(32px, 10vh, 100px) auto;
+}
+
+.login #header {
+  min-height: 0;
+  border-bottom: 0;
+  background: #fff;
+  justify-content: center;
+  padding: 32px 24px 8px;
+}
+
+.login #site-name a {
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login #site-name img {
+  height: 80px;
+}
+
+.login #site-name span {
+  border-left: 0;
+  padding-left: 0;
+  font-size: 1.6rem;
+}
+
+.login #content {
+  padding: 16px 32px 32px;
+}
+
+.login .form-row {
+  padding: 0 0 16px;
+  border-bottom: 0;
+}
+
+.login .form-row label {
+  display: block;
+  font-weight: 500;
+  padding: 0 0 6px;
+  line-height: 1.4;
+}
+
+.login .form-row #id_username,
+.login .form-row #id_password {
+  width: 100%;
+  border-radius: 9999px;
+  padding-left: 18px;
+}
+
+.login .submit-row {
+  padding: 8px 0 0;
+  margin: 0;
+  background: transparent;
+}
+
+.login .submit-row input {
+  width: 100%;
+  min-height: 48px;
+}
+
+.login .password-reset-link {
+  text-align: center;
+}
+
+/* Telas menores: a barra lateral some (Django) e os botões do topo descem para o fluxo. */
+
+@media (max-width: 1024px) {
+  .object-tools {
+    margin-top: 0;
+    float: none;
+    padding: 0 0 16px;
+  }
+
+  .object-tools li {
+    margin: 0 8px 8px 0;
+  }
+
+  #changelist-filter {
+    flex-basis: auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  #header {
+    min-height: 0;
+    height: auto;
+    align-items: flex-start;
+  }
+
+  #user-tools {
+    margin: 0;
+    font-size: 0.875rem;
+  }
+
+  .form-row input:not([type="checkbox"]):not([type="radio"]),
+  .form-row select,
+  .form-row textarea,
+  .form-row .vTextField {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .aligned .form-row > div,
+  .aligned .flex-container,
+  .aligned div.help {
+    max-width: 100%;
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  #site-name img {
+    height: 48px;
+  }
+
+  #site-name span {
+    font-size: 1.1rem;
+  }
+
+  #nav-sidebar + #content,
+  .main > #nav-sidebar + .content {
+    padding-left: 0;
+  }
+
+  .module h2,
+  .module caption,
+  .module td:first-child,
+  .module th:first-child,
+  .form-row,
+  .submit-row {
+    padding-left: 16px;
+  }
+
+  .module td:last-child,
+  .module th:last-child,
+  .form-row,
+  .submit-row {
+    padding-right: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

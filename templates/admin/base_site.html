@@ -1,0 +1,32 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% comment %}
+  Painel com a cara do catálogo: mesmas fontes, cores e coluna central de 72rem.
+  Estilos em static/css/admin.css, carregado por último para vencer o CSS do Django.
+  Só tema claro (o site não tem modo escuro).
+{% endcomment %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block dark-mode-vars %}{% endblock %}
+
+{% block responsive %}
+  {{ block.super }}
+  <meta name="theme-color" content="#fbf7f3">
+  <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Jost:wght@400;500&display=swap">
+  <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+{% endblock %}
+
+{% block branding %}
+<div id="site-name">
+  <a href="{% url 'admin:index' %}">
+    <img src="{% static 'img/logo.svg' %}" alt="Tay Modas" width="2032" height="1176">
+    <span>Painel da loja</span>
+  </a>
+</div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
