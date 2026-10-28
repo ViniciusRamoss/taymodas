@@ -167,7 +167,7 @@
       "ouro": {
         "role": "tertiary",
         "displayName": "Ouro do Logo",
-        "canonical": "#dab871",
+        "canonical": "#d5ba7e",
         "oklch": "oklch(79.7% 0.098 85)",
         "tonalRamp": [
           "oklch(15% 0.049 85)",
@@ -261,9 +261,7 @@
       "default": "outline 2px solid rosa, offset 2px",
       "onDark": "outline 2px solid ouro, offset 2px (dentro de .on-dark)"
     },
-    "openDependencies": [
-      "Logo em alta resolução ou vetor: static/img/logo.png foi recortado de media/Logo.jpeg (500x500); pedir o original à dona."
-    ]
+    "openDependencies": []
   },
   "components": [
     {

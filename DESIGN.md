@@ -12,7 +12,7 @@ colors:
   rosa: "#a34f73"
   rosa-escuro: "#813557"
   ameixa: "#3b2833"
-  ouro: "#dab871"
+  ouro: "#d5ba7e"
 typography:
   display:
     fontFamily: "Bodoni Moda, Didot, Bodoni 72, Georgia, serif"
@@ -226,8 +226,8 @@ Paleta quente de baixa saturação: creme e rosados claros no fundo, uma ameixa 
 Uma coluna central com largura máxima de 72rem (`max-w-6xl`) e respiro lateral de 16px. Pontos de quebra do Tailwind: `sm` 640px, `md` 768px, `lg` 1024px.
 
 - **Cabeçalho:** no celular, logo centrado com o menu embaixo; a partir de `sm`, logo à esquerda e menu à direita numa faixa de 112px. Acima dele fica a faixa do Instagram em pétala forte.
-- **Catálogo:** grade de 2 colunas no celular, 3 em `sm` e 4 em `lg`. Espaço horizontal de 12px a 20px e vertical de 40px entre cards. As pílulas de categoria rolam na horizontal, sem barra visível, e ficam fixas no topo sobre creme a 95%.
-- **Hero do catálogo:** campo pétala arredondado; em `lg`, divide em 1.3fr e 1fr, com a peça mais nova à direita em 4:5.
+- **Catálogo (lookbook):** no celular, uma peça por tela, foto de ponta a ponta sem raio (`-mx-4`, 4px entre fotos). Em `sm`, 2 colunas com 16px. Em `lg`, mosaico `.lookbook` de 3 colunas em blocos de 3 peças: uma foto 2x2 e duas pequenas 3:4, alternando o lado da grande (`nth-child(6n+1)` à esquerda, `6n+4` à direita, `grid-auto-rows: 1fr`, fluxo `dense`). As pílulas de categoria rolam na horizontal, sem barra visível, e ficam fixas no topo sobre creme a 95%.
+- **Hero do catálogo:** faixa pétala curta; em `lg`, título à esquerda e frase de apoio à direita (1.2fr/1fr, alinhados pela base). A peça mais nova aparece como a primeira foto grande do lookbook.
 - **Peça:** em `md`, 12 colunas: 7 para as fotos (grade de 2) e 5 para as informações, que ficam fixas ao rolar. No celular, as fotos viram um carrossel com scroll-snap, cada uma com 88% da largura para mostrar a próxima na borda.
 - **Páginas de conteúdo:** abertura com display e botão, depois blocos de painel com 16px entre si, seções separadas por 56px, e a página fecha com uma faixa ameixa. O rodapé ameixa fica 80px abaixo do conteúdo.
 - **Ritmo:** escala de 4px do Tailwind. Painéis usam 24px de padding, ou 32px a partir de `sm`.
@@ -265,7 +265,7 @@ Cheios, arredondados e calmos. Todo botão leva ao próximo passo, quase sempre 
 - **Selo (`photo-tag`):** pílula pequena no canto superior esquerdo da foto. "Esgotado" vai em ameixa; "Novidade" vai em branco com texto rosa-escuro.
 
 ### Cards / Containers
-- **Card de peça:** sem caixa. Foto 3:4 em `foto` sobre pétala, depois nome em Bodoni, preço em Jost 500, tamanhos em malva e amostras de cor. O link cobre o card inteiro. No hover, a foto aproxima 3% em 500ms e o nome ganha sublinhado rosa. Esgotado: foto em cinza a 55% de opacidade e preço em malva.
+- **Card de peça:** a foto é o card (3:4, raio `foto` a partir de `sm`). Sobre ela, embaixo, uma etiqueta branca a 95% com nome em Bodoni, preço em rosa-escuro, tamanhos em malva e a pílula ameixa "Pedir" (decorativa: o link cobre o card inteiro). Cores ficam só para leitor de tela. No hover, a foto aproxima 3% em 700ms e o nome ganha sublinhado rosa. Esgotado: foto em cinza a 55% de opacidade e preço em malva.
 - **Painel (`panel`):** branco ou pétala, raio `painel`, padding de 24px (32px a partir de `sm`), ícone de 36px em rosa no topo e linha de detalhe separada por borda no pé.
 - **Faixa ameixa (`band-ameixa`):** bloco de fechamento das páginas de conteúdo. Título em Bodoni branco, texto em branco a 80% e botão claro.
 - **Shadow Strategy:** nenhuma; ver Elevation & Depth.
@@ -283,7 +283,7 @@ Cheios, arredondados e calmos. Todo botão leva ao próximo passo, quase sempre 
 Conjunto próprio em SVG de 24px, traço de 1.5, pontas arredondadas, cor `currentColor`: `box`, `moto`, `pin`, `chat`, `hanger`, `ruler`, `arrow-out`. São usados em rosa nos painéis e em branco dentro dos botões.
 
 ### Logo
-Logo dourado oficial em PNG (`static/img/logo.png`), com 64px a 80px de altura no cabeçalho e 96px a 112px no rodapé. **Pendência da dona:** o arquivo atual foi recortado de um JPEG de 500px; falta o original em alta resolução ou vetor.
+Logo dourado oficial em vetor (`static/img/logo.svg`, `#d5ba7e`; `logo.png` 1016x588 é a versão raster), com 64px a 80px de altura no cabeçalho e 96px a 112px no rodapé. Favicon: `static/img/favicon.svg`, "T" dourado sobre ameixa com cantos arredondados.
 
 ## Do's and Don'ts
 

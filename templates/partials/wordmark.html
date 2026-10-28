@@ -1,5 +1,5 @@
 {% load static %}{% comment %}
-  Logo oficial (dourado, fundo transparente), recortado de media/Logo.jpeg.
+  Logo oficial em vetor (static/img/logo.svg, dourado). logo.png é a versão raster.
   Uso: {% include "partials/wordmark.html" with size="small" %} (ou size="large").
-{% endcomment %}<img src="{% static 'img/logo.png' %}" alt="Tay Modas" width="256" height="149"
+{% endcomment %}<img src="{% static 'img/logo.svg' %}" alt="Tay Modas" width="2032" height="1176"
      class="{% if size == 'large' %}h-24 sm:h-28{% else %}h-16 sm:h-20{% endif %} w-auto">

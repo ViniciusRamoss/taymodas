@@ -59,7 +59,7 @@
     {% endif %}
 
     {% if cards %}
-      <ul class="mt-8 grid grid-cols-2 gap-x-3 gap-y-10 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-4">
+      <ul class="lookbook -mx-4 mt-8 grid gap-1 sm:mx-0 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
         {% for card in cards %}
           {# Abaixo do título da lista: h2 com hero (h1) ou h1 sem ele; o card fica um nível abaixo. #}
           <li>{% if show_hero %}{% include "catalog/partials/product_card.html" with heading="h3" %}{% else %}{% include "catalog/partials/product_card.html" with heading="h2" %}{% endif %}</li>

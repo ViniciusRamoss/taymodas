@@ -1,40 +1,41 @@
-<article class="group relative">
-  <div class="relative aspect-[3/4] overflow-hidden rounded-2xl bg-petala">
+{% comment %}
+  Card do lookbook: a foto é o card; nome, preço e tamanhos ficam numa etiqueta sobre ela.
+  No celular ocupa a largura toda (uma peça por tela); no desktop o tamanho vem da grade
+  `.lookbook` (uma foto grande e duas pequenas por bloco).
+{% endcomment %}
+<article class="group relative h-full">
+  <div class="relative aspect-[3/4] h-full overflow-hidden bg-petala sm:rounded-2xl">
     {% if card.image_url %}
       <img src="{{ card.image_url }}"
            srcset="{{ card.image_srcset }}"
-           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+           sizes="(min-width: 1024px) 66vw, (min-width: 640px) 50vw, 100vw"
            alt="{{ card.image_alt }}"
            loading="lazy" decoding="async"
-           class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03] {% if card.is_sold_out %}opacity-55 grayscale{% endif %}">
+           class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03] {% if card.is_sold_out %}opacity-55 grayscale{% endif %}">
     {% endif %}
     {% if card.is_sold_out %}
       <span class="photo-tag">Esgotado</span>
     {% elif card.is_new %}
       <span class="photo-tag photo-tag--new">Novidade</span>
     {% endif %}
-  </div>
 
-  {# O link cobre o card inteiro (foto incluída) via ::after. #}
-  <{{ heading }} class="mt-3 line-clamp-2 font-display text-[1.05rem] leading-snug">
-    <a href="{{ card.url }}" class="after:absolute after:inset-0 after:rounded-2xl hover:underline hover:decoration-rosa hover:underline-offset-4">{{ card.name }}</a>
-  </{{ heading }}>
-  <p class="mt-1 font-medium {% if card.is_sold_out %}text-malva{% endif %}">{{ card.price }}</p>
-
-  {% if card.sizes %}
-    <p class="mt-1.5 text-sm text-malva"><span class="sr-only">Tamanhos disponíveis: </span>{{ card.sizes|join:", " }}</p>
-  {% endif %}
-
-  {% if card.colors %}
-    <p class="sr-only">Cores disponíveis: {% for color in card.colors %}{{ color.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-    <ul class="mt-2 flex flex-wrap items-center gap-1.5" aria-hidden="true">
-      {% for color in card.colors %}
-        {% if color.hex_code %}
-          <li class="size-3.5 rounded-full ring-1 ring-black/20" style="background-color: {{ color.hex_code }}" title="{{ color.name }}"></li>
-        {% else %}
-          <li class="text-xs text-malva">{{ color.name }}</li>
+    <div class="absolute inset-x-3 bottom-3 flex items-end justify-between gap-3 rounded-2xl bg-white/95 px-4 py-3 sm:inset-x-2.5 sm:bottom-2.5">
+      <div class="min-w-0">
+        {# O link cobre o card inteiro (foto incluída) via ::after. #}
+        <{{ heading }} class="line-clamp-2 font-display text-[1.15rem] leading-snug">
+          <a href="{{ card.url }}" class="after:absolute after:inset-0 group-hover:underline group-hover:decoration-rosa group-hover:underline-offset-4">{{ card.name }}</a>
+        </{{ heading }}>
+        <p class="mt-0.5 font-medium {% if card.is_sold_out %}text-malva{% else %}text-rosa-escuro{% endif %}">{{ card.price }}</p>
+        {% if card.sizes %}
+          <p class="mt-0.5 text-[0.85rem] text-malva"><span class="sr-only">Tamanhos disponíveis: </span>{{ card.sizes|join:", " }}</p>
         {% endif %}
-      {% endfor %}
-    </ul>
-  {% endif %}
+        {% if card.colors %}
+          <p class="sr-only">Cores disponíveis: {% for color in card.colors %}{{ color.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+        {% endif %}
+      </div>
+      {% if not card.is_sold_out %}
+        <span aria-hidden="true" class="shrink-0 rounded-full bg-ameixa px-4 py-2 text-[0.85rem] font-medium text-white transition-colors group-hover:bg-rosa-escuro">Pedir</span>
+      {% endif %}
+    </div>
+  </div>
 </article>

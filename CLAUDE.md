@@ -73,9 +73,9 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
 - Tokens (`assets/css/source.css`): `creme #fbf7f3` (fundo), `petala #f6e8ec` (campos e fundo
   de foto), `linha #eedfe4`, `tinta #2f242b`, `malva #75666f` (secundário), `rosa #a34f73`
   (acento), `rosa-escuro #813557`, `ameixa #3b2833` (botões, rodapé, faixas de ação),
-  `ouro #dab871` (só o logo; como texto, só sobre `ameixa`).
-- Logo: `static/img/logo.png`, recortado com fundo transparente de `media/Logo.jpeg` (500px,
-  baixa resolução; pedir o original). Partial `partials/wordmark.html` (`size="small|large"`).
+  `ouro #d5ba7e` (cor do logo; como texto, só sobre `ameixa`).
+- Logo: `static/img/logo.svg` (vetor da dona; `logo.png` é a versão raster). Partial
+  `partials/wordmark.html` (`size="small|large"`). Favicon `static/img/favicon.svg`.
 - Tipos: Bodoni Moda (títulos, nomes de peça; ecoa o "TAY" do logo) + Jost (texto).
 - Formas: painéis `rounded-3xl` (`.panel`), pílulas (`.pill`, `.choice`, `.button`), fotos
   `rounded-2xl`. Ícones SVG próprios em `partials/icon.html` (traço 1.5), nunca emoji.
@@ -84,10 +84,22 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
 - Evitar: eyebrows/rótulos em caixa alta, palavra única destacada no título, emoji, setas em
   texto, sombras. Contornos de 1px (`border-linha`) só em pílulas e controles.
 - Menu: `nav_current` no contexto (`catalogo`, `entregas`, `como-comprar`) marca a aba.
-- Hero da home (`partials/list_header.html`, id `titulo-inicio`): em `lg+` mostra a peça mais
-  nova (`cards.0`).
+- Listagem = lookbook (direção escolhida no sorteio do Impeccable): no celular uma peça por
+  tela, foto de ponta a ponta com etiqueta (nome, preço, tamanhos, "Pedir"); no desktop o
+  mosaico `.lookbook` (CSS fora de `@layer`, em `source.css`) põe uma foto 2x2 e duas pequenas
+  por bloco, alternando o lado. Hero da home (`partials/list_header.html`, id `titulo-inicio`)
+  é uma faixa curta.
 - View usa `selectors.catalog_products()` + `presenters.ProductCard` (sem lógica no
   template). Número de queries da listagem não cresce com os produtos (teste cobre).
+
+## Peças reais (import_store_photos)
+
+- `manage.py import_store_photos <pasta> [--sizes P,M,G] [--stock 1]`: cadastra as 9 peças das
+  fotos da dona (lista explícita no comando: nome, categoria, cor, preço vindos do nome do
+  arquivo; cor descrita da foto quando o arquivo não diz). Idempotente (pula pelo nome).
+  Com storage local referencia o arquivo dentro de `MEDIA_ROOT`; com Cloudinary, faz upload.
+- Fotos em `media/products/2026/10/` (fora do git). Para produção: rodar localmente com
+  `DATABASE_URL`/`CLOUDINARY_URL` de produção, ou cadastrar pelo painel.
 
 ## Entregas e Como comprar
 
@@ -168,8 +180,8 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
   provisório, pessoal do dono do projeto; trocar no admin antes do deploy)
 - Lista final de categorias e tamanhos
 - Confirmação: esgotado exibido vs. escondido
-- Logo em alta resolução ou vetor (o atual tem 500px); favicon e imagem de compartilhamento
-  da home ainda usam o provisório
+- Tamanhos e estoque reais das 9 peças importadas (entraram com P, M, G e estoque 1)
+- Imagem de compartilhamento da home (hoje sem `og:image`)
 - Textos de entrega (cidades do mototáxi, envio nacional, prazos, retirada)
 - Screenshots do README: tirar depois do novo layout e com fotos reais de produção
   (as fotos lisas do `seed_demo` não servem para portfólio)

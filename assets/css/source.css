@@ -17,7 +17,7 @@
   --color-rosa: #a34f73;
   --color-rosa-escuro: #813557;
   --color-ameixa: #3b2833;
-  --color-ouro: #dab871;
+  --color-ouro: #d5ba7e;
 
   --font-display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
   --font-sans: "Jost", "Futura", system-ui, sans-serif;
@@ -63,6 +63,29 @@
   }
   .rise-late {
     animation: rise 0.7s 0.12s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+/*
+ * Lookbook: no desktop, blocos de 3 peças com uma foto grande (2x2) e duas pequenas,
+ * alternando o lado da grande. Linhas de altura igual (1fr) à de uma foto pequena 3:4.
+ * Fora de @layer para vencer o `aspect-[3/4]` do card.
+ */
+@media (width >= 64rem) {
+  .lookbook {
+    grid-auto-flow: row dense;
+    grid-auto-rows: 1fr;
+  }
+  .lookbook > li:nth-child(6n + 1),
+  .lookbook > li:nth-child(6n + 4) {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .lookbook > li:nth-child(6n + 4) {
+    grid-column: 2 / span 2;
+  }
+  .lookbook > li:is(:nth-child(6n + 1), :nth-child(6n + 4)) > article > div {
+    aspect-ratio: auto;
   }
 }
 

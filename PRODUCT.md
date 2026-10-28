@@ -49,8 +49,7 @@ sem precisar perguntar "tem no meu tamanho?".
 
 - Nome: Tay Modas. Instagram @taymodas23.
 - Logo oficial: "TAY" em serifa de alto contraste com "modas" em letra cursiva, em dourado
-  sobre fundo claro (`media/Logo.jpeg`, 500×500, raster de baixa resolução; pedir o arquivo
-  original em alta ou vetor).
+  `#d5ba7e` (`static/img/logo.svg`, vetor; `static/img/logo.png` raster).
 - Template de referência enviado pela dona do projeto: `templates/taymodas_entregas.html`
   (paleta rosa e creme, títulos em serifa, conteúdo da página de entregas). Vinculante como
   base visual e de conteúdo.
@@ -58,9 +57,11 @@ sem precisar perguntar "tem no meu tamanho?".
 
 ## Evidence on Hand
 
-- Logo (raster) e o conteúdo de entregas do template.
-- Ainda não há fotos reais de peças, da loja ou de clientes. Não inventar depoimentos,
-  números de vendas, avaliações nem fotos apresentadas como da loja.
+- Logo (vetor) e o conteúdo de entregas do template.
+- 11 fotos reais de 9 peças em `media/products/2026/10/` (nome, cor e preço no nome do
+  arquivo). Tamanhos e estoque reais ainda não informados.
+- Não há fotos da loja nem de clientes. Não inventar depoimentos, números de vendas,
+  avaliações nem fotos apresentadas como da loja.
 
 ## Product Principles
 
