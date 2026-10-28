@@ -1,5 +1,4 @@
 import re
-from urllib.parse import unquote
 
 import pytest
 from django.db import connection
@@ -68,18 +67,16 @@ class TestProductDetailView:
         assert "<h1" in content and "Vestido Midi" in content
         assert "Vestido de frente" in content
         assert "?categoria=vestidos" in content
-        assert "Escolha a cor e o tamanho para fazer o pedido." in content
-        assert "wa.me" not in content
+        assert "Escolha a cor e o tamanho para adicionar à sacola." in content
 
-    def test_full_choice_shows_whatsapp_link(
+    def test_full_choice_is_ready_for_the_bag(
         self, client: Client, product: Product, store: StoreSettings
     ) -> None:
         response = client.get(product.get_absolute_url(), choose(product, "M", "Preto"))
 
-        content = unquote(response.content.decode())
-        assert "https://wa.me/5511900000000?text=" in content
-        assert "Tamanho: M" in content
-        assert f"http://testserver{product.get_absolute_url()}" in content
+        content = response.content.decode()
+        assert "Adicionar à sacola" in content
+        assert "Junte quantas peças quiser" in content
 
     def test_sold_out_combination_explains_and_hides_button(
         self, client: Client, product: Product, store: StoreSettings
@@ -89,15 +86,14 @@ class TestProductDetailView:
         ).content.decode()
 
         assert "M na cor Vinho esgotou." in content
-        assert "wa.me" not in content
 
     def test_without_store_number_hides_button(self, client: Client, product: Product) -> None:
         content = client.get(
             product.get_absolute_url(), choose(product, "M", "Preto")
         ).content.decode()
 
-        assert "wa.me" not in content
-        assert "Pedir pelo WhatsApp" not in content
+        assert "Adicionar à sacola" not in content
+        assert 'id="contador-sacola"' not in content
 
     def test_htmx_request_returns_only_the_form(
         self, client: Client, product: Product, store: StoreSettings
@@ -109,7 +105,7 @@ class TestProductDetailView:
         content = response.content.decode()
         assert 'id="pedido"' in content
         assert "<html" not in content
-        assert "Pedir pelo WhatsApp" in content
+        assert "Adicionar à sacola" in content
         assert "HX-Request" in response["Vary"]
 
     def test_htmx_history_restore_gets_full_page(self, client: Client, product: Product) -> None:
@@ -132,16 +128,14 @@ class TestProductDetailView:
     ) -> None:
         content = client.get(product.get_absolute_url()).content.decode()
 
-        assert 'name="pedir" value="1"' in content
+        assert f'hx-post="{product.get_absolute_url()}"' in content
         assert "autofocus" not in content
 
     def test_order_without_full_choice_points_to_missing_group(
         self, client: Client, product: Product, store: StoreSettings
     ) -> None:
         black = variant(product, "P", "Preto").color
-        params: dict[str, int | str] = {"cor": black.pk, "pedir": "1"}
-
-        response = client.get(product.get_absolute_url(), params, headers=HTMX)
+        response = client.post(product.get_absolute_url(), {"cor": black.pk}, headers=HTMX)
 
         content = response.content.decode()
         small = variant(product, "P", "Preto").size
@@ -150,15 +144,58 @@ class TestProductDetailView:
         assert content.count("autofocus") == 1
         assert "font-medium text-tinta" in content
 
-    def test_order_with_full_choice_without_js_redirects_to_whatsapp(
+    def test_add_without_choice_points_to_color_first(
         self, client: Client, product: Product, store: StoreSettings
     ) -> None:
-        params: dict[str, int | str] = {**choose(product, "M", "Preto"), "pedir": "1"}
+        content = client.post(product.get_absolute_url(), {}, headers=HTMX).content.decode()
 
-        response = client.get(product.get_absolute_url(), params)
+        black = variant(product, "P", "Preto").color
+        assert "escolha uma" in content
+        assert re.search(f'id="cor-{black.pk}"[^>]*autofocus', content)
+
+    def test_add_without_js_redirects_back_with_notice(
+        self, client: Client, product: Product, store: StoreSettings
+    ) -> None:
+        chosen = choose(product, "M", "Preto")
+
+        response = client.post(product.get_absolute_url(), chosen)
 
         assert response.status_code == 302
-        assert response["Location"].startswith("https://wa.me/5511900000000?text=")
+        assert "adicionado=1" in response["Location"]
+        assert client.session["sacola"] == {str(variant(product, "M", "Preto").pk): 1}
+        page = client.get(response["Location"]).content.decode()
+        assert "Peça na sacola." in page
+        assert re.search(r'id="contador-sacola".*?>1<', page, re.S)
+
+    def test_add_with_htmx_returns_form_and_counter(
+        self, client: Client, product: Product, store: StoreSettings
+    ) -> None:
+        response = client.post(
+            product.get_absolute_url(), choose(product, "P", "Preto"), headers=HTMX
+        )
+
+        content = response.content.decode()
+        assert response.status_code == 200
+        assert "<html" not in content
+        assert "Peça na sacola." in content
+        assert 'id="contador-sacola"' in content and 'hx-swap-oob="true"' in content
+
+    def test_add_never_goes_over_stock(
+        self, client: Client, product: Product, store: StoreSettings
+    ) -> None:
+        for _ in range(3):
+            client.post(product.get_absolute_url(), choose(product, "P", "Preto"))
+
+        assert client.session["sacola"] == {str(variant(product, "P", "Preto").pk): 1}
+
+    def test_add_sold_out_combination_adds_nothing(
+        self, client: Client, product: Product, store: StoreSettings
+    ) -> None:
+        response = client.post(product.get_absolute_url(), choose(product, "M", "Vinho"))
+
+        assert response.status_code == 200
+        assert "M na cor Vinho esgotou." in response.content.decode()
+        assert "sacola" not in client.session
 
     def test_sold_out_product_shows_message_instead_of_form(self, client: Client) -> None:
         sold_out = ProductFactory.create()

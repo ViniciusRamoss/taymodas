@@ -80,7 +80,7 @@ ProductVariant product, size, color, stock             único por (product, size
 
 ## Evolução
 
-1. Hoje: `build_whatsapp_order_url(variant, store, product_url)`.
-2. `cart`: carrinho em sessão, itens apontando para `ProductVariant`.
+1. Antes: `build_whatsapp_order_url` (uma peça por pedido).
+2. Feito: `cart`, sacola em sessão com itens apontando para `ProductVariant`.
 3. `orders`: `Order`/`OrderItem` com preço congelado; baixa de estoque com `select_for_update`.
 4. `payments`: interface `PaymentGateway` (Pix/Mercado Pago ou similar).

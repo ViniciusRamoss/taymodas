@@ -27,6 +27,7 @@ def robots_txt(request: HttpRequest) -> HttpResponse:
         "Disallow: /*?*tamanho=",
         "Disallow: /*?*cor=",
         "Disallow: /*?*page=",
+        "Disallow: /sacola/",
         f"Sitemap: {request.build_absolute_uri(reverse('sitemap'))}",
     ]
     return HttpResponse("\n".join(lines) + "\n", content_type="text/plain")
@@ -58,8 +59,8 @@ class HowToBuyView(TemplateView):
     extra_context = {
         "meta_title": "Como comprar — Tay Modas",
         "meta_description": (
-            "Escolha a peça, o tamanho e a cor no site e finalize o pedido pelo WhatsApp com a "
-            "mensagem já pronta."
+            "Escolha as peças, o tamanho e a cor no site, monte a sacola e envie o pedido pelo "
+            "WhatsApp com a mensagem já pronta."
         ),
         "nav_current": "como-comprar",
     }

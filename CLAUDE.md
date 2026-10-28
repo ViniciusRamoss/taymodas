@@ -118,11 +118,23 @@ uv run python manage.py seed_demo          # produtos fictícios "Demo" (só com
   `partials/order_form.html` e a URL é atualizada (`hx-replace-url`). Restore de histórico do
   HTMX recebe a página inteira. Resposta tem `Vary: HX-Request`.
 - `services.select_variant()` resolve a escolha (opções esgotadas riscadas; opção única já vem
-  escolhida). `services.build_whatsapp_order_url()` monta o `wa.me`; mensagem com chaves
-  inválidas cai na padrão; sem número cadastrado devolve `None` e o botão some.
-- Botão "Pedir pelo WhatsApp" sempre visível (se a loja tem número): com a escolha completa é
-  link `wa.me`; incompleta, é submit com `pedir=1`, que destaca o grupo pendente e dá `autofocus`
-  na 1ª opção dele. Sem JS e com a escolha completa, `pedir=1` redireciona (302) para o WhatsApp.
+  escolhida).
+- Botão "Adicionar à sacola" (só se a loja tem número): POST na própria URL da peça
+  (`formmethod="post"` + `hx-post`; o GET do HTMX tira o token com `hx-params`). Completa: entra
+  na sacola; HTMX recebe o form com "Peça na sacola." + `#contador-sacola` fora de banda; sem JS,
+  302 para `?cor&tamanho&adicionado=1`. Incompleta: destaca o grupo pendente com `autofocus`.
+
+## Sacola (`apps/cart`)
+
+- `Cart` (`cart.py`): `session["sacola"] = {"<variant_id>": qtd}`, sempre limitada ao estoque.
+- `services.py`: `cart_variants()` (só produtos visíveis), `build_lines()`, `cart_total()`,
+  `build_whatsapp_cart_url()` com `{itens}`/`{total}` (`StoreSettings.order_message_template`;
+  chaves inválidas caem na padrão; sem número ou sem peça disponível devolve `None`).
+- `/sacola/` (`cart:detail`, noindex, fora do robots): linhas com −/+/Remover (POST
+  `cart:update`, `quantidade=0` remove), Esvaziar (`cart:clear`), PRG + `hx-boost`. Peças que
+  saíram do site ou esgotaram aparecem uma vez e são tiradas da sessão.
+- Contador no topo: `partials/cart_link.html` + context processor `apps.cart.context_processors.cart`.
+- Migration core 0003 troca mensagens antigas (`{produto}`...) pela padrão da sacola.
 - Estilos `.choice`, `.choice-out`, `.swatch`, `.order-button` em `source.css` (layer components; utilitários no
   template sobrescrevem, então cor do anel fica no CSS).
 

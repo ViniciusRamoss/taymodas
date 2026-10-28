@@ -16,9 +16,10 @@ Faça uma vez só, nesta ordem:
 
 1. **Configurações da loja**
    - **Número do WhatsApp**: só números, com 55 e o DDD (ex.: `5516912345678`). Enquanto
-     estiver vazio, o botão de pedido não aparece no site.
-   - **Mensagem do pedido**: o texto que já chega escrito para você. As palavras entre chaves
-     são trocadas sozinhas: `{produto}`, `{tamanho}`, `{cor}`, `{preco}` e `{link}`.
+     estiver vazio, a sacola e o botão de pedido não aparecem no site.
+   - **Mensagem do pedido**: o texto que chega escrito para você quando a cliente envia a
+     sacola. As palavras entre chaves são trocadas sozinhas: `{itens}` (cada peça com
+     quantidade, cor, tamanho, valor e link) e `{total}`.
    - **Informações de entrega**: aparece no rodapé do site (cidades, prazos, retirada).
 2. **Categorias** (ex.: Vestidos, Conjuntos). A **ordem** define a sequência no menu do site:
    número menor aparece primeiro.

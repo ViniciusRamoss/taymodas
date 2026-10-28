@@ -17,8 +17,8 @@ class StoreSettingsAdmin(admin.ModelAdmin[StoreSettings]):
             "Pedido pelo WhatsApp",
             {
                 "fields": ["order_message_template"],
-                "description": "É assim que a mensagem chega para você quando a cliente clica "
-                "em “Pedir no WhatsApp”.",
+                "description": "É assim que a mensagem chega para você quando a cliente envia "
+                "a sacola pelo WhatsApp.",
             },
         ),
         ("Entrega", {"fields": ["mototaxi_cities", "delivery_info"]}),

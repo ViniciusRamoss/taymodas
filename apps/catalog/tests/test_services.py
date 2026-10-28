@@ -1,21 +1,11 @@
-from decimal import Decimal
-from urllib.parse import parse_qs, urlsplit
-
 import pytest
 
 from apps.catalog.models import ProductVariant
-from apps.catalog.services import build_whatsapp_order_url, select_variant
-from apps.core.models import StoreSettings
+from apps.catalog.services import select_variant
 
 from .factories import ColorFactory, ProductFactory, ProductVariantFactory, SizeFactory
 
 pytestmark = pytest.mark.django_db
-
-PRODUCT_URL = "https://taymodas.example/p/vestido-midi/"
-
-
-def message_of(url: str) -> str:
-    return parse_qs(urlsplit(url).query)["text"][0]
 
 
 class TestSelectVariant:
@@ -91,54 +81,3 @@ class TestSelectVariant:
         selection = select_variant([variant], size_id=None, color_id=None)
 
         assert selection.variant == variant
-
-
-class TestBuildWhatsappOrderUrl:
-    @pytest.fixture
-    def variant(self) -> ProductVariant:
-        product = ProductFactory.create(name="Vestido Midi", price=Decimal("189.9"))
-        return ProductVariantFactory.create(
-            product=product,
-            size=SizeFactory.create(name="M"),
-            color=ColorFactory.create(name="Preto"),
-        )
-
-    @pytest.fixture
-    def store(self) -> StoreSettings:
-        return StoreSettings(whatsapp_number="5511900000000")
-
-    def test_fills_default_message(self, variant: ProductVariant, store: StoreSettings) -> None:
-        url = build_whatsapp_order_url(variant, store, PRODUCT_URL)
-
-        assert url is not None
-        assert url.startswith("https://wa.me/5511900000000?text=")
-        assert message_of(url) == (
-            "Olá! Quero pedir este produto:\n"
-            "Vestido Midi\n"
-            "Tamanho: M\n"
-            "Cor: Preto\n"
-            "Preço: R$ 189,90\n"
-            f"{PRODUCT_URL}"
-        )
-
-    def test_uses_custom_message(self, variant: ProductVariant, store: StoreSettings) -> None:
-        store.order_message_template = "Oi, {produto} tam. {tamanho} & cor {cor}?"
-
-        url = build_whatsapp_order_url(variant, store, PRODUCT_URL)
-
-        assert url is not None
-        assert message_of(url) == "Oi, Vestido Midi tam. M & cor Preto?"
-
-    @pytest.mark.parametrize("template", ["Quero {", "Quero {}", "Quero {produto.x}", "{nome}"])
-    def test_broken_message_falls_back_to_default(
-        self, variant: ProductVariant, store: StoreSettings, template: str
-    ) -> None:
-        store.order_message_template = template
-
-        url = build_whatsapp_order_url(variant, store, PRODUCT_URL)
-
-        assert url is not None
-        assert message_of(url).startswith("Olá! Quero pedir este produto:")
-
-    def test_without_number_returns_none(self, variant: ProductVariant) -> None:
-        assert build_whatsapp_order_url(variant, StoreSettings(), PRODUCT_URL) is None

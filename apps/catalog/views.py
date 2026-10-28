@@ -1,13 +1,14 @@
 from typing import Any
 from urllib.parse import urlencode
 
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, QueryDict
 from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.cache import patch_vary_headers
 from django.views.generic import DetailView, ListView
 
-from apps.core.models import StoreSettings
+from apps.cart.cart import Cart
 
 from . import selectors, services
 from .models import Category, Product
@@ -44,8 +45,8 @@ class ProductListView(ListView[Product]):
             category=self.category,
             sizes=sizes,
             colors=colors,
-            size_id=_int_param(self.request, "tamanho"),
-            color_id=_int_param(self.request, "cor"),
+            size_id=_int_param(self.request.GET, "tamanho"),
+            color_id=_int_param(self.request.GET, "cor"),
         )
         return selectors.catalog_products(
             category=self.category, size=self.filters.size, color=self.filters.color
@@ -74,10 +75,12 @@ class ProductListView(ListView[Product]):
 
 class ProductDetailView(DetailView[Product]):
     """Página do produto. A escolha de tamanho/cor vem na querystring (`?tamanho=&cor=`);
-    em requests do HTMX devolve só o formulário de pedido.
+    em requests do HTMX devolve só o formulário da peça.
 
-    O botão de pedido envia `pedir=1`. Com a escolha completa (caso sem JS) redireciona
-    para o WhatsApp; incompleta, destaca o que falta e põe o foco no grupo pendente.
+    O botão "Adicionar à sacola" envia a escolha por POST. Completa, a peça entra na sacola:
+    com HTMX volta o formulário com o aviso e o contador do topo (fora de banda); sem JS,
+    redireciona para a página com `adicionado=1`. Incompleta, destaca o que falta e põe o foco
+    no grupo pendente.
     """
 
     template_name = "catalog/product_detail.html"
@@ -88,12 +91,28 @@ class ProductDetailView(DetailView[Product]):
 
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
-        if context["wants_order"] and context["order_url"] and not _is_htmx(self.request):
-            return HttpResponseRedirect(context["order_url"])
-        response = self.render_to_response(context)
+        response = self.render_to_response(self.get_context_data(object=self.object))
         patch_vary_headers(response, ["HX-Request"])
         return response
+
+    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        selection: services.VariantSelection = context["selection"]
+        variant = selection.variant
+        if variant is None:
+            return self.render_to_response(context)
+
+        Cart(request.session).add(variant.pk, stock=variant.stock)
+        if not _is_htmx(request):
+            query = urlencode(
+                {"cor": variant.color_id, "tamanho": variant.size_id, "adicionado": 1}
+            )
+            return HttpResponseRedirect(f"{request.path}?{query}")
+        context["added"] = True
+        form = render_to_string(self.order_form_template, context, request=request)
+        counter = render_to_string("partials/cart_link.html", {"oob": True}, request=request)
+        return HttpResponse(form + counter)
 
     def get_template_names(self) -> list[str]:
         if _is_htmx(self.request):
@@ -104,19 +123,14 @@ class ProductDetailView(DetailView[Product]):
         context = super().get_context_data(**kwargs)
         context["nav_current"] = "catalogo"
         product: Product = self.object
+        params = self.request.POST if self.request.method == "POST" else self.request.GET
         selection = services.select_variant(
             list(product.variants.all()),
-            size_id=_int_param(self.request, "tamanho"),
-            color_id=_int_param(self.request, "cor"),
+            size_id=_int_param(params, "tamanho"),
+            color_id=_int_param(params, "cor"),
         )
-        order_url = None
-        if selection.variant is not None:
-            order_url = services.build_whatsapp_order_url(
-                selection.variant,
-                StoreSettings.load(),
-                self.request.build_absolute_uri(product.get_absolute_url()),
-            )
-        wants_order = self.request.GET.get("pedir") == "1"
+        # Tentou adicionar sem escolher tudo: o aviso e o foco apontam o que falta.
+        wants_order = self.request.method == "POST" and selection.variant is None
         detail = ProductDetail.from_product(product)
         context["detail"] = detail
         context["meta_title"] = f"{detail.name} — Tay Modas"
@@ -125,7 +139,7 @@ class ProductDetailView(DetailView[Product]):
         if detail.images:
             context["meta_image"] = self.request.build_absolute_uri(detail.images[0].share_url)
         context["selection"] = selection
-        context["order_url"] = order_url
+        context["added"] = selection.variant is not None and params.get("adicionado") == "1"
         context["wants_order"] = wants_order
         context["focus_group"], context["focus_choice"] = (
             _pending_choice(selection) if wants_order else ("", None)
@@ -140,8 +154,8 @@ def _is_htmx(request: HttpRequest) -> bool:
     return bool(headers.get("HX-Request")) and not headers.get("HX-History-Restore-Request")
 
 
-def _int_param(request: HttpRequest, name: str) -> int | None:
-    value = request.GET.get(name, "")
+def _int_param(params: QueryDict, name: str) -> int | None:
+    value = params.get(name, "")
     return int(value) if value.isdecimal() else None
 
 

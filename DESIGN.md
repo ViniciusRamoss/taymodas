@@ -176,7 +176,7 @@ O movimento é quase nenhum: o título de cada página sobe ao carregar, os bot�
 Paleta quente de baixa saturação: creme e rosados claros no fundo, uma ameixa escura para agir, um rosa médio como acento e o dourado reservado ao logo.
 
 ### Primary
-- **Ameixa** (`ameixa`): cor de ação. Fundo de todo botão principal, do botão "Pedir pelo WhatsApp", da pílula atual, da opção escolhida, do selo "Esgotado", do rodapé e das faixas escuras de fechamento ("Como combinar sua entrega", "Ficou com alguma dúvida?").
+- **Ameixa** (`ameixa`): cor de ação. Fundo de todo botão principal, dos botões "Adicionar à sacola" e "Enviar pedido pelo WhatsApp", da pílula atual, da opção escolhida, do selo "Esgotado", do rodapé e das faixas escuras de fechamento ("Como combinar sua entrega", "Ficou com alguma dúvida?").
 - **Rosa-escuro** (`rosa-escuro`): hover dos botões em ameixa, preço da peça, links de texto sublinhados, texto do selo "Novidade" e da faixa do Instagram.
 
 ### Secondary

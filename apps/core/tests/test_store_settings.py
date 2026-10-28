@@ -38,7 +38,7 @@ def test_default_message_is_valid() -> None:
 
 
 def test_rejects_unknown_placeholder_in_message() -> None:
-    settings = StoreSettings(order_message_template="Quero {produto} na cor {cores}")
+    settings = StoreSettings(order_message_template="Pedido: {itens}, {total}, cor {cores}")
 
     with pytest.raises(ValidationError, match="cores"):
         settings.full_clean()

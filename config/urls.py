@@ -14,6 +14,7 @@ urlpatterns: list[URLPattern | URLResolver] = [
     path(settings.ADMIN_URL, admin.site.urls),
     path("sitemap.xml", sitemap, {"sitemaps": SITEMAPS}, name="sitemap"),
     path("", include("apps.core.urls")),
+    path("", include("apps.cart.urls")),
     path("", include("apps.catalog.urls")),
 ]
 

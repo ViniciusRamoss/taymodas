@@ -1,4 +1,4 @@
-{% comment %} Cabeçalho de todas as páginas. `nav_current` vem da view (catalogo/entregas/como-comprar). {% endcomment %}
+{% comment %} Cabeçalho de todas as páginas. `nav_current` vem da view (catalogo/entregas/como-comprar/sacola). {% endcomment %}
 <header class="bg-creme">
   {% if store.instagram_handle %}
     <p class="bg-petala-forte px-4 py-2 text-center text-[0.85rem] text-rosa-escuro">
@@ -11,10 +11,11 @@
       {% include "partials/wordmark.html" with size="small" %}
     </a>
     <nav aria-label="Principal">
-      <ul class="flex gap-6 sm:gap-8">
+      <ul class="flex flex-wrap justify-center gap-x-5 sm:gap-x-8">
         <li><a class="nav-link" href="{% url 'catalog:product_list' %}" {% if nav_current == "catalogo" %}aria-current="page"{% endif %}>Peças</a></li>
         <li><a class="nav-link" href="{% url 'core:delivery' %}" {% if nav_current == "entregas" %}aria-current="page"{% endif %}>Entregas</a></li>
         <li><a class="nav-link" href="{% url 'core:how_to_buy' %}" {% if nav_current == "como-comprar" %}aria-current="page"{% endif %}>Como comprar</a></li>
+        {% if store.whatsapp_number or cart_count %}<li>{% include "partials/cart_link.html" %}</li>{% endif %}
       </ul>
     </nav>
   </div>

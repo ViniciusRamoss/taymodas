@@ -29,8 +29,8 @@ sem precisar perguntar "tem no meu tamanho?".
 
 ## Operating Context
 
-- Pedido e pagamento acontecem no WhatsApp; o site não tem carrinho nem checkout (pode ganhar
-  no futuro).
+- A cliente monta uma sacola no site (sem login) e envia o pedido inteiro, com o total, pelo
+  WhatsApp. Pagamento e frete são combinados na conversa; não há checkout.
 - Entrega para todo o Brasil (frete pelo CEP) e por mototáxi em Ribeirão Preto e região
   (Ribeirão Preto, Serrana, Serra Azul, Cravinhos, Cajuru, Jardinópolis). Valor e prazo do
   mototáxi são combinados no WhatsApp.

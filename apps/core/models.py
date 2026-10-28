@@ -19,17 +19,10 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 
-ORDER_MESSAGE_FIELDS = ("produto", "tamanho", "cor", "preco", "link")
+ORDER_MESSAGE_FIELDS = ("itens", "total")
 
-# Proposta inicial; a dona da loja ajusta no admin.
-DEFAULT_ORDER_MESSAGE = (
-    "Olá! Quero pedir este produto:\n"
-    "{produto}\n"
-    "Tamanho: {tamanho}\n"
-    "Cor: {cor}\n"
-    "Preço: {preco}\n"
-    "{link}"
-)
+# Mensagem do pedido da sacola; a dona da loja ajusta no admin.
+DEFAULT_ORDER_MESSAGE = "Olá! Quero fazer este pedido:\n\n{itens}\n\nTotal: {total}"
 
 DEFAULT_MOTOTAXI_CITIES = "\n".join(
     ["Ribeirão Preto", "Serrana", "Serra Azul", "Cravinhos", "Cajuru", "Jardinópolis"]
@@ -65,8 +58,9 @@ class StoreSettings(models.Model):
         "mensagem do pedido",
         default=DEFAULT_ORDER_MESSAGE,
         help_text=(
-            "Texto que já vem escrito no WhatsApp da cliente. Use as palavras entre chaves "
-            "para preencher automaticamente: {produto}, {tamanho}, {cor}, {preco} e {link}."
+            "Texto que já vem escrito no WhatsApp quando a cliente envia a sacola. Use as "
+            "palavras entre chaves para preencher automaticamente: {itens} (as peças, com "
+            "quantidade, cor, tamanho, valor e link) e {total}."
         ),
     )
     delivery_info = models.TextField(

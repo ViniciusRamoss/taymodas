@@ -1,0 +1,6 @@
+{% comment %}
+  Link da sacola no topo, com a quantidade de peças. A página da peça devolve este bloco com
+  `oob=True` (hx-swap-oob) ao adicionar, para o número mudar sem recarregar.
+{% endcomment %}<a id="contador-sacola" href="{% url 'cart:detail' %}" class="nav-link gap-1.5" {% if nav_current == "sacola" %}aria-current="page"{% endif %} {% if oob %}hx-swap-oob="true"{% endif %}>
+  {% include "partials/icon.html" with name="bag" class="size-5" %}Sacola{% if cart_count %} <span class="inline-flex min-w-6 items-center justify-center rounded-full bg-rosa px-1.5 text-[0.8rem] font-medium leading-6 text-white"><span class="sr-only">com </span>{{ cart_count }}<span class="sr-only"> peça{{ cart_count|pluralize }}</span></span>{% endif %}
+</a>

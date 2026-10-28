@@ -5,9 +5,6 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from apps.core.formatting import format_brl
-from apps.core.models import DEFAULT_ORDER_MESSAGE, StoreSettings
-
 from .models import Color, ProductVariant, Size
 
 
@@ -84,26 +81,3 @@ def _pick[T: (Size, Color)](options: list[T], selected_id: int | None) -> T | No
     if len(options) == 1:
         return options[0]
     return next((option for option in options if option.pk == selected_id), None)
-
-
-def build_whatsapp_order_url(
-    variant: ProductVariant, store: StoreSettings, product_url: str
-) -> str | None:
-    """Link do WhatsApp com a mensagem de pedido já escrita.
-
-    Devolve `None` enquanto a loja não cadastrou o número (o botão não aparece).
-    """
-    fields = {
-        "produto": variant.product.name,
-        "tamanho": variant.size.name,
-        "cor": variant.color.name,
-        "preco": format_brl(variant.product.price),
-        "link": product_url,
-    }
-    try:
-        text = store.order_message_template.format_map(fields)
-    except (KeyError, IndexError, ValueError, AttributeError):
-        # Mensagem salva com chaves inválidas (ex.: "{" solto): usa a padrão para não
-        # deixar a cliente sem botão de pedido.
-        text = DEFAULT_ORDER_MESSAGE.format_map(fields)
-    return store.whatsapp_url(text)

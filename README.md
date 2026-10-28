@@ -15,8 +15,10 @@ estoque por um painel administrativo em português.
 - Filtros por tamanho e cor com HTMX: atualizam a lista sem recarregar a página e geram URLs
   compartilháveis. Sem JavaScript, viram um formulário comum.
 - Página da peça com galeria e escolha de tamanho e cor. Combinações sem estoque aparecem
-  riscadas, e o botão "Pedir pelo WhatsApp" abre a conversa com produto, tamanho, cor, preço e
-  link preenchidos.
+  riscadas; a peça escolhida vai para a sacola.
+- Sacola na sessão (sem login): quantidades limitadas ao estoque, total, e o botão "Enviar
+  pedido pelo WhatsApp" abre a conversa com todas as peças (quantidade, cor, tamanho, valor e
+  link) e o total já escritos.
 - Painel administrativo em PT-BR para quem não é técnico: fotos com prévia, estoque por
   tamanho e cor, filtros de esgotado e atualização de estoque em lote.
   [Guia do painel](docs/guia-admin.md).

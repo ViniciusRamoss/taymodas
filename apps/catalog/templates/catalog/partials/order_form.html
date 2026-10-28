@@ -1,8 +1,12 @@
-{# Formulário GET: funciona sem JS; com HTMX troca só este bloco (ao mudar a escolha ou pedir). #}
+{% comment %}
+  Escolha de cor e tamanho: com HTMX, cada mudança troca só este bloco (GET, sem o token na URL).
+  "Adicionar à sacola" envia a escolha por POST; sem JS, o mesmo botão faz o POST normal.
+{% endcomment %}
 <form id="pedido" method="get" action="{{ request.path }}"
-      hx-get="{{ request.path }}" hx-trigger="change, submit" hx-target="this" hx-swap="outerHTML"
-      hx-replace-url="true"
+      hx-get="{{ request.path }}" hx-trigger="change" hx-target="this" hx-swap="outerHTML"
+      hx-replace-url="true" hx-params="not csrfmiddlewaretoken"
       class="mt-6 space-y-6">
+  {% csrf_token %}
   {% if selection.colors %}
     <fieldset>
       <legend class="text-[0.95rem]">Cor{% if selection.color %}: <span class="font-medium">{{ selection.color.name }}</span>{% elif wants_order %}: <span class="font-medium text-rosa">escolha uma</span>{% endif %}</legend>
@@ -42,26 +46,27 @@
     </fieldset>
   {% endif %}
 
-  {# Sem número cadastrado na loja não há botão, conforme a ajuda do admin. #}
+  {# Sem número cadastrado na loja não há sacola, conforme a ajuda do admin. #}
   {% if store.whatsapp_number %}
     <div>
-      {% if order_url %}
-        <a href="{{ order_url }}" target="_blank" rel="noopener" class="order-button">{% include "partials/icon.html" with name="chat" %}Pedir pelo WhatsApp</a>
-        <p class="mt-2 text-sm text-malva">Abre o WhatsApp com o pedido já escrito.</p>
-      {% else %}
-        <button type="submit" name="pedir" value="1" class="order-button">{% include "partials/icon.html" with name="chat" %}Pedir pelo WhatsApp</button>
-        <p role="status" class="mt-2 text-sm {% if wants_order %}font-medium text-tinta{% else %}text-malva{% endif %}">
-          {% if selection.is_sold_out_combination %}
-            {{ selection.size.name }} na cor {{ selection.color.name }} esgotou. Escolha outro tamanho ou cor.
-          {% elif not selection.size and not selection.color %}
-            Escolha a cor e o tamanho para fazer o pedido.
-          {% elif not selection.size %}
-            Escolha o tamanho para fazer o pedido.
-          {% else %}
-            Escolha a cor para fazer o pedido.
-          {% endif %}
-        </p>
-      {% endif %}
+      <button type="submit" formmethod="post" hx-post="{{ request.path }}" hx-params="*" hx-replace-url="false" class="order-button">
+        {% include "partials/icon.html" with name="bag" %}Adicionar à sacola
+      </button>
+      <p role="status" class="mt-2 text-sm {% if wants_order or added %}font-medium text-tinta{% else %}text-malva{% endif %}">
+        {% if added %}
+          Peça na sacola. <a class="text-rosa-escuro underline underline-offset-4" href="{% url 'cart:detail' %}">Ver sacola e enviar o pedido</a>
+        {% elif selection.variant %}
+          Junte quantas peças quiser e envie tudo de uma vez pelo WhatsApp.
+        {% elif selection.is_sold_out_combination %}
+          {{ selection.size.name }} na cor {{ selection.color.name }} esgotou. Escolha outro tamanho ou cor.
+        {% elif not selection.size and not selection.color %}
+          Escolha a cor e o tamanho para adicionar à sacola.
+        {% elif not selection.size %}
+          Escolha o tamanho para adicionar à sacola.
+        {% else %}
+          Escolha a cor para adicionar à sacola.
+        {% endif %}
+      </p>
     </div>
   {% endif %}
 </form>

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block extra_meta %}<meta name="robots" content="noindex">{% endblock %}
+
+{% block content %}
+  {# hx-boost: os botões da sacola trocam a página sem recarregar; sem JS, viram POST normal. #}
+  <div class="mx-auto max-w-6xl px-4 pb-14" hx-boost="true">
+    <section aria-labelledby="titulo-sacola" class="pb-8 pt-8 sm:pt-12">
+      <h1 id="titulo-sacola" class="rise font-display text-[clamp(2.4rem,8vw,4.2rem)] leading-[1.04] tracking-[-0.02em]">Sua sacola</h1>
+      {% if lines %}
+        <p class="rise-late mt-4 max-w-[52ch] text-[1.05rem] leading-relaxed text-tinta/80">
+          Confira as peças e envie o pedido. A mensagem vai pronta para o WhatsApp da loja.
+        </p>
+      {% endif %}
+    </section>
+
+    {% if not lines %}
+      <div class="panel bg-petala">
+        <p class="font-display text-[1.6rem] leading-tight">Sua sacola está vazia.</p>
+        <p class="mt-2 max-w-[48ch] leading-relaxed text-tinta/80">Na página de cada peça, escolha a cor e o tamanho e toque em Adicionar à sacola.</p>
+        <a class="button mt-6" href="{% url 'catalog:product_list' %}">Ver as peças</a>
+      </div>
+    {% else %}
+      <div class="grid gap-6 md:grid-cols-[1.5fr_1fr] md:items-start md:gap-10">
+        <ul class="divide-y divide-linha rounded-3xl bg-white px-4 sm:px-6" aria-label="Peças na sacola">
+          {% for line in lines %}
+            <li class="grid grid-cols-[5.5rem_1fr] gap-4 py-5 sm:grid-cols-[6.5rem_1fr]">
+              <a href="{{ line.url }}" tabindex="-1" aria-hidden="true" class="block self-start overflow-hidden rounded-xl bg-petala">
+                {% if line.image_url %}
+                  <img src="{{ line.image_url }}" alt="" loading="lazy" decoding="async"
+                       class="aspect-[3/4] w-full object-cover {% if not line.is_available %}opacity-55 grayscale{% endif %}">
+                {% else %}
+                  <span class="block aspect-[3/4]"></span>
+                {% endif %}
+              </a>
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-baseline justify-between gap-x-4">
+                  <h2 class="font-display text-[1.25rem] leading-snug">
+                    <a class="underline-offset-4 hover:underline" href="{{ line.url }}">{{ line.name }}</a>
+                  </h2>
+                  {% if line.is_available %}
+                    <p class="font-medium text-rosa-escuro">{{ line.subtotal_display }}</p>
+                  {% endif %}
+                </div>
+                <p class="mt-1 text-[0.95rem] text-malva">Cor {{ line.color }}, tamanho {{ line.size }}{% if line.quantity > 1 %}. {{ line.unit_price_display }} cada{% endif %}</p>
+
+                <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+                  {% if line.is_available %}
+                    <div class="inline-flex items-center rounded-full border border-linha">
+                      <form method="post" action="{% url 'cart:update' line.variant_id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="quantidade" value="{{ line.quantity|add:'-1' }}">
+                        <button type="submit" class="inline-flex size-11 cursor-pointer items-center justify-center rounded-full text-lg hover:text-rosa-escuro" aria-label="Tirar uma unidade de {{ line.name }}">−</button>
+                      </form>
+                      <span class="min-w-6 text-center font-medium" aria-label="Quantidade">{{ line.quantity }}</span>
+                      <form method="post" action="{% url 'cart:update' line.variant_id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="quantidade" value="{{ line.quantity|add:'1' }}">
+                        <button type="submit" class="inline-flex size-11 cursor-pointer items-center justify-center rounded-full text-lg hover:text-rosa-escuro disabled:cursor-not-allowed disabled:text-linha" aria-label="Mais uma unidade de {{ line.name }}" {% if not line.can_add_more %}disabled{% endif %}>+</button>
+                      </form>
+                    </div>
+                    {% if not line.can_add_more %}<p class="text-sm text-malva">Última{% if line.stock > 1 %}s {{ line.stock }}{% endif %} no estoque</p>{% endif %}
+                  {% else %}
+                    <p class="rounded-full bg-ameixa px-3 py-1 text-xs font-medium tracking-wide text-white">Esgotou</p>
+                  {% endif %}
+                  <form method="post" action="{% url 'cart:update' line.variant_id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="quantidade" value="0">
+                    <button type="submit" class="inline-flex min-h-11 cursor-pointer items-center text-[0.95rem] text-malva underline underline-offset-4 hover:text-tinta">Remover<span class="sr-only"> {{ line.name }}</span></button>
+                  </form>
+                </div>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+
+        <aside aria-labelledby="titulo-total" class="panel bg-petala md:sticky md:top-8">
+          <div class="flex items-baseline justify-between gap-4">
+            <h2 id="titulo-total" class="font-display text-[1.6rem] leading-tight">Total</h2>
+            <p class="font-display text-[2rem] leading-none">{{ total }}</p>
+          </div>
+          <p class="mt-2 text-[0.95rem] text-tinta/80">Sem o frete. A entrega você combina na conversa. <a class="text-rosa-escuro underline underline-offset-4" href="{% url 'core:delivery' %}">Ver entregas</a></p>
+          {% if has_sold_out %}
+            <p role="status" class="mt-4 text-[0.95rem] font-medium">As peças que esgotaram ficam fora do pedido.</p>
+          {% endif %}
+
+          {% if order_url %}
+            <a href="{{ order_url }}" target="_blank" rel="noopener" class="order-button mt-6">{% include "partials/icon.html" with name="chat" %}Enviar pedido pelo WhatsApp</a>
+            <p class="mt-2 text-sm text-malva">Abre o WhatsApp com as peças e o total já escritos.</p>
+          {% endif %}
+
+          <form method="post" action="{% url 'cart:clear' %}" class="mt-5 border-t border-petala-forte pt-4">
+            {% csrf_token %}
+            <button type="submit" class="inline-flex min-h-11 cursor-pointer items-center text-[0.95rem] text-malva underline underline-offset-4 hover:text-tinta">Esvaziar sacola</button>
+          </form>
+        </aside>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
