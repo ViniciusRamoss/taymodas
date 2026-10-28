@@ -61,7 +61,7 @@ ProductVariant product, size, color, stock             único por (product, size
 | Categorias         | Model no admin + seed via data migration      | Aguardando lista      |
 | Esgotado           | Exibir com selo "Esgotado"                    | Padrão recomendado    |
 | Baixa de estoque   | Manual no admin                               | Padrão recomendado    |
-| Hospedagem         | Render free + Neon free + Cloudinary free     | Preparado (Etapa 8)   |
+| Hospedagem         | Render free + Neon free + Cloudinary free     | No ar (Etapa 8)       |
 | Domínio            | Subdomínio grátis do Render                   | Padrão recomendado    |
 | Entrega            | Página "Entrega" + rodapé, texto editável     | Aguardando textos     |
 
